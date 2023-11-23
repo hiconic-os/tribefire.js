@@ -32,6 +32,7 @@ You should have received a copy of the GNU Lesser General Public License along w
         </license>
     </licenses>
     <dependencies>
+		<!--
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-dev</artifactId>
@@ -44,6 +45,7 @@ You should have received a copy of the GNU Lesser General Public License along w
             </exclusions>
             <version>${V.com.google.gwt}</version>
         </dependency>
+        -->
         <!-- TODO once there is a monolithic .d.ts file remove the js tags. -->
         <dependency>
             <groupId>tribefire.js</groupId>
