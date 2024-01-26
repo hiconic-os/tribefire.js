@@ -21,7 +21,6 @@ You should have received a copy of the GNU Lesser General Public License along w
         <V.com.braintribe.common>[2.0,2.1)</V.com.braintribe.common>
         <V.com.braintribe.gm>[2.0,2.1)</V.com.braintribe.gm>
         <V.com.braintribe.templatetools>[2.0,2.1)</V.com.braintribe.templatetools>
-        <V.com.braintribe.xml>[1.0,1.1)</V.com.braintribe.xml>
         <V.tribefire.extension.js>[2.1,2.2)</V.tribefire.extension.js>
         <V.com.google.gwt>2.8.0</V.com.google.gwt>
         <V.javax.servlet>2.4</V.javax.servlet>
@@ -30,7 +29,6 @@ You should have received a copy of the GNU Lesser General Public License along w
         <V.org.antlr>4.5</V.org.antlr>
         <V.org.assertj>3.18.1</V.org.assertj>
         <V.org.apache.velocity>2.3</V.org.apache.velocity>
-        <V.com.braintribe.devrock>[2.0,2.1)</V.com.braintribe.devrock>
         <V.com.sencha.gxt>4.0.2</V.com.sencha.gxt>
         <V.com.xedge>2.0</V.com.xedge>
         <V.javax.servlet>3.1.0</V.javax.servlet>
