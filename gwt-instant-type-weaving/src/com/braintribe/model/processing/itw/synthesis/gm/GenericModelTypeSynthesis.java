@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -52,12 +53,15 @@ import com.braintribe.model.generic.reflection.Property;
 import com.braintribe.model.generic.reflection.TransientProperty;
 import com.braintribe.model.generic.reflection.type.custom.AbstractEntityType;
 import com.braintribe.model.generic.value.NullDescriptor;
+import com.braintribe.model.meta.GmEntityType;
+import com.braintribe.model.meta.GmMetaModel;
 import com.braintribe.model.processing.itw.analysis.BeanPropertyScan;
 import com.braintribe.model.processing.itw.analysis.protomodel.ProtoGmTypeImpl;
 import com.braintribe.model.processing.itw.asm.AsmClass;
 import com.braintribe.model.processing.itw.asm.AsmClassPool;
 import com.braintribe.model.processing.itw.asm.AsmExistingClass;
 import com.braintribe.model.processing.itw.asm.AsmNewClass;
+import com.braintribe.model.processing.itw.asm.AsmType;
 import com.braintribe.model.processing.itw.asm.ClassBuilder;
 import com.braintribe.model.processing.itw.asm.InterfaceBuilder;
 import com.braintribe.model.processing.itw.synthesis.gm.asm.DefaultMethodsSupport;
@@ -83,6 +87,7 @@ import com.braintribe.model.weaving.ProtoGmProperty;
 import com.braintribe.model.weaving.ProtoGmSetType;
 import com.braintribe.model.weaving.ProtoGmType;
 import com.braintribe.model.weaving.info.ProtoGmPropertyInfo;
+import com.braintribe.model.weaving.override.ProtoGmPropertyOverride;
 import com.braintribe.processing.async.api.AsyncCallback;
 
 /* NOTE regarding "ensure" method names. Some have regular names, some other start with an underscore. Those with
@@ -112,8 +117,8 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 	 * model types, you just want to call {@link ProtoGmMetaModel#deploy()}.
 	 * 
 	 * But why? Well, it's really a bad idea. There are blocks that are synchronized and the lock is only valid for one instance (as it is an instance
-	 * variable). For now, I'm not making it static, to avoid unpredictable errors, so I'm moving to this method to ensure nobody calls the
-	 * constructor, unless he knows what he's doing.
+	 * variable). For now, I'm not making it static, to avoid unpredictable errors, so I'm moving to this method to ensure nobody calls the constructor,
+	 * unless he knows what he's doing.
 	 */
 	public static GenericModelTypeSynthesis newInstance() {
 		return new GenericModelTypeSynthesis();
@@ -145,6 +150,18 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 		}
 	}
 
+	/** @deprecated use {@link #ensureModelTypes(ProtoGmMetaModel)} */
+	@Deprecated
+	public void ensureModelTypes(GmMetaModel gmModel) throws GenericModelTypeSynthesisException {
+		ensureModelTypes((ProtoGmMetaModel) gmModel);
+	}
+
+	/** @deprecated use {@link #ensureModelTypes(ProtoGmMetaModel, AsyncCallback)} */
+	@Deprecated
+	public void ensureModelTypes(GmMetaModel gmModel, AsyncCallback<Void> asyncCallback) {
+		ensureModelTypes((ProtoGmMetaModel) gmModel, asyncCallback);
+	}
+
 	private void _tryEnsuringModelTypes(ProtoGmMetaModel gmModel, Set<ProtoGmMetaModel> ensuredModels) throws GenericModelTypeSynthesisException {
 		if (!ensuredModels.add(gmModel))
 			return;
@@ -174,7 +191,7 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 			_ensureEntityType((ProtoGmEntityType) entityType);
 	}
 
-	private final Object ENUM_TYPE_LOCK = new Object();
+	private final ReentrantLock enumTypeLock = new ReentrantLock();
 
 	/** Returns a fully-initialized {@link EnumType} which corresponds to given {@link ProtoGmEnumType}; */
 	private EnumType _ensureEnumType(ProtoGmEnumType gmEnumType) throws GenericModelTypeSynthesisException {
@@ -185,10 +202,9 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 			if (enumType != null)
 				return enumType;
 
-			GmtsMetaModelValidator.validate(gmEnumType);
-
 			/* we are synchronizing for all equal strings, so creating two different enums at the concurrently is possible */
-			synchronized (ENUM_TYPE_LOCK) {
+			enumTypeLock.lock();
+			try {
 				enumType = (EnumType) typeReflection.getDeployedType(typeSignature);
 				if (enumType != null)
 					return enumType;
@@ -197,6 +213,8 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 				Class<? extends Enum<?>> enumClass = getJavaClass(enumAsmClass);
 
 				return typeReflection.deployEnumType(enumClass);
+			} finally {
+				enumTypeLock.unlock();
 			}
 
 		} catch (Exception e) {
@@ -207,9 +225,14 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 	/* This method should not be called recursively as it would be doing unnecessary extra validation */
 	/** Returns a fully-initialized {@link GenericModelType} which corresponds to given {@link ProtoGmType}; */
 	public GenericModelType ensureType(ProtoGmType gmType) throws GenericModelTypeSynthesisException {
-		GmtsMetaModelValidator.validate(gmType);
-		return _ensureType(gmType);
+		return ensureType(gmType, true);
+	}
 
+	public GenericModelType ensureType(ProtoGmType gmType, boolean validate) {
+		if (validate)
+			GmtsMetaModelValidator.validate(gmType);
+
+		return _ensureType(gmType);
 	}
 
 	private GenericModelType _ensureType(ProtoGmType gmType) throws GenericModelTypeSynthesisException {
@@ -255,7 +278,13 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 	private Throwable throwable;
 
 	public <T extends GenericEntity> EntityType<T> ensureEntityType(ProtoGmEntityType gmEntityType) throws GenericModelTypeSynthesisException {
-		GmtsMetaModelValidator.validate(gmEntityType);
+		return ensureEntityType(gmEntityType, true);
+	}
+
+	public <T extends GenericEntity> EntityType<T> ensureEntityType(ProtoGmEntityType gmEntityType, boolean validate) {
+		if (validate)
+			GmtsMetaModelValidator.validate(gmEntityType);
+
 		return _ensureEntityType(gmEntityType);
 	}
 
@@ -311,9 +340,8 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 		if (entityType != null)
 			return entityType;
 
-		gmEntityType = replaceWithJtaIfRelevant(gmEntityType);
-
-		// There used to be try-finally block, but that is useless, any error and ITW is wasted, so let's just make the code simpler
+		// There used to be try-finally block, but that is useless, any error and ITW is wasted, so let's just make the code
+		// simpler
 		entityCreationStack.push(gmEntityType);
 
 		PreliminaryEntityType pet = weaveNewEntityType(gmEntityType);
@@ -325,12 +353,15 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 			newEntityTypes.clear();
 			preliminaryTypes.clear();
 
-			return cast(pet.entityType);
+			return pet.entityType;
 		}
 
-		return cast(pet);
+		return pet;
 	}
 
+	/**
+	 * In case we have received a {@link GmEntityType} for a type the exists on the classpath, we ask GMTR to give us replacement (via proto JTA)
+	 */
 	private ProtoGmEntityType replaceWithJtaIfRelevant(ProtoGmEntityType gmEntityType) {
 		if (gmEntityType instanceof ProtoGmTypeImpl)
 			return gmEntityType;
@@ -341,7 +372,7 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 	}
 
 	private ItwEntityType findExistingItwType(String typeSignature) {
-		ItwEntityType entityType = cast(typeReflection.getDeployedType(typeSignature));
+		ItwEntityType entityType = typeReflection.getDeployedType(typeSignature);
 
 		return entityType != null ? entityType : newEntityTypes.get(typeSignature);
 	}
@@ -364,12 +395,24 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 			PreliminaryEntityType pet = ensurePet(gmEntityType);
 			newEntityTypes.put(entityTypeName, pet);
 
+			// in case gmEntityType was replaced with JTA version
+			gmEntityType = pet.gmEntityType;
+
 			pet.superTypes = ensureSuperTypes(gmEntityType);
 
 			for (ProtoGmPropertyInfo[] propertyLineage : pet.mergedProtoGmProperties.values()) {
-				ProtoGmProperty gmProperty = propertyLineage[0].relatedProperty();
-				ensurePreliminaryType(gmProperty.getType());
+				for (ProtoGmPropertyInfo pi : propertyLineage) {
+					if (pi instanceof ProtoGmProperty) {
+						ensurePreliminaryType(((ProtoGmProperty) pi).getType());
 
+					} else if (pi instanceof ProtoGmPropertyOverride) {
+						ProtoGmType typeOverride = ((ProtoGmPropertyOverride) pi).getTypeOverride();
+						if (typeOverride != null)
+							ensurePreliminaryType(typeOverride);
+					}
+				}
+
+				ProtoGmProperty gmProperty = propertyLineage[0].relatedProperty();
 				pet.createPreliminaryProperty(gmProperty, propertyLineage);
 			}
 
@@ -383,8 +426,8 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 			pet.selectiveInformationAnnotation = getAnnotation(pet.entityIface, SelectiveInformation.class);
 
 			/* The toSelectiveInformation methods (for both plain/enhanced) can only be implemented iff all the properties are at least started, which
-			 * only happens after we are done with the entire assembly. So i will only get the implementer here, and finish in that finalize thing.
-			 * But the properties can definitely be implemented right away. */
+			 * only happens after we are done with the entire assembly. So i will only get the implementer here, and finish in that finalize thing. But
+			 * the properties can definitely be implemented right away. */
 			finalizeWeakInterface(gmEntityType, pet);
 			finalizePlainClass(gmEntityType, pet);
 			finalizeEnhancedEntityClass(gmEntityType, pet);
@@ -407,6 +450,8 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 
 		if (typeReflection.getDeployedType(typeSignature) != null)
 			return null;
+
+		gmEntityType = replaceWithJtaIfRelevant(gmEntityType);
 
 		pet = new PreliminaryEntityType(gmEntityType);
 		preliminaryTypes.put(typeSignature, pet);
@@ -469,7 +514,7 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 			if (!isTransient(method))
 				continue;
 
-			Boolean isGetter = BeanPropertyScan.isGetter(method);
+			Boolean isGetter = BeanPropertyScan.isGetter(method, false);
 			if (Boolean.TRUE != isGetter)
 				continue;
 
@@ -541,16 +586,14 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 	}
 
 	private void ensurePreliminaryType(ProtoGmType type) throws GenericModelTypeSynthesisException {
-		if (type instanceof ProtoGmEntityType) {
+		if (type instanceof ProtoGmEntityType)
 			ensureEntityTypeHelper((ProtoGmEntityType) type);
 
-		} else if (type instanceof ProtoGmCollectionType) {
+		else if (type instanceof ProtoGmCollectionType)
 			ensureCollectionTypeHelper((ProtoGmCollectionType) type);
 
-		} else {
-
+		else
 			_ensureType(type);
-		}
 	}
 
 	private void ensureCollectionTypeHelper(ProtoGmCollectionType gmCollectionType) throws GenericModelTypeSynthesisException {
@@ -674,14 +717,19 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 			// Implement properties
 			for (PropertyDescription pd : pet.propertyAnalysis) {
 				String propertyName = pd.getName();
-				if (pet.mustImplement(propertyName)) {
-					PreliminaryProperty pp = pet.getPreliminaryProperty(propertyName);
+				PreliminaryProperty pp = pet.getPreliminaryProperty(propertyName);
 
+				if (pet.mustImplement(propertyName)) {
 					eei.createAndStorePropertyField(pd);
 					eei.addAopAroundGetterSetter(pet.getPropertyClassName(propertyName), pp, pd);
-					eei.addPlainRead(pd);
-					eei.addPlainWrite(pd);
+					eei.addEnhancedRead(pd);
+					eei.addEnhancedWrite(pd);
+				}
 
+				// TODO optimized, do not created these overrides if super-class already has them
+				// the property analyzer should only take such overrides that are not reachable from most-prop super-type
+				for (AsmType overrideTyp : pd.allTypeOverrides) {
+					eei.addGetterOverride(pd, overrideTyp);
 				}
 
 				if (pd.isPrimitive())
@@ -706,9 +754,7 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 
 			return eei.build();
 
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 			throw new GenericModelTypeSynthesisException("Error while building enhanced class for: " + gmEntityType.getTypeSignature(), e);
 		}
 	}
@@ -803,6 +849,7 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 	// #############################################
 	// ## . . . . EntityType finalization . . . . ##
 	// #############################################
+
 	private void setJavaTypesForEntityType(PreliminaryEntityType pet) throws GenericModelTypeSynthesisException {
 		JvmEntityType<GenericEntity> result = pet.entityType;
 		if (result.getJavaType() != null)
@@ -822,6 +869,7 @@ public class GenericModelTypeSynthesis extends JavaTypeSynthesis {
 		result.setPlainClass(this.<GenericEntity> getJavaClass(pet.plainClass));
 		result.setEnhancedClass(this.<GenericEntity> getJavaClass(pet.enhancedClass));
 
+		// TODO seems unnecessary, it only does something for types in newEntityTypes map, which we are iterating over anyway.
 		for (PreliminaryProperty pp : pet.preliminaryProperties.values())
 			if (pp.isIntroducedAt(pet.gmEntityType))
 				setJavaTypesForDependedEntityTypes(pp.gmProperty.getType());

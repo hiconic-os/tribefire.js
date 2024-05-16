@@ -61,8 +61,7 @@ public class MetaDataAnnotationAnalyzers {
 		for (Annotation annotation : annotations) {
 			Class<? extends Annotation> annotationType = annotation.annotationType();
 
-			MdaHandler<Annotation, MetaData> analyzer = (MdaHandler<Annotation, MetaData>) analyzerMap
-					.get(annotationType);
+			MdaHandler<Annotation, MetaData> analyzer = (MdaHandler<Annotation, MetaData>) analyzerMap.get(annotationType);
 			if (analyzer == null)
 				continue;
 

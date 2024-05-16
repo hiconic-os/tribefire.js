@@ -12,10 +12,6 @@
 package com.braintribe.model.generic.annotation.meta.api.synthesis;
 
 import java.lang.annotation.Annotation;
-import java.lang.annotation.Repeatable;
-
-import com.braintribe.model.generic.annotation.meta.CompoundUnique;
-import com.braintribe.model.generic.annotation.meta.CompoundUniques;
 
 /**
  * 
@@ -23,31 +19,28 @@ import com.braintribe.model.generic.annotation.meta.CompoundUniques;
 public interface MdaSynthesisContext {
 
 	/**
-	 * Creates a new {@link SingleAnnotationDescriptor} and makes sure the inner globalId is set properly.
+	 * Creates a new {@link SingleAnnotationDescriptor} and makes sure the inner globalId is set properly. If second parameter is true, the newly
+	 * created descriptor is also set as the current descriptor.
+	 * <p>
+	 * <h3>When should we avoid setting it as current descriptor.</h3>
+	 * 
+	 * In case of repeatable meta-data, the current descriptor should be a {@link RepeatedAnnotationDescriptor}, which consists of multiple
+	 * {@link SingleAnnotationDescriptor}s. When we are creating new single descriptor (other than very first one), setting it as current would
+	 * overwrite the previous descriptor. Instead, we create it without setting as current and then use
+	 * {@link #setCurrentDescriptorMulti(SingleAnnotationDescriptor, Class)} to set it.
 	 */
 	SingleAnnotationDescriptor newDescriptor(Class<? extends Annotation> annotationClass);
-
-	SingleAnnotationDescriptor newDescriptor(Class<? extends Annotation> annotationClass, boolean setAsCurrentDescriptor);
-
-	/**
-	 * @return {@link AnnotationDescriptor} associated with the type of currently processed meta-data. Usually this returns null, because we don't
-	 *         expect multiple MetaData of the same type, but in some cases this is possible when the annotation is handled as {@link Repeatable},
-	 *         like {@link CompoundUnique} / {@link CompoundUniques}.
-	 */
-	AnnotationDescriptor getCurrentDescriptor();
 
 	/**
 	 * associates given {@link AnnotationDescriptor} with the type of currently processed meta-data
 	 * 
-	 * @see #getCurrentDescriptor()
+	 * @see #setCurrentDescriptorMulti(SingleAnnotationDescriptor, Class)
 	 */
 	void setCurrentDescriptor(AnnotationDescriptor descriptor);
 
 	/**
 	 * Associates given {@link AnnotationDescriptor} with the type of currently processed meta-data. In case there already is a descriptor associated,
 	 * it creates a new or extends existing {@link RepeatedAnnotationDescriptor} which corresponds to given {@link SingleAnnotationDescriptor}.
-	 * 
-	 * @see #getCurrentDescriptor()
 	 */
 	void setCurrentDescriptorMulti(SingleAnnotationDescriptor descriptor, Class<? extends Annotation> repeatabeAnnoClass);
 

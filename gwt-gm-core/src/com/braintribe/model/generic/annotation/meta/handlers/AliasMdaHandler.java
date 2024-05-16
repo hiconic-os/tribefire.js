@@ -70,7 +70,7 @@ public class AliasMdaHandler implements RepeatableMdaHandler<Alias, Aliases, com
 
 	@Override
 	public void buildAnnotation(MdaSynthesisContext context, com.braintribe.model.meta.data.mapping.Alias md) {
-		SingleAnnotationDescriptor result = context.newDescriptor(com.braintribe.model.generic.annotation.meta.Alias.class, false);
+		SingleAnnotationDescriptor result = context.newDescriptor(Alias.class);
 		result.addAnnotationValue("value", md.getName());
 
 		context.setCurrentDescriptorMulti(result, Aliases.class);

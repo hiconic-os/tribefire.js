@@ -18,13 +18,14 @@ import java.util.List;
 import java.util.Set;
 
 import com.braintribe.model.generic.GMF;
-import com.braintribe.model.processing.itw.asm.AsmAnnotationInstance;
+import com.braintribe.model.processing.itw.asm.AsmClass;
 import com.braintribe.model.processing.itw.asm.AsmExistingClass;
 import com.braintribe.model.processing.itw.asm.AsmField;
 import com.braintribe.model.processing.itw.asm.AsmType;
 import com.braintribe.model.weaving.ProtoGmCollectionType;
 import com.braintribe.model.weaving.ProtoGmEntityType;
 import com.braintribe.model.weaving.ProtoGmProperty;
+import com.braintribe.model.weaving.info.ProtoGmPropertyInfo;
 
 public class PropertyAnalysis implements Iterable<PropertyAnalysis.PropertyDescription> {
 
@@ -47,9 +48,13 @@ public class PropertyAnalysis implements Iterable<PropertyAnalysis.PropertyDescr
 	}
 
 	public static class PropertyDescription {
+		public AsmClass ownerType;
 		public AsmType accessPropertyClass; // this may be a primitive (if class exists and it's property is primitive)
 		public AsmType actualPropertyClass;
+		public ProtoGmPropertyInfo propertyInfo;
 		public ProtoGmProperty property;
+		public AsmType declaredTypeOverride;
+		public List<AsmType> allTypeOverrides;
 		public String fieldName;
 		public String setterName;
 		public String getterName;
@@ -58,7 +63,6 @@ public class PropertyAnalysis implements Iterable<PropertyAnalysis.PropertyDescr
 
 		public AsmField plainPropertyField;
 		public AsmField enhancedPropertyField;
-		public List<AsmAnnotationInstance> annotations;
 
 		public boolean isCollection() {
 			return property.getType() instanceof ProtoGmCollectionType;

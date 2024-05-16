@@ -17,14 +17,17 @@ import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Not thread-safe!
  */
+@SuppressWarnings({ "removal", "deprecation" })
 public class AsmClassLoaderWrapper implements AsmClassLoading {
 
 	private final Map<String, AsmLoadableClass> asmClasses = new HashMap<>();
 	private final Map<String, Class<?>> loadedAsmClasses = new HashMap<>();
+	private final ReentrantLock loadedAsmClassesLock = new ReentrantLock();
 
 	private final ClassLoader contextClassLoader;
 	private static Method defineClassMethod;
@@ -65,21 +68,30 @@ public class AsmClassLoaderWrapper implements AsmClassLoading {
 		return (Class<T>) loadClass(name);
 	}
 
-	protected synchronized Class<?> loadClass(String name) throws ClassNotFoundException {
+	protected Class<?> loadClass(String name) throws ClassNotFoundException {
 		if (loadedAsmClasses.containsKey(name))
 			return loadedAsmClasses.get(name);
 
-		if (asmClasses.containsKey(name)) {
-			AsmLoadableClass asmClass = asmClasses.get(name);
+		loadedAsmClassesLock.lock();
+		try {
+			if (loadedAsmClasses.containsKey(name)) {
+				return loadedAsmClasses.get(name);
+			}
 
-			ensureLoaded(asmClass.getSuperClass());
-			for (AsmClass iface : asmClass.getInterfaces())
-				ensureLoaded(iface);
+			if (asmClasses.containsKey(name)) {
+				AsmLoadableClass asmClass = asmClasses.get(name);
 
-			return loadClass(asmClass);
+				ensureLoaded(asmClass.getSuperClass());
+				for (AsmClass iface : asmClass.getInterfaces())
+					ensureLoaded(iface);
+
+				return loadClass(asmClass);
+			}
+
+			return Class.forName(name);
+		} finally {
+			loadedAsmClassesLock.unlock();
 		}
-
-		return Class.forName(name);
 	}
 
 	private void ensureLoaded(AsmClass asmClass) throws ClassNotFoundException {

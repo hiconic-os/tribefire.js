@@ -11,16 +11,17 @@
 // ============================================================================
 package com.braintribe.model.processing.itw.asm;
 
-import static com.braintribe.utils.lcd.CollectionTools2.newMap;
-
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Registering new {@link AsmLoadableClass loadable classes} is not thread-safe!
  */
 public class AsmDirectClassLoader extends ClassLoader implements AsmClassLoading {
 
-	private final Map<String, AsmLoadableClass> asmClasses = newMap();
+	private final Map<String, AsmLoadableClass> asmClasses = new ConcurrentHashMap<>();
+	private final ReentrantLock lock = new ReentrantLock();
 
 	public AsmDirectClassLoader() {
 		super(AsmDirectClassLoader.class.getClassLoader());
@@ -30,7 +31,7 @@ public class AsmDirectClassLoader extends ClassLoader implements AsmClassLoading
 	public ClassLoader getItwClassLoader() {
 		return this;
 	}
-	
+
 	@Override
 	public void register(AsmLoadableClass asmClass) {
 		asmClasses.put(asmClass.getName(), asmClass);
@@ -42,11 +43,18 @@ public class AsmDirectClassLoader extends ClassLoader implements AsmClassLoading
 	}
 
 	@Override
-	protected synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-		if (asmClasses.containsKey(name))
-			return loadClass(asmClasses.get(name));
-		else
-			return super.loadClass(name, resolve);
+	protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+		if (asmClasses.containsKey(name)) {
+			lock.lock();
+			try {
+				if (asmClasses.containsKey(name))
+					return loadClass(asmClasses.get(name));
+
+			} finally {
+				lock.unlock();
+			}
+		}
+		return super.loadClass(name, resolve);
 	}
 
 	private Class<?> loadClass(AsmLoadableClass asmClass) {

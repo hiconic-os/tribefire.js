@@ -12,10 +12,10 @@
 package com.braintribe.model.processing.itw.synthesis.gm.experts.template;
 
 import static com.braintribe.model.processing.core.commons.SelectiveInformationSupport.SI_ID;
+import static com.braintribe.model.processing.core.commons.SelectiveInformationSupport.SI_RUNTIME_ID;
 import static com.braintribe.model.processing.core.commons.SelectiveInformationSupport.SI_TYPE;
 import static com.braintribe.model.processing.core.commons.SelectiveInformationSupport.SI_TYPE_ALT;
 import static com.braintribe.model.processing.core.commons.SelectiveInformationSupport.SI_TYPE_SHORT;
-import static com.braintribe.model.processing.core.commons.SelectiveInformationSupport.SI_RUNTIME_ID;
 
 public class MagicVariableNames {
 

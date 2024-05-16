@@ -50,6 +50,14 @@ public class SingleAnnotationDescriptor extends AnnotationDescriptor {
 		addAnnotationValue(GenericEntity.globalId, globalId);
 	}
 
+	public String getGlobalId() {
+		return (String) annotationValues.get(GenericEntity.globalId);
+	}
+
+	public void removeGlobalId() {
+		annotationValues.remove(GenericEntity.globalId);
+	}
+
 	@Override
 	public void withSourceCode(Consumer<String> sourceCodeConsumer) {
 		sourceCodeConsumer.accept(toSourceCode());
@@ -113,7 +121,12 @@ public class SingleAnnotationDescriptor extends AnnotationDescriptor {
 
 		} else if (value instanceof String) {
 			sb.append('"');
-			sb.append(value);
+			String escapedValue = (String) value;
+			escapedValue = escapedValue.replace("\\", "\\\\");
+			escapedValue = escapedValue.replace("\"", "\\\"");
+			escapedValue = escapedValue.replace("\n", "\\n");
+			escapedValue = escapedValue.replace("\r", "\\r");
+			sb.append(escapedValue);
 			sb.append('"');
 
 		} else if (value instanceof ClassReference) {

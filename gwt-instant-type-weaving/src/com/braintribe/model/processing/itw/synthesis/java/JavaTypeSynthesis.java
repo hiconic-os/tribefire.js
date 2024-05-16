@@ -128,7 +128,7 @@ public class JavaTypeSynthesis {
 		if (visitedTypes.contains(gmEntityType))
 			throw new JavaTypeSynthesisException("Seems like type '" + gmEntityType.getTypeSignature() + "' is it's own sub-type!");
 
-		Map<String, ProtoGmPropertyInfo[]> result = this.mergedProperties.get(gmEntityType.getTypeSignature());
+		Map<String, ProtoGmPropertyInfo[]> result = mergedProperties.get(gmEntityType.getTypeSignature());
 
 		if (result == null) {
 			Map<String, List<ProtoGmPropertyInfo>> mps = new TreeMap<>();
@@ -248,7 +248,7 @@ public class JavaTypeSynthesis {
 		List<AsmEnumConstant> result = newList();
 
 		for (ProtoGmEnumConstant ec : nullSafe(gmEnumType.getConstants())) {
-			List<AsmAnnotationInstance> annos = MdaSynthesis.synthesizeMetaDataAnnotations(ec.getMetaData()).stream() //
+			List<AsmAnnotationInstance> annos = MdaSynthesis.synthesizeMetaDataAnnotations(ec.getGlobalId(), ec.getMetaData()).stream() //
 					.map(this::toAsmAnnotationInstance) //
 					.collect(Collectors.toList());
 
@@ -324,9 +324,10 @@ public class JavaTypeSynthesis {
 	}
 
 	private void implementCustomTypeMetaDataAnnotationsIfEligible(TypeBuilder tb, ProtoHasMetaData gmCustomType) {
-		Collection<AnnotationDescriptor> annotationDescriptors = MdaSynthesis.synthesizeMetaDataAnnotations(gmCustomType.getMetaData());
+		Collection<AnnotationDescriptor> ads = MdaSynthesis.synthesizeMetaDataAnnotations( //
+				gmCustomType.getGlobalId(), gmCustomType.getMetaData());
 
-		for (AnnotationDescriptor annotationDescriptor : annotationDescriptors)
+		for (AnnotationDescriptor annotationDescriptor : ads)
 			tb.addAnnotation(toAsmAnnotationInstance(annotationDescriptor));
 	}
 
@@ -365,10 +366,13 @@ public class JavaTypeSynthesis {
 		// declaration is needed only if not already present or we re-declare the initializer
 		if (pd.achievement == SetterGetterAchievement.missing || isInterfaceWithInitializer(asmClass, pd)) {
 			AsmType propertyClass = pd.getPropertyType();
-			List<AsmAnnotationInstance> as = pd.annotations;
+			List<AsmAnnotationInstance> as = propertyAnalyzer.getAnnotations(pd);
 			ib.addAbstractMethod(pd.getterName, as, propertyClass);
 			ib.addAbstractMethod(pd.setterName, AsmClassPool.voidType, propertyClass);
 		}
+
+		if (pd.declaredTypeOverride != null)
+			ib.addAbstractMethod(pd.getterName, pd.declaredTypeOverride);
 	}
 
 	/**

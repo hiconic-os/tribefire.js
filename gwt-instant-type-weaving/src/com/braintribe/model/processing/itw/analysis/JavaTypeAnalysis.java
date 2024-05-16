@@ -57,11 +57,13 @@ import com.braintribe.model.generic.annotation.GlobalId;
 import com.braintribe.model.generic.annotation.Transient;
 import com.braintribe.model.generic.annotation.TypeRestriction;
 import com.braintribe.model.generic.annotation.meta.api.analysis.MdaAnalysisContext;
+import com.braintribe.model.generic.base.EnumBase;
 import com.braintribe.model.generic.eval.EvalContext;
 import com.braintribe.model.generic.eval.Evaluator;
 import com.braintribe.model.generic.tools.GmValueCodec.EnumParsingMode;
 import com.braintribe.model.generic.value.ValueDescriptor;
 import com.braintribe.model.meta.GmEntityType;
+import com.braintribe.model.meta.GmModels;
 import com.braintribe.model.meta.GmType;
 import com.braintribe.model.processing.itw.InitializerTools;
 import com.braintribe.model.processing.itw.InitializerTools.EnumHint;
@@ -94,16 +96,20 @@ import com.braintribe.utils.lcd.StringTools;
 
 public final class JavaTypeAnalysis {
 
-	private volatile Map<Type, ProtoGmType> typeMap;
+	private volatile Map<Type, ProtoGmType> typeMap; // may contain not-yet-finished GmTypes
 	private final Object typeMapLock = new Object();
+	private final Map<Type, ProtoGmType> typeCache = new ConcurrentHashMap<>(); // contains only finished GmTypes
+
 	private ClassLoader classLoader = null;
 	private boolean proto;
 	private boolean enhanced;
 	private final JtaClasses jtaClasses = new JtaClasses();
 	protected final ThreadLocal<List<Runnable>> postProcessors = new ThreadLocal<>();
+	private boolean requireEnumBase = true;
 
 	public static final class JtaClasses {
 		public Class<?> genericEntityClass;
+		public Class<?> enumBaseClass;
 		public Class<?> evaluatorClass;
 		public Class<?> evalContextClass;
 		public Class<? extends Annotation> abstractAnnotationClass;
@@ -118,8 +124,17 @@ public final class JavaTypeAnalysis {
 		this.enhanced = enhanced;
 	}
 
+	@Deprecated
+	public void setPseudo(boolean pseudo) {
+		setProto(pseudo);
+	}
+
 	public void setProto(boolean proto) {
 		this.proto = proto;
+	}
+
+	public void setRequireEnumBase(boolean requireEnumBase) {
+		this.requireEnumBase = requireEnumBase;
 	}
 
 	private Class<? extends Annotation> getSafeAnnotationClass(Class<? extends Annotation> annotationClass) {
@@ -209,26 +224,39 @@ public final class JavaTypeAnalysis {
 
 	/** This method cannot be invoked recursively!!! */
 	public GmType getGmType(Type type) throws JavaTypeAnalysisException {
-		return (GmType) getProtoGmType(type);
+		try {
+			return (GmType) getProtoGmType(type);
+		} catch (Exception e) {
+			throw Exceptions.unchecked(e, "Error while analyzing " + type);
+		}
 	}
 
 	public ProtoGmType getProtoGmType(Type type) throws JavaTypeAnalysisException {
+		ProtoGmType gmType = typeCache.get(type);
+		if (gmType != null)
+			return gmType;
+
 		ensureClassObjects();
 
+		ProtoGmType result;
 		synchronized (typeMapLock) {
-			return getProtoGmTypeSynced(type);
+			result = getProtoGmTypeSynced(type);
 		}
+
+		typeCache.put(type, result);
+		return result;
 	}
 
 	private void ensureClassObjects() {
 		if (jtaClasses.genericEntityClass != null)
 			return;
 
-		jtaClasses.genericEntityClass = getSafeClass(GenericEntity.class);
+		jtaClasses.enumBaseClass = getSafeClass(EnumBase.class);
 		jtaClasses.evaluatorClass = getSafeClass(Evaluator.class);
 		jtaClasses.evalContextClass = getSafeClass(EvalContext.class);
 		jtaClasses.abstractAnnotationClass = getSafeAnnotationClass(Abstract.class);
 		jtaClasses.transientAnnotationClass = getSafeAnnotationClass(Transient.class);
+		jtaClasses.genericEntityClass = getSafeClass(GenericEntity.class);
 	}
 
 	/** This method cannot be invoked recursively!!! */
@@ -253,7 +281,7 @@ public final class JavaTypeAnalysis {
 	}
 
 	private ProtoGmType _getProtoGmType(Type type) throws JavaTypeAnalysisException {
-		ProtoGmType gmType = getTypeMap().get(type);
+		ProtoGmType gmType = getCachedGmType(type);
 		if (gmType != null)
 			return gmType;
 
@@ -313,7 +341,7 @@ public final class JavaTypeAnalysis {
 	private <T extends Type, G extends ProtoGmType> G registerProtoGmType(T type, ProtoGmTypeBuilder<T, G> gmTypeBuilder)
 			throws JavaTypeAnalysisException {
 
-		G gmType = (G) getTypeMap().get(type);
+		G gmType = (G) getCachedGmType(type);
 		if (gmType != null)
 			return gmType;
 
@@ -331,6 +359,10 @@ public final class JavaTypeAnalysis {
 		}
 
 		return gmType;
+	}
+
+	private ProtoGmType getCachedGmType(Type type) {
+		return getTypeMap().get(type);
 	}
 
 	public abstract class ProtoGmTypeBuilder<T extends Type, G extends ProtoGmType> {
@@ -389,12 +421,12 @@ public final class JavaTypeAnalysis {
 		}
 
 		private void prepareProperties(Class<? extends GenericEntity> type, ProtoGmEntityType gmEntityType) throws JavaTypeAnalysisException {
-			BeanPropertyScan propertyScan = new BeanPropertyScan(type, jtaClasses);
+			BeanPropertyScan propertyScan = new BeanPropertyScan(type, jtaClasses, requireEnumBase);
 			List<ProtoGmProperty> properties = newList();
 			List<ProtoGmPropertyOverride> propertyOverrides = newList();
 
 			for (ScannedProperty scannedProperty : propertyScan.getScannedProperties()) {
-				scannedProperty.validate();
+				scannedProperty.validate(jtaClasses);
 
 				String propertyName = scannedProperty.propertyName;
 
@@ -459,6 +491,13 @@ public final class JavaTypeAnalysis {
 					eagerProtoGmProperty.setType(gmProperty, _getProtoGmType(propertyType), proto);
 					eagerProtoGmProperty.setTypeRestriction(gmProperty, getProtoGmTypeRestriction(gmProperty, scannedProperty), proto);
 				}
+
+				if (scannedProperty.isCovariantOverride)
+					if (gmPropertyInfo instanceof ProtoGmPropertyOverride) {
+						ProtoGmPropertyOverride gmPropertyOverride = (ProtoGmPropertyOverride) gmPropertyInfo;
+						Type typeOverride = scannedProperty.getter.getGenericReturnType();
+						eagerProtoGmPropertyOverride.setTypeOverride(gmPropertyOverride, _getProtoGmType(typeOverride), proto);
+					}
 
 				analyzeMetaDataAnnotations(scannedProperty.getter.getAnnotations(), new MetaDataAnnotationAnalyzerContextImpl(gmPropertyInfo));
 			}
@@ -762,7 +801,7 @@ public final class JavaTypeAnalysis {
 	 * {@link #resolveGlobalId(Class)}, otherwise make a query by typeSignature.
 	 */
 	public static String typeGlobalId(String typeSignature) {
-		return "type:" + typeSignature;
+		return GmModels.typeGlobalId(typeSignature);
 	}
 
 	private static String resolveEnumConstantGlobalId(Field enumConstantField) {
@@ -771,7 +810,7 @@ public final class JavaTypeAnalysis {
 	}
 
 	public static String constantGlobalId(String typeSignature, String constantName) {
-		return "enum:" + typeSignature + "/" + constantName;
+		return GmModels.constantGlobalId(typeSignature, constantName);
 	}
 
 	private static String resolvePropertyGlobalId(ScannedProperty scannedProperty) {
@@ -780,7 +819,7 @@ public final class JavaTypeAnalysis {
 	}
 
 	public static String propertyGlobalId(String typeSignature, String propertyName) {
-		return "property:" + typeSignature + "/" + propertyName;
+		return GmModels.propertyGlobalId(typeSignature, propertyName);
 	}
 
 	private static String resolvePropertyOverrideGlobalId(ScannedProperty scannedProperty) {
@@ -789,7 +828,7 @@ public final class JavaTypeAnalysis {
 	}
 
 	public static String propertyOverrideGlobalId(String typeSignature, String propertyName) {
-		return "propertyOverride:" + typeSignature + "/" + propertyName;
+		return GmModels.propertyOverrideGlobalId(typeSignature, propertyName);
 	}
 
 }

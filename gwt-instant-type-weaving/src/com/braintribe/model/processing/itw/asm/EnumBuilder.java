@@ -95,7 +95,7 @@ public class EnumBuilder extends TypeBuilder {
 	 * @param mv
 	 *            visitor for the {@code <clinit>} method.
 	 */
-	protected void initializeNonConstantFields(MethodVisitor mv) {
+	protected void initializeNonConstantFields(@SuppressWarnings("unused") MethodVisitor mv) {
 		// might be overridden by sub-type
 	}
 

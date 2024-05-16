@@ -13,9 +13,10 @@ package com.braintribe.model.processing.itw.synthesis.java;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.braintribe.model.generic.reflection.GenericModelException;
 import com.braintribe.model.weaving.ProtoGmEntityType;
@@ -32,17 +33,28 @@ public class TmpJtsTracker {
 	private TmpJtsTracker() {
 	}
 
-	private final Map<Exception, Object> exceptions = new ConcurrentHashMap<>();
+	private final Map<Exception, Object> exceptions = new HashMap<>();
+	private final ReentrantReadWriteLock exceptionsLock = new ReentrantReadWriteLock();
 
-	public synchronized void onNewJts() {
+	public void onNewJts() {
 		Exception e = new Exception();
-		exceptions.put(e, e);
+		exceptionsLock.writeLock().lock();
+		try {
+			exceptions.put(e, e);
+		} finally {
+			exceptionsLock.writeLock().unlock();
+		}
 	}
 
-	public synchronized <T> T handleClassCastException(ClassCastException e) {
-		String traces = getTracesForJtsInstantiations();
+	public <T> T handleClassCastException(ClassCastException e) {
+		exceptionsLock.readLock().lock();
+		try {
+			String traces = getTracesForJtsInstantiations();
 
-		throw new GenericModelException("We had our good old ClassCasstException. <JTS_INFO>\n" + traces + "\n</JTS_INFO>", e);
+			throw new GenericModelException("We had our good old ClassCasstException. <JTS_INFO>\n" + traces + "\n</JTS_INFO>", e);
+		} finally {
+			exceptionsLock.readLock().lock();
+		}
 	}
 
 	private String getTracesForJtsInstantiations() {

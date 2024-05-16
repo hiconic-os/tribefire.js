@@ -61,10 +61,14 @@ public class MdaAnalysisTools {
 			String targetGlobalId = context.getTarget().getGlobalId();
 
 			if (!StringTools.isEmpty(targetGlobalId))
-				result.setGlobalId(mdType.getShortName() + ":" + targetGlobalId + globalIdSuffix);
+				result.setGlobalId(naturalGlobalId(mdType, targetGlobalId, globalIdSuffix));
 		}
 
 		return result;
+	}
+
+	public static String naturalGlobalId(EntityType<? extends MetaData> mdType, String ownerGlobalId, String globalIdSuffix) {
+		return mdType.getShortName() + ":" + ownerGlobalId + globalIdSuffix;
 	}
 
 	public static <M extends MetaData, A extends Annotation> List<M> toLsBasedMd( //
@@ -119,7 +123,7 @@ public class MdaAnalysisTools {
 			String locale = entry.getKey();
 			String value = entry.getValue();
 
-			SingleAnnotationDescriptor ad = context.newDescriptor(handler.annotationClass(), false);
+			SingleAnnotationDescriptor ad = context.newDescriptor(handler.annotationClass());
 			ad.addAnnotationValue("locale", locale);
 			ad.addAnnotationValue("value", value);
 

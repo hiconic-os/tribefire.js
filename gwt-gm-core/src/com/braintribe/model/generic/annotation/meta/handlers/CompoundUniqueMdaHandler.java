@@ -78,7 +78,7 @@ public class CompoundUniqueMdaHandler
 		List<String> up = newList(md.getUniqueProperties());
 		up.sort(Comparator.naturalOrder());
 
-		SingleAnnotationDescriptor result = context.newDescriptor(com.braintribe.model.generic.annotation.meta.CompoundUnique.class, false);
+		SingleAnnotationDescriptor result = context.newDescriptor(CompoundUnique.class);
 		result.addAnnotationValue("value", up.toArray(new String[up.size()]));
 
 		context.setCurrentDescriptorMulti(result, CompoundUniques.class);

@@ -115,11 +115,29 @@ public class EnhancedEntityImplementer extends AbstractGenericEntityImplementer 
 		return b.notifyMethodFinished();
 	}
 
+	public void addGetterOverride(PropertyDescription pd, AsmType overrideType) {
+		// method: %{accessPropertyClass} get${PropertyName}()
+		mv = b.visitMethodWithGenerics(ACC_PUBLIC, pd.getterName, overrideType);
+		mv.visitCode();
+
+		// return (${overrideType}) get${PropertyName}();
+		mv.visitVarInsn(ALOAD, 0);
+		String signature = AsmUtils.createMethodSignature(pd.actualPropertyClass).intern();
+		mv.visitMethodInsn(INVOKEVIRTUAL, asmClass.getInternalName(), pd.getterName, signature, false);
+		checkCast(overrideType);
+		addReturn(overrideType);
+
+		mv.visitMaxs(1, 1);
+		mv.visitEnd();
+		
+		b.notifyMethodFinished();
+	}
+
 	public void createAndStorePropertyField(PropertyDescription pd) {
 		pd.enhancedPropertyField = b.addField(pd.getFieldName(), objectType, Modifier.PROTECTED);
 	}
 
-	public void addPlainRead(PropertyDescription pd) {
+	public void addEnhancedRead(PropertyDescription pd) {
 		AsmField f = pd.enhancedPropertyField;
 
 		// method: public Object readProperty()
@@ -136,7 +154,7 @@ public class EnhancedEntityImplementer extends AbstractGenericEntityImplementer 
 		b.notifyMethodFinished();
 	}
 
-	public void addPlainWrite(PropertyDescription pd) {
+	public void addEnhancedWrite(PropertyDescription pd) {
 		AsmField f = pd.enhancedPropertyField;
 
 		// method: public void writeProperty(Object value)
