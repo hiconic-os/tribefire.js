@@ -23,7 +23,7 @@ You should have received a copy of the GNU Lesser General Public License along w
         <major>3</major>
         <minor>0</minor>
         <nextMinor>1</nextMinor>
-        <revision>3-pc</revision>
+        <revision>3</revision>
         <archetype>war</archetype>
         <!-- Exclude dependencies tagged with 'serverdeps' -->
         <tagRule.classpath>!serverdeps</tagRule.classpath>
