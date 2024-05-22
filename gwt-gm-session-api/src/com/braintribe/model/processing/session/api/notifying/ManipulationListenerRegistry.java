@@ -13,51 +13,16 @@ package com.braintribe.model.processing.session.api.notifying;
 
 import com.braintribe.model.generic.GmCoreApiInteropNamespaces;
 import com.braintribe.model.generic.tracking.ManipulationListener;
-import com.braintribe.model.processing.session.api.notifying.js.JsManipulationListener;
 
-import jsinterop.annotations.JsIgnore;
-import jsinterop.annotations.JsMethod;
 import jsinterop.annotations.JsType;
 
 @JsType(namespace=GmCoreApiInteropNamespaces.manipulation)
 public interface ManipulationListenerRegistry {
 
-	@JsIgnore
 	void add(ManipulationListener listener);
 
-	@JsIgnore
 	void addFirst(ManipulationListener listener);
 
-	@JsIgnore
 	void remove(ManipulationListener listener);
 	
-	@JsMethod(name="add")
-	default void _add(Object listener) {
-		if (!(listener instanceof JsManipulationListener)) {
-			add((ManipulationListener) listener);
-			return;
-		}
-		
-		add(manipulation -> ((JsManipulationListener) listener).noticeManipulation(manipulation));
-	}
-
-	@JsMethod(name="addFirst")
-	default void _addFirst(Object listener) {
-		if (!(listener instanceof JsManipulationListener)) {
-			addFirst((ManipulationListener) listener);
-			return;
-		}
-		
-		addFirst(manipulation -> ((JsManipulationListener) listener).noticeManipulation(manipulation));
-	}
-
-	@JsMethod(name="remove")
-	default void _remove(Object listener) {
-		if (!(listener instanceof JsManipulationListener)) {
-			remove((ManipulationListener) listener);
-			return;
-		}
-		
-		remove(manipulation -> ((JsManipulationListener) listener).noticeManipulation(manipulation));
-	}
 }

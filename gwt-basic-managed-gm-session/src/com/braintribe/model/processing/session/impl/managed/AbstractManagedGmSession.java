@@ -19,6 +19,7 @@ import com.braintribe.model.access.ModelAccessException;
 import com.braintribe.model.accessapi.ManipulationRequest;
 import com.braintribe.model.accessapi.ReferencesRequest;
 import com.braintribe.model.accessapi.ReferencesResponse;
+import com.braintribe.model.generic.GMF;
 import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.enhance.ManipulationTrackingPropertyAccessInterceptor;
 import com.braintribe.model.generic.enhance.VdePropertyAccessInterceptor;

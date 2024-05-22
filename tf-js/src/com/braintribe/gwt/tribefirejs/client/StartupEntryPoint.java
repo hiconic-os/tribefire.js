@@ -11,6 +11,7 @@
 // ============================================================================
 package com.braintribe.gwt.tribefirejs.client;
 
+import com.braintribe.gwt.tribefirejs.client.manipulation.ManipulationSerialization;
 import com.braintribe.gwt.tribefirejs.client.remote.TfJsRpcLatest;
 import com.braintribe.gwt.tribefirejs.client.tools.StaticTools;
 import com.google.gwt.core.client.EntryPoint;
@@ -27,6 +28,7 @@ public class StartupEntryPoint implements EntryPoint {
 	public void onModuleLoad() {
 		StaticTools.class.getName(); // force usage of the class (Gxt problem on Dev. Mode - Mac)
 		TfJsRpcLatest.class.getName();
+		ManipulationSerialization.class.getName();
 	}	
 }
 	
