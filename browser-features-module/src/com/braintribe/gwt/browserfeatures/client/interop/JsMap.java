@@ -11,13 +11,14 @@
 // ============================================================================
 package com.braintribe.gwt.browserfeatures.client.interop;
 
+import jsinterop.annotations.JsPackage;
 import jsinterop.annotations.JsType;
 
 /**
  * @author peter.gazdik
  */
 @SuppressWarnings("unused")
-@JsType(name = "Map", namespace = "globalThis", isNative = true)
+@JsType(name = "Map", namespace = JsPackage.GLOBAL, isNative = true)
 public interface JsMap<K, V> {
 	// empty
 }

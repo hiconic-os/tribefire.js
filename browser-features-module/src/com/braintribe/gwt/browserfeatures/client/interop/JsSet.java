@@ -11,13 +11,14 @@
 // ============================================================================
 package com.braintribe.gwt.browserfeatures.client.interop;
 
+import jsinterop.annotations.JsPackage;
 import jsinterop.annotations.JsType;
 
 /**
  * @author peter.gazdik
  */
 @SuppressWarnings("unused")
-@JsType(name = "Set", namespace = "globalThis", isNative = true)
+@JsType(name = "Set", namespace = JsPackage.GLOBAL, isNative = true)
 public interface JsSet<E> {
 	// empty
 }
