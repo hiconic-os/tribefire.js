@@ -80,6 +80,12 @@ You should have received a copy of the GNU Lesser General Public License along w
         </dependency>
         <dependency>
             <groupId>tribefire.js</groupId>
+            <artifactId>gwt-basic-managed-gm-session</artifactId>
+            <version>${V.tribefire.js}</version>
+            <?tag js?>
+        </dependency>
+        <dependency>
+            <groupId>tribefire.js</groupId>
             <artifactId>gm-resource-module</artifactId>
             <version>${V.tribefire.js}</version>
             <?tag js?>

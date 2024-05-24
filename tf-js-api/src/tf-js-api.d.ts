@@ -1,6 +1,7 @@
 /// <reference path="../tribefire.js.gwt-gm-session-api-3.0~/gwt-gm-session-api.d.ts" />
 /// <reference path="../tribefire.js.gm-resource-module-3.0~/gm-resource-module.d.ts" />
 /// <reference path="../tribefire.js.tribefire-js-module-3.0~/tribefire-js-module.d.ts" />
+/// <reference path="../tribefire.js.gwt-basic-managed-gm-session-3.0~/gwt-basic-managed-gm-session.d.ts" />
 export import T = $T;
 export import attr = $tf.attr;
 export import async = $tf.async;
