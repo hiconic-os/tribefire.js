@@ -72,8 +72,8 @@ You should have received a copy of the GNU Lesser General Public License along w
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-dev</artifactId>
-            <scope>provided</scope>
             <version>${V.com.google.gwt}</version>
+            <scope>provided</scope>
             <exclusions>
             	<!-- This brings stuff like org.w3c.dom.Document (via transitive deps) which causes issues for newer java versions -->
 	            <exclusion>

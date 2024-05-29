@@ -41,13 +41,13 @@ You should have received a copy of the GNU Lesser General Public License along w
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-dev</artifactId>
+            <version>${V.com.google.gwt}</version>
             <exclusions>
                 <exclusion>
                     <groupId>xerces</groupId>
                     <artifactId>xercesImpl</artifactId>
                 </exclusion>
             </exclusions>
-            <version>${V.com.google.gwt}</version>
         </dependency>
         <dependency>
             <groupId>com.google.gwt</groupId>
