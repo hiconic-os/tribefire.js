@@ -9,6 +9,5 @@
 	<inherits name="com.braintribe.processing.async.AsyncApi"/>
 	<inherits name="com.google.gwt.core.Core"/>
 	<inherits name="com.google.gwt.emul.Emulation"/>
-	<inherits name="jsinterop.annotations.Annotations"/>
 	<source path="client"/>
 </module>

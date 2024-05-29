@@ -36,7 +36,6 @@
     <inherits name="com.google.gwt.user.Debug"/>
     <inherits name="com.google.gwt.user.RemoteServiceObfuscateTypeNames"/>
     <inherits name="com.google.gwt.xml.XML"/>
-    <inherits name="jsinterop.annotations.Annotations"/>
     <!--Resource Module-->
     <inherits name="jsinterop.JsInteropBase"/>
     <source path="client"/>

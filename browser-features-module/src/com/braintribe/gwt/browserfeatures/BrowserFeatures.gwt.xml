@@ -17,7 +17,6 @@
     <inherits name="com.google.gwt.user.Debug"/>
     <inherits name="com.google.gwt.user.RemoteServiceObfuscateTypeNames"/>
     <inherits name="com.google.gwt.xhr.XMLHttpRequest"/>
-	<inherits name="jsinterop.annotations.Annotations"/>
     <source path="client"/>
     <super-source path="jre"/>
 </module>

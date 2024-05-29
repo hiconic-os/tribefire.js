@@ -10,6 +10,5 @@
     <inherits name="com.google.gwt.emul.Emulation"/>
 	<inherits name="com.google.gwt.user.Debug"/>
 	<inherits name="com.google.gwt.user.RemoteServiceObfuscateTypeNames"/>
-	<inherits name="jsinterop.annotations.Annotations"/>
     <source path="client"/>
 </module>

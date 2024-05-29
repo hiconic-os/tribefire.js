@@ -26,7 +26,6 @@
 	<inherits name="com.braintribe.utils.I18nTools"/>
 	<inherits name="com.google.gwt.core.Core"/>
 	<inherits name="com.google.gwt.emul.Emulation"/>
-	<inherits name="jsinterop.annotations.Annotations"/>
     <!--Resource Module-->
     <inherits name="com.braintribe.utils.stream.StreamPipes"/>
     <source path="generic">

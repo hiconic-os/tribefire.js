@@ -32,6 +32,5 @@
 	<inherits name="com.braintribe.utils.I18nTools"/>
 	<inherits name="com.google.gwt.core.Core"/>
 	<inherits name="com.google.gwt.emul.Emulation"/>
-	<inherits name="jsinterop.annotations.Annotations"/>
     <source path="persistence"/>
 </module>

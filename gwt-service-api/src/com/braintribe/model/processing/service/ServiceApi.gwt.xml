@@ -9,7 +9,6 @@
     <inherits name="com.braintribe.utils.Collection"/>
     <inherits name="com.google.gwt.core.Core"/>
     <inherits name="com.google.gwt.emul.Emulation"/>
-    <inherits name="jsinterop.annotations.Annotations"/>
     <source path="api" />
     <source path="impl">
     	<include name="**/AbstractAttributeContextBuilder.java"/>

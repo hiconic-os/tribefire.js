@@ -6,6 +6,5 @@
 	<inherits name="com.braintribe.model.PathModel"/>
 	<inherits name="com.google.gwt.core.Core"/>
 	<inherits name="com.google.gwt.emul.Emulation"/>
-	<inherits name="jsinterop.annotations.Annotations"/>
 	<source path="generic.path"/>
 </module>

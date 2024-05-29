@@ -11,5 +11,4 @@
 	<inherits name="com.google.gwt.dom.DOM"/>
 	<inherits name="com.google.gwt.emul.Emulation"/>
 	<inherits name="com.google.gwt.xhr.XMLHttpRequest"/>
-	<inherits name="jsinterop.annotations.Annotations"/>
 </module>
