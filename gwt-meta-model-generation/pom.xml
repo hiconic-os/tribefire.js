@@ -34,19 +34,16 @@ You should have received a copy of the GNU Lesser General Public License along w
             <groupId>tribefire.js</groupId>
             <artifactId>gwt-gm-core</artifactId>
             <version>${V.tribefire.js}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.braintribe.gm</groupId>
             <artifactId>meta-model</artifactId>
             <version>${V.com.braintribe.gm}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>tribefire.js</groupId>
             <artifactId>gwt-meta-model-api</artifactId>
             <version>${V.tribefire.js}</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
