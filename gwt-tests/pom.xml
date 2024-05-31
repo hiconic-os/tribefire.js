@@ -38,17 +38,16 @@ You should have received a copy of the GNU Lesser General Public License along w
         </license>
     </licenses>
     <dependencies>
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-dev</artifactId>
-            <version>${V.com.google.gwt}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>xerces</groupId>
-                    <artifactId>xercesImpl</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+        <!--
+            CANNOT BE HERE: gwt-dev
+
+            It has to be added to the compiler classpath within the build. Otherwise it leads to an obscure error while compiling:
+            [exec] [ERROR] Unexpected internal compiler error
+            [exec] java.lang.ArrayIndexOutOfBoundsException: -1
+            [exec]     at org.eclipse.jdt.internal.compiler.parser.Parser.parse(Parser.java:11111)
+            [exec]     at org.eclipse.jdt.internal.compiler.parser.Parser.parse(Parser.java:11360)
+            [exec]     at org.eclipse.jdt.internal.compiler.parser.Parser.parse(Parser.java:11317)
+         -->
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>

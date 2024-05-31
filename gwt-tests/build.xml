@@ -21,7 +21,8 @@ You should have received a copy of the GNU Lesser General Public License along w
     <property location="${dist}/gwt-deploy" name="gwt-deploy"/>
     <property location="${dist}/gwt-work" name="gwt-work"/>
     <property location="war" name="packagingInfoDir"/>
-    <target depends="common-init" name="init">
+
+    <target name="init" depends="common-init" >
         <property environment="env."/>
         <property name="maven.repo.local" value="${env.M2_REPO}"/>
         <bt:pom file="pom.xml" id="maven.project"/>
@@ -34,7 +35,19 @@ You should have received a copy of the GNU Lesser General Public License along w
         <!-- Create the time stamp -->
         <tstamp/>
         <!-- Create the build directory structure used by compile -->
-        <mkdir dir="${build}"/>
+        <!-- <mkdir dir="${build}"/> -->
+
+        <!-- Current GWT version requires Java 8, therefore the respective environment variable has to be set.
+            Note that java executable property is called 'java4gwt.executable' (and not 'java.executable'),
+            because 'java.executable' is used in other scripts and may be set, e.g. by the CI. -->
+        <fail message="GWT build requires Java 8. Please set environment variable 'JAVA_8_HOME'.">
+            <condition>
+                <not>
+                    <isset property="env.JAVA_8_HOME"/>
+                </not>
+            </condition>
+        </fail>
+        <property name="java4gwt.executable" value="${env.JAVA_8_HOME}${file.separator}bin${file.separator}java" />
     </target>
 
     <target name="collectJars" depends="init">
@@ -51,33 +64,39 @@ You should have received a copy of the GNU Lesser General Public License along w
         </copy>
     </target>
 
-    <target depends="init" name="create-packaging-info">
+    <target name="create-packaging-info" depends="init">
         <mkdir dir="${packagingInfoDir}"/>
         <bt:dependencies packagingFile="${packagingInfoDir}/packaging.xml" pathId="dummyPath" pomFile="pom.xml"/>
     </target>
 
-    <target name="compile" depends="create-packaging-info" description="compile the source ">
-        <property environment="env"/>
+    <target name="prepare-compile-path" depends="init">
+        <bt:dependencies filesetId="compiler.fileset" useScope="runtime">
+            <dependency groupId="com.google.gwt" artifactId="gwt-dev" version="2.8.0" exclusions="xerces:xercesImpl" />
+        </bt:dependencies>
         <path id="gwt.compile.path">
-            <fileset refid="compile.sources.fileset"/>
-            <fileset refid="compile.fileset"/>
+            <resources refid="compile.sources.fileset"/>
+            <resources refid="compile.fileset"/>
+            <resources refid="compiler.fileset"/>
             <pathelement location="${src}"/>
         </path>
-        <pathconvert property="rawCompilePath" refid="gwt.compile.path" pathsep="&#10;"/>
-        <bt:permutePath property="compilePath" path="${rawCompilePath}" selector="gwt-dev" />
-        <echo message="${compilePath}" file=".gwt-compile-classpath" />
-        <property name="java.executable" value="${env.JAVA_8_HOME}${file.separator}bin${file.separator}java"/>
-
-        <echo message="running gwt compiler with: ${java.executable}"/>
+        <!--<pathconvert property="compilePath" refid="gwt.compile.path" />-->
+        <pathconvert pathsep="&#10;" property="rawCompilePath" refid="gwt.compile.path"/>
+        <bt:permutePath path="${rawCompilePath}" pathSeparator="&#10;" property="compilePath" selector="gwt-dev-namespace" prepend="true" />
+        <echo file=".gwt-compile-classpath" message="${compilePath}"/>
+        <echo message="running gwt compiler with: ${java4gwt.executable}"/>
         <bt:dependencies filesetId="classloader.classpath" useScope="runtime">
             <dependency groupId="com.braintribe.devrock" artifactId="file-classpath-classloader" version="[2.0,2.1)" />
         </bt:dependencies>
         <pathconvert property="classloader.classpath.string" refid="classloader.classpath"/>
         <echo message="FileClassPathLoader CP: ${classloader.classpath.string}"/>
+    </target>
+
+    <target name="compile" depends="prepare-compile-path">
+        <property environment="env"/>
         <!-- We need to set the newenvironment attribute in order NOT to inherit other env vars when it's executed, especially in CI
         where in alpine image we have java related env vars (e.g. LD_LIBRARY_PATH=/opt/java/jdk8/lib/server:/opt/java/jdk8/lib:/opt/java/jdk8/../lib).
         This is important in CI because we compile with custom java version by setting the java.executable. -->
-        <exec executable="${java.executable}" failonerror="true" newenvironment="true">
+        <exec executable="${java4gwt.executable}" failonerror="true" newenvironment="true">
 
             <!-- Uncomment for remote debugging of the build -->
             <!--
@@ -102,8 +121,7 @@ You should have received a copy of the GNU Lesser General Public License along w
         	<arg value="-generateJsInteropExports"/>
         	<!-- <arg value="-strict"/> -->
             <arg value="-logLevel"/>
-            <arg value="ERROR"/>
-            <!--Uncomment the lines bellow for better debugging-->
+            <arg value="ERROR"/><!-- Use DEBUG for debugging -->
             <arg value="-style"/>
             <arg value="PRETTY"/>
             <!--Uncomment the lines bellow for creating a folder with the generated java files-->
@@ -175,7 +193,7 @@ You should have received a copy of the GNU Lesser General Public License along w
         <copy file="${dist}/assembled/${versionedName}.war" tofile="${dist}/assembled/${distributableName}.war"/>
     </target>
 
-    <target name="install" depends="assemble" description="install to local maven repository">
+    <target name="install" depends="assemble">
         <bt:install file="dist/assembled/${versionedName}.war">
             <pom refid="maven.project"/>
             <attach file="asset.man" type="asset:man"/>
@@ -186,8 +204,7 @@ You should have received a copy of the GNU Lesser General Public License along w
         <bt:release buildDir="."/>
     </target>
 
-    <target name="clean" description="clean up">
-        <!-- Delete the ${build} and ${dist} directory trees -->
+    <target name="clean">
         <delete dir="${build}"/>
         <delete dir="${dist}"/>
     </target>
