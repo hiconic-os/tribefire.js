@@ -66,11 +66,11 @@ You should have received a copy of the GNU Lesser General Public License along w
         <pathconvert property="rawCompilePath" refid="gwt.compile.path" pathsep="&#10;"/>
         <bt:permutePath property="compilePath" path="${rawCompilePath}" selector="gwt-dev" />
         <echo message="${compilePath}" file=".gwt-compile-classpath" />
-        <property name="java.executable" value="${env.JAVA_HOME}${file.separator}bin${file.separator}java"/>
+        <property name="java.executable" value="${env.JAVA_8_HOME}${file.separator}bin${file.separator}java"/>
 
         <echo message="running gwt compiler with: ${java.executable}"/>
         <bt:dependencies filesetId="classloader.classpath" useScope="runtime">
-            <dependency groupId="com.braintribe.devrock" artifactId="file-classpath-classloader" version="[1.0,1.1)" />
+            <dependency groupId="com.braintribe.devrock" artifactId="file-classpath-classloader" version="[2.0,2.1)" />
         </bt:dependencies>
         <pathconvert property="classloader.classpath.string" refid="classloader.classpath"/>
         <echo message="FileClassPathLoader CP: ${classloader.classpath.string}"/>
