@@ -29,7 +29,7 @@ import com.braintribe.model.meta.GmMetaModel;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class JseReadTest extends AbstractGwtTest {
+public class JseReadTest extends AbstractGmGwtTest {
 	@Override
 	protected void tryRun() throws Exception {
 		AbsenceInformation.T.create();

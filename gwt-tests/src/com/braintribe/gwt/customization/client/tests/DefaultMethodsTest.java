@@ -33,7 +33,7 @@ import com.braintribe.model.meta.GmMetaModel;
 /**
  * @author peter.gazdik
  */
-public class DefaultMethodsTest extends AbstractGwtTest {
+public class DefaultMethodsTest extends AbstractGmGwtTest {
 
 	@Override
 	protected void tryRun() throws Exception {

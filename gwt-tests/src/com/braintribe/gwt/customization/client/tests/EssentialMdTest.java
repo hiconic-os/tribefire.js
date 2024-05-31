@@ -27,7 +27,7 @@ import com.braintribe.model.util.meta.NewMetaModelGeneration;
 /**
  * @author peter.gazdik
  */
-public class EssentialMdTest extends AbstractGwtTest {
+public class EssentialMdTest extends AbstractGmGwtTest {
 
 	private final NewMetaModelGeneration mmg = new NewMetaModelGeneration();
 

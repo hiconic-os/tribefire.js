@@ -29,7 +29,7 @@ import com.braintribe.utils.lcd.CommonTools;
 /**
  * @author peter.gazdik
  */
-public class InitializerTest extends AbstractGwtTest {
+public class InitializerTest extends AbstractGmGwtTest {
 
 	private static final long SECOND_IN_MILLIS = 1000;
 

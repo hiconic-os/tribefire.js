@@ -17,7 +17,7 @@ import com.braintribe.model.generic.GmfException;
 /**
  * @author peter.gazdik
  */
-public class GrindleboneTest extends AbstractGwtTest {
+public class GrindleboneTest extends AbstractGmGwtTest {
 
 	@Override
 	protected void tryRun() throws GmfException {

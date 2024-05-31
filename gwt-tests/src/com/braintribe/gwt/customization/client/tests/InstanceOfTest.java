@@ -45,7 +45,7 @@ import com.braintribe.model.util.meta.NewMetaModelGeneration;
 /**
  * @author peter.gazdik
  */
-public class InstanceOfTest extends AbstractGwtTest {
+public class InstanceOfTest extends AbstractGmGwtTest {
 
 	private static final String SYNTHETIC = "Synthetic";
 	private static final String IS_NOT_ASSIGNABLE_TO_TYPE = " is not assignable to ";

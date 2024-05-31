@@ -29,7 +29,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 /**
  * @author peter.gazdik
  */
-public class SingleCharEnumTest extends AbstractGwtTest {
+public class SingleCharEnumTest extends AbstractGmGwtTest {
 
 	@Override
 	protected void tryRun() throws GmfException {

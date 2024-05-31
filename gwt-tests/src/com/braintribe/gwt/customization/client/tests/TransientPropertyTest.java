@@ -31,7 +31,7 @@ import com.braintribe.model.util.meta.NewMetaModelGeneration;
 /**
  * @author peter.gazdik
  */
-public class TransientPropertyTest extends AbstractGwtTest {
+public class TransientPropertyTest extends AbstractGmGwtTest {
 
 	private EntityType<?> DYNAMIC_ET;
 

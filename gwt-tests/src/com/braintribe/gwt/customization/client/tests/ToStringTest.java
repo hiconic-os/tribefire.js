@@ -26,7 +26,7 @@ import com.braintribe.model.meta.GmMetaModel;
 /**
  * @author peter.gazdik
  */
-public class ToStringTest extends AbstractGwtTest {
+public class ToStringTest extends AbstractGmGwtTest {
 
 	@Override
 	protected void tryRun() throws GmfException {

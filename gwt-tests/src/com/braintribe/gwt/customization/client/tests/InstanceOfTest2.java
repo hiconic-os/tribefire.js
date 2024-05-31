@@ -32,7 +32,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 /**
  * @author peter.gazdik
  */
-public class InstanceOfTest2 extends AbstractGwtTest {
+public class InstanceOfTest2 extends AbstractGmGwtTest {
 
 	private static final String IS_NOT_ASSIGNABLE_TO_TYPE = " is not assignable to ";
 	private static final String IS_ASSIGNABLE_TO_TYPE = " is assignable to ";

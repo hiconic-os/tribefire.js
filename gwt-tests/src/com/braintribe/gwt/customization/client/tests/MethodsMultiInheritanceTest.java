@@ -30,7 +30,7 @@ import com.braintribe.model.util.meta.NewMetaModelGeneration;
  * 
  * @author peter.gazdik
  */
-public class MethodsMultiInheritanceTest extends AbstractGwtTest {
+public class MethodsMultiInheritanceTest extends AbstractGmGwtTest {
 
 	@Override
 	protected void tryRun() throws GmfException {

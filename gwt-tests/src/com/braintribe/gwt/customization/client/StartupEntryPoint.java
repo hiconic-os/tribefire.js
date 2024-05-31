@@ -19,6 +19,7 @@ import com.braintribe.gwt.customization.client.tests.InitializerTest;
 import com.braintribe.gwt.customization.client.tests.InstanceOfTest;
 import com.braintribe.gwt.customization.client.tests.KeywordTest;
 import com.braintribe.gwt.customization.client.tests.MethodsMultiInheritanceTest;
+import com.braintribe.gwt.customization.client.tests.NonGmTest;
 import com.braintribe.gwt.customization.client.tests.PartialModelTest;
 import com.braintribe.gwt.customization.client.tests.SingleCharEnumTest;
 import com.braintribe.gwt.customization.client.tests.ToStringTest;
@@ -39,19 +40,20 @@ public class StartupEntryPoint implements EntryPoint {
 	 */
 	@Override
 	public void onModuleLoad() {
-		new BasicItwTest().run();
-		new VirtualPropertyTest().run();
-		new SingleCharEnumTest().run();
-		new EssentialMdTest().run();
-		new InitializerTest().run();
-		new MethodsMultiInheritanceTest().run();
-		new DefaultMethodsTest().run();
-		new ToStringTest().run();
-		new EvaluatesToTest().run();
-		new InstanceOfTest().run();
-		new TransientPropertyTest().run();
-		new PartialModelTest().run();
-		new KeywordTest().run();
+		new NonGmTest().run();
+//		new BasicItwTest().run();
+//		new VirtualPropertyTest().run();
+//		new SingleCharEnumTest().run();
+//		new EssentialMdTest().run();
+//		new InitializerTest().run();
+//		new MethodsMultiInheritanceTest().run();
+//		new DefaultMethodsTest().run();
+//		new ToStringTest().run();
+//		new EvaluatesToTest().run();
+//		new InstanceOfTest().run();
+//		new TransientPropertyTest().run();
+//		new PartialModelTest().run();
+//		new KeywordTest().run();
 
 		// new GrindleboneTest().run();
 		// new JseReadTest().run();

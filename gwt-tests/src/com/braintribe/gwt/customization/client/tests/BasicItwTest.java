@@ -63,7 +63,7 @@ import com.braintribe.model.util.meta.NewMetaModelGeneration;
 /**
  * @author peter.gazdik
  */
-public class BasicItwTest extends AbstractGwtTest {
+public class BasicItwTest extends AbstractGmGwtTest {
 
 	NotifyingGmSession session = new BasicNotifyingGmSession();
 

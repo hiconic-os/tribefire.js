@@ -29,7 +29,7 @@ import com.braintribe.model.util.meta.NewMetaModelGeneration;
  * 
  * @author peter.gazdik
  */
-public class PartialModelTest extends AbstractGwtTest {
+public class PartialModelTest extends AbstractGmGwtTest {
 
 	@Override
 	protected void tryRun() throws GmfException {

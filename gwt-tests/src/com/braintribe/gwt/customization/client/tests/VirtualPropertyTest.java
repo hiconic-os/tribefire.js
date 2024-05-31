@@ -27,7 +27,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 /**
  * @author peter.gazdik
  */
-public class VirtualPropertyTest extends AbstractGwtTest {
+public class VirtualPropertyTest extends AbstractGmGwtTest {
 
 	private EntityType<?> DYNAMIC_ET;
 

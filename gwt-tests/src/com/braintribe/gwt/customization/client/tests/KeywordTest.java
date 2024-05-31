@@ -36,7 +36,7 @@ import jsinterop.context.JsKeywords;
 /**
  * @author peter.gazdik
  */
-public class KeywordTest extends AbstractGwtTest {
+public class KeywordTest extends AbstractGmGwtTest {
 
 	private static final Set<String> jsKeywords = jsKeywordsWithout_Class();
 

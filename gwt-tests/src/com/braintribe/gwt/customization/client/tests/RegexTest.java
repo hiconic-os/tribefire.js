@@ -16,10 +16,10 @@ import com.braintribe.model.processing.query.eval.context.ConditionEvaluationToo
 /**
  * @author peter.gazdik
  */
-public class RegexTest extends AbstractGwtTest {
+public class RegexTest extends AbstractGmGwtTest {
 
 	@Override
-	public void run() {
+	public void tryRun() {
 		String plain = "com.bt.model.Clazz";
 		String pattern = "*.Clazz";
 
