@@ -1,14 +1,3 @@
-// ============================================================================
-// Copyright BRAINTRIBE TECHNOLOGY GMBH, Austria, 2002-2022
-// 
-// This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
-// 
-// This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-// 
-// You should have received a copy of the GNU Lesser General Public License along with this library; See http://www.gnu.org/licenses/.
-// ============================================================================
 package com.braintribe.gwt.customization.client.tests;
 
 import java.util.Arrays;
@@ -39,7 +28,6 @@ import com.braintribe.model.meta.GmMetaModel;
 import com.braintribe.model.meta.GmType;
 import com.braintribe.model.meta.data.HasMetaData;
 import com.braintribe.model.resource.Resource;
-import com.braintribe.model.util.meta.NewMetaModelGeneration;
 
 
 /**
@@ -77,7 +65,7 @@ public class InstanceOfTest extends AbstractGmGwtTest {
 		log("creating models");
 		List<EntityType<?>> toBeVirtualized = Arrays.asList(InitializedSubEntity.T, InitializedEntity.T);
 		Set<String> typeNames = toBeVirtualized.stream().map(t -> t.getTypeSignature()).collect(Collectors.toSet());
-		GmMetaModel testModel = new NewMetaModelGeneration().buildMetaModel("TestModel", toBeVirtualized);
+		GmMetaModel testModel = generateModel("test-model", toBeVirtualized);
 		
 		for (GmType type: testModel.getTypes()) {
 			if (type.isEntity() && typeNames.contains(type.getTypeSignature())) {
@@ -97,9 +85,7 @@ public class InstanceOfTest extends AbstractGmGwtTest {
 				DiamondAbstractIntermediate2.T,
 				DiamondTop.T);
 		
-		
-		
-		GmMetaModel testModel2 = new NewMetaModelGeneration().buildMetaModel("TestModel2", toBeVirtualized2);
+		GmMetaModel testModel2 = generateModel("test-model2", toBeVirtualized2);
 		
 		GmEntityType runtimeDerivedAbstractBase = createDerivate("com.braintribe.model.virtual.RuntimeDerivedAbstractBase", testModel2, DerivedAbstractBase.T);
 		GmEntityType runtimeStandaloneAbstractBase = createDerivate("com.braintribe.model.virtual.RuntimeStandaloneAbstractBase", testModel2, StandaloneAbstractBase.T);

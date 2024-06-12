@@ -19,7 +19,7 @@ import com.braintribe.model.generic.reflection.ListType;
 /**
  * @author peter.gazdik
  */
-public class PlainList<E> extends ArrayList<E> implements ListBase<E> {
+public class PlainList<E> extends ArrayList<E> implements ListBase<E>, JsWrappableCollection {
 
 	private static final long serialVersionUID = -6029303086432557408L;
 
@@ -38,5 +38,11 @@ public class PlainList<E> extends ArrayList<E> implements ListBase<E> {
 	public ListType type() {
 		return listType;
 	}
+
+	// @formatter:off
+	private Collectionish jsWrapper;
+	@Override public Collectionish getCollectionWrapper() { return jsWrapper; }
+	@Override public void setCollectionWrapper(Collectionish jsWrapper) {this.jsWrapper = jsWrapper;}
+	// @formatter:on
 
 }

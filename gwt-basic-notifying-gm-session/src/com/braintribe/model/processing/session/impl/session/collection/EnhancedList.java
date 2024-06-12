@@ -28,6 +28,7 @@ import java.util.Map;
 
 import com.braintribe.model.generic.GMF;
 import com.braintribe.model.generic.GenericEntity;
+import com.braintribe.model.generic.collection.Collectionish;
 import com.braintribe.model.generic.collection.ListBase;
 import com.braintribe.model.generic.manipulation.AddManipulation;
 import com.braintribe.model.generic.manipulation.ClearCollectionManipulation;
@@ -451,10 +452,7 @@ public class EnhancedList<E> extends AbstractList<E> implements ListBase<E>, Enh
 		incomplete = false;
 	}
 
-	/**
-	 * Slightly differs from implementation from {@link AbstractList} - it checks the size of the lists first, and
-	 * continues only if it is equal.
-	 */
+	/** Slightly differs from implementation from {@link AbstractList} - it checks the size of the lists first, and continues only if it is equal. */
 	@Override
 	public boolean equals(Object o) {
 		if (o == this)
@@ -464,7 +462,7 @@ public class EnhancedList<E> extends AbstractList<E> implements ListBase<E>, Enh
 			return false;
 
 		ensureComplete();
-		
+
 		List<?> l = (List<?>) o;
 		if (this.size() != l.size()) {
 			return false;
@@ -496,5 +494,11 @@ public class EnhancedList<E> extends AbstractList<E> implements ListBase<E>, Enh
 		ensureComplete();
 		return delegate.toString();
 	}
+
+	// @formatter:off
+	private Collectionish jsWrapper;
+	@Override public Collectionish getCollectionWrapper() { return jsWrapper; }
+	@Override public void setCollectionWrapper(Collectionish jsWrapper) {this.jsWrapper = jsWrapper;}
+	// @formatter:on
 
 }

@@ -13,7 +13,6 @@ package com.braintribe.gwt.genericmodel.client.itw;
 
 import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.reflection.AbstractProperty;
-import com.google.gwt.core.client.JavaScriptObject;
 
 /**
  * @author peter.gazdik
@@ -38,6 +37,16 @@ public abstract class GwtScriptProperty extends AbstractProperty {
 		return ObfuscatedIdentifierSequence.specialChar + getName();
 	}
 
+	@Override
+	public native <T> T getJs(GenericEntity entity) /*-{
+		return entity[this.@AbstractProperty::propertyName];
+	}-*/;
+
+	@Override
+	public native void setJs(GenericEntity entity, Object value) /*-{
+		entity[this.@AbstractProperty::propertyName] = value;
+	}-*/;
+
 	@SuppressWarnings("unusable-by-js")
 	@Override
 	public <T> T getDirectUnsafe(GenericEntity entity) {
@@ -51,23 +60,5 @@ public abstract class GwtScriptProperty extends AbstractProperty {
 		throw new UnsupportedOperationException("Seems method 'setDirectUnsafe' was not implemented in runtime! Property: "
 				+ getDeclaringType().getTypeSignature() + "." + getName());
 	}
-
-	public static native JavaScriptObject unboxJavaNumberToJsPrimitive(Number i)/*-{
-		return i != null ? i.@Number::doubleValue()() : null;
-	}-*/;
-
-	public static Integer boxJsNumberToJavaInteger(Double n) {
-		return n != null? n.intValue(): null;
-	}
-	
-	public static Float boxJsNumberToJavaFloat(Double n) {
-		return n != null? n.floatValue(): null;
-	}
-
-	public static native JavaScriptObject exceptionIfNumber(JavaScriptObject  o, String pName) /*-{
-		if(typeof(o)=="number")
-			throw Exception("Cannot assign native JS number '"+o+"' to property: " + pName);
-		return o;
-	}-*/;
 
 }

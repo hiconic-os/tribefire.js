@@ -19,7 +19,7 @@ import com.braintribe.model.generic.reflection.MapType;
 /**
  * @author peter.gazdik
  */
-public class PlainMap<K, V> extends LinkedHashMap<K, V> implements MapBase<K, V> {
+public class PlainMap<K, V> extends LinkedHashMap<K, V> implements MapBase<K, V>, JsWrappableCollection {
 
 	private static final long serialVersionUID = -6029303086432557408L;
 
@@ -39,4 +39,9 @@ public class PlainMap<K, V> extends LinkedHashMap<K, V> implements MapBase<K, V>
 		return mapType;
 	}
 
+	// @formatter:off
+	private Collectionish jsWrapper;
+	@Override public Collectionish getCollectionWrapper() { return jsWrapper; }
+	@Override public void setCollectionWrapper(Collectionish jsWrapper) {this.jsWrapper = jsWrapper;}
+	// @formatter:on
 }

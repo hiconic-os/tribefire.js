@@ -18,9 +18,9 @@ import com.braintribe.model.generic.pr.criteria.PropertyCriterion;
 import com.braintribe.model.generic.value.ValueDescriptor;
 
 @SuppressWarnings("unusable-by-js")
-public abstract class AbstractProperty implements Property {
+public abstract class AbstractProperty implements Property, JsInteropAttribute {
 	private GenericModelType propertyType;
-	private final String propertyName;
+	protected final String propertyName;
 	private final boolean isIdentifier;
 	private final boolean isPartition;
 	private final boolean isGlobalId;
@@ -36,6 +36,16 @@ public abstract class AbstractProperty implements Property {
 		this.isGlobalId = GenericEntity.globalId.equals(propertyName);
 		this.nullable = nullable;
 		this.confidential = confidential;
+	}
+
+	@Override
+	public <T> T getJs(GenericEntity entity) {
+		return get(entity);
+	}
+
+	@Override
+	public void setJs(GenericEntity entity, Object value) {
+		set(entity, value);
 	}
 
 	@Override
@@ -61,7 +71,7 @@ public abstract class AbstractProperty implements Property {
 
 		if (!getType().isValueAssignable(value))
 			throw new IllegalArgumentException("Cannot assign value '" + value + "' of type '" + GMF.getTypeReflection().getType(value)
-					+ "' to property '" + qualifiedName() + "' of type '" + getType() + "' Entity: " + entity);
+					+ "' to property '" + qualifiedName() + "' of type '" + getType().getTypeName() + "' Entity: " + entity);
 
 		Object result = getDirectUnsafe(entity);
 		setDirectUnsafe(entity, value);

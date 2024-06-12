@@ -222,7 +222,7 @@ public class JseScriptFunctions extends JavaScriptObject {
 	}
 	
 	public static Date createDate(String millies) {
-		return new Date(new Long(millies));
+		return new Date(Long.valueOf(millies));
 	}
 	
 	private static native <V> V buildStringMap(JavaScriptObject backend) /*-{

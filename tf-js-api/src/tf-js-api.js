@@ -23,7 +23,6 @@ export var service = $tf.service;
 export var session = $tf.session;
 export var time = $tf.time;
 export var util = $tf.util;
-export var view = $tf.view;
 // TC builder
 export var tc = $tf.tc;
 export var lang;

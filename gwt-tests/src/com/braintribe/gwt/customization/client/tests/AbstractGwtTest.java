@@ -1,14 +1,3 @@
-// ============================================================================
-// Copyright BRAINTRIBE TECHNOLOGY GMBH, Austria, 2002-2022
-// 
-// This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
-// 
-// This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-// 
-// You should have received a copy of the GNU Lesser General Public License along with this library; See http://www.gnu.org/licenses/.
-// ============================================================================
 package com.braintribe.gwt.customization.client.tests;
 
 import com.braintribe.gwt.logging.client.ExceptionUtil;
@@ -16,6 +5,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.PreElement;
 import com.google.gwt.dom.client.Style.Unit;
+
+import jsinterop.annotations.JsMethod;
 
 /**
  * @author peter.gazdik
@@ -29,7 +20,7 @@ public abstract class AbstractGwtTest {
 			tryRun();
 
 		} catch (Exception e) {
-			logError("error: " + e.getMessage(), e);
+			logErrorDetail("error: " + e.getMessage(), e);
 		}
 
 		logSeparator();
@@ -54,6 +45,59 @@ public abstract class AbstractGwtTest {
 			throw new RuntimeException("Object is null: " + descriptor);
 	}
 
+	@JsMethod(name = "assertEqual")
+	public native void assertEqualJs(JavaScriptObject actual, JavaScriptObject expected, String message, JavaScriptObject omitLogIfOk) /*-{
+		if (!this.areEqual(actual, expected)) 
+			this.@AbstractGwtTest::logError(*)("Error: " + message + //
+					 "   Expected: " + expected + " (" + this.typeOf(expected) + ")" + //
+					", actual: " + actual + " (" +  this.typeOf(actual) + ")");
+
+		else if (!omitLogIfOk)
+			this.@AbstractGwtTest::log(*)("    " + message + " [OK]");
+	}-*/;
+
+	@JsMethod
+	protected native void assertOperation(Object o, String operationBody, Object expected) /*-{
+		var f = eval("(function(x){return " + operationBody + ";})");
+		var actual = f(o);
+		this.assertEqual(actual, expected, operationBody + " == " + expected);
+	}-*/;
+
+	@JsMethod
+	private native boolean areEqual(JavaScriptObject a, JavaScriptObject b) /*-{
+		if (a == b)
+			return true;
+		if (!Array.isArray(a))
+			return false;
+		if (!Array.isArray(b))
+			return false;
+		if (a.length != b.length)
+			return false;
+		for (var i = 0; i < a.length; i++)
+			if (!this.areEqual(a[i], b[i]))
+				return false;
+		return true;
+	}-*/;
+
+	@JsMethod(name = "typeOf")
+	private native String typeOf(JavaScriptObject o) /*-{
+		if (o == undefined || o == null)
+			return "N/A";
+
+		if (o.@Object::getClass())
+			return o.@Object::getClass()();
+
+		return typeof o;
+	}-*/;
+
+	@JsMethod
+	protected void assertTrue(boolean bool, String what) {
+		if (bool)
+			log("    " + what + " [OK]");
+		else
+			logError("    " + what + " [ERROR]");
+	}
+
 	// ##########################################
 	// ## . . . . . . . tf.js . . . . . . . . .##
 	// ##########################################
@@ -75,6 +119,7 @@ public abstract class AbstractGwtTest {
 		document.getBody().appendChild(document.createHRElement());
 	}
 
+	@JsMethod
 	protected void log(String msg) {
 		Document document = Document.get();
 		PreElement preElement = document.createPreElement();
@@ -83,7 +128,8 @@ public abstract class AbstractGwtTest {
 		document.getBody().appendChild(preElement);
 	}
 
-	protected void logError(String msg, Throwable t) {
+	@JsMethod
+	protected void logErrorDetail(String msg, Throwable t) {
 		Document document = Document.get();
 		PreElement preElement = document.createPreElement();
 		preElement.getStyle().setColor("red");
@@ -92,6 +138,7 @@ public abstract class AbstractGwtTest {
 		document.getBody().appendChild(preElement);
 	}
 
+	@JsMethod
 	protected void logError(String msg) {
 		Document document = Document.get();
 		PreElement preElement = document.createPreElement();

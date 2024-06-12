@@ -26,7 +26,6 @@ export import service = $tf.service;
 export import session = $tf.session;
 export import time = $tf.time;
 export import util = $tf.util;
-export import view = $tf.view;
 
 // TC builder
 export import tc = $tf.tc;

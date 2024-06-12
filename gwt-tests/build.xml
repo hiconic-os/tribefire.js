@@ -125,9 +125,9 @@ You should have received a copy of the GNU Lesser General Public License along w
             <arg value="-style"/>
             <arg value="PRETTY"/>
             <!--Uncomment the lines bellow for creating a folder with the generated java files-->
-            <!--
             <arg value="-gen"/>
             <arg value="GWT-GENERATED"/>
+            <!--
             -->
 
             <!--Uncomment the line bellow if your machine is dual core. It will make compilation faster-->

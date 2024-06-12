@@ -28,30 +28,30 @@ public interface Resources {
 	@JsMethod(namespace = GmCoreApiInteropNamespaces.resources)
 	public static Resource fromBlob(Blob blob) {
 		String uuid = GMF.platform().newUuid();
-		
+
 		GwtInputStreamProvider streamProvider = new GwtInputStreamProvider(blob);
 
 		TransientSource source = TransientSource.T.create();
 		source.setGlobalId(uuid);
 		source.setInputStreamProvider(streamProvider);
-		
+
 		Resource resource = Resource.T.create();
-		
+
 		resource.setResourceSource(source);
 		source.setOwner(resource);
-		
-		resource.setFileSize((long)blob.size());
+
+		resource.setFileSize(blob.size());
 		resource.setMimeType(blob.type());
 		resource.setCreated(new Date());
-		
+
 		return resource;
 	}
-	
+
 	@JsMethod(namespace = GmCoreApiInteropNamespaces.resources)
 	public static Resource fromFile(File file) {
 		Resource resource = fromBlob(file);
 		resource.setName(file.getName());
-		
+
 		return resource;
 	}
 }

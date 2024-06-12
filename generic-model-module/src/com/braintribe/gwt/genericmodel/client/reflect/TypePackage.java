@@ -21,8 +21,10 @@ import com.google.gwt.core.client.JavaScriptObject;
 import jsinterop.context.JsKeywords;
 
 @SuppressWarnings("unusable-by-js")
-public class TypePackage{
+public class TypePackage {
 	
+	public static final String GM_TYPE_NAMESPACE = "$T";
+
 	public static Map<String, JavaScriptObject> packagesByQualfiedName = newMap();
 	
 	// WHY IS THIS HERE???
@@ -31,12 +33,8 @@ public class TypePackage{
 	}-*/;
 	
 	public static native JavaScriptObject getRoot() /*-{
-		var root = $wnd.$T;
-		if(!root){
-			root = {};
-			$wnd.$T = root;
-		}			
-		return root;
+	    var gt = globalThis.parent || globalThis;
+	    return gt.$T || (gt.$T = {}); 
 	}-*/;
 
 	public static final void register(GenericModelType type, Object jsObjectToRegister) {

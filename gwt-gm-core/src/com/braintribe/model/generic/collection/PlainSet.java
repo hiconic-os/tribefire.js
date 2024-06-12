@@ -19,7 +19,7 @@ import com.braintribe.model.generic.reflection.SetType;
 /**
  * @author peter.gazdik
  */
-public class PlainSet<E> extends LinkedHashSet<E> implements SetBase<E> {
+public class PlainSet<E> extends LinkedHashSet<E> implements SetBase<E>, JsWrappableCollection {
 
 	private static final long serialVersionUID = -6029303086432557408L;
 
@@ -39,4 +39,9 @@ public class PlainSet<E> extends LinkedHashSet<E> implements SetBase<E> {
 		return setType;
 	}
 
+	// @formatter:off
+	private Collectionish jsWrapper;
+	@Override public Collectionish getCollectionWrapper() { return jsWrapper; }
+	@Override public void setCollectionWrapper(Collectionish jsWrapper) {this.jsWrapper = jsWrapper;}
+	// @formatter:on
 }

@@ -32,6 +32,7 @@ import java.util.function.BiConsumer;
 
 import com.braintribe.model.generic.GMF;
 import com.braintribe.model.generic.GenericEntity;
+import com.braintribe.model.generic.collection.Collectionish;
 import com.braintribe.model.generic.collection.MapBase;
 import com.braintribe.model.generic.manipulation.AddManipulation;
 import com.braintribe.model.generic.manipulation.ClearCollectionManipulation;
@@ -461,7 +462,7 @@ public class EnhancedMap<K, V> extends AbstractMap<K, V> implements MapBase<K, V
 
 			return true;
 		}
-		
+
 		@Override
 		public Object[] toArray() {
 			return delegate.entrySet().toArray();
@@ -784,4 +785,10 @@ public class EnhancedMap<K, V> extends AbstractMap<K, V> implements MapBase<K, V
 		collectionManipulation.setOwner(owner);
 		return collectionManipulation;
 	}
+
+	// @formatter:off
+	private Collectionish jsWrapper;
+	@Override public Collectionish getCollectionWrapper() { return jsWrapper; }
+	@Override public void setCollectionWrapper(Collectionish jsWrapper) {this.jsWrapper = jsWrapper;}
+	// @formatter:on
 }

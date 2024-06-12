@@ -28,6 +28,7 @@ import java.util.Set;
 
 import com.braintribe.model.generic.GMF;
 import com.braintribe.model.generic.GenericEntity;
+import com.braintribe.model.generic.collection.Collectionish;
 import com.braintribe.model.generic.manipulation.AddManipulation;
 import com.braintribe.model.generic.manipulation.ClearCollectionManipulation;
 import com.braintribe.model.generic.manipulation.LocalEntityProperty;
@@ -413,7 +414,7 @@ public class EnhancedSet<E> implements Set<E>, EnhancedCollection {
 			return;
 
 		EnhanceUtil.<Set<E>> loadCollectionLazily(entity, owner, value -> delegate.addAll(value));
-		
+
 		loaded = true;
 		incomplete = false;
 	}
@@ -445,4 +446,9 @@ public class EnhancedSet<E> implements Set<E>, EnhancedCollection {
 		return collectionManipulation;
 	}
 
+	// @formatter:off
+	private Collectionish jsWrapper;
+	@Override public Collectionish getCollectionWrapper() { return jsWrapper; }
+	@Override public void setCollectionWrapper(Collectionish jsWrapper) {this.jsWrapper = jsWrapper;}
+	// @formatter:on
 }

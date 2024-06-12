@@ -13,8 +13,8 @@ package com.braintribe.gwt.ioc.client;
 
 import java.util.function.Supplier;
 
-
-
+/** @deprecated seems unused */
+@Deprecated
 public class IocUtils {
 	
 	public static class IfNotNull<T> {

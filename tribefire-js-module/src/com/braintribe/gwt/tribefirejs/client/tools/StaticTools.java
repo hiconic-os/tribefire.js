@@ -51,7 +51,6 @@ import com.braintribe.model.service.api.ServiceRequest;
 import com.braintribe.processing.async.api.AsyncCallback;
 import com.braintribe.processing.async.api.JsPromise;
 import com.braintribe.utils.promise.JsPromiseCallback;
-import com.google.gwt.core.client.JsDate;
 import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.i18n.shared.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.xhr.client.XMLHttpRequest;
@@ -66,11 +65,6 @@ public class StaticTools {
 	@JsMethod(namespace = TfJsNameSpaces.DATE_TOOLS)
 	public static Date now(){
 		return new Date();
-	}
-	
-	@JsMethod(namespace = TfJsNameSpaces.DATE_TOOLS)
-	public static Date fromJsDate(JsDate jsDate){
-		return toDateTime(jsDate.getFullYear(), jsDate.getMonth()+1, jsDate.getDate(), jsDate.getHours(), jsDate.getMinutes(), jsDate.getSeconds());
 	}
 	
 	@JsMethod(name = "parseDate", namespace = TfJsNameSpaces.DATE_TOOLS)
@@ -90,14 +84,6 @@ public class StaticTools {
 		return dateTimeFormat.format(date);
 	}
 	
-	@JsMethod(name = "printJsDate", namespace = TfJsNameSpaces.DATE_TOOLS)
-	public static String printDate(JsDate date, String dtf){
-		DateTimeFormat dateTimeFormat = getDefaultDateTimeFormat();
-		if(dtf != null)
-			dateTimeFormat = DateTimeFormat.getFormat(dtf);
-		return dateTimeFormat.format(fromJsDate(date));
-	}
-		
 	@JsMethod(name = "date", namespace = TfJsNameSpaces.DATE_TOOLS)
 	public static Date toDate(int year, int month, int dayOfMonth){
 		DateTimeFormat dtf = DateTimeFormat.getFormat("yyyy-MM-dd");

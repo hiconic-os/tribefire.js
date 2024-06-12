@@ -20,7 +20,7 @@ import com.braintribe.model.generic.GenericEntity;
  * @author peter.gazdik
  */
 @SuppressWarnings("unusable-by-js")
-public abstract class AbstractTransientProperty implements TransientProperty {
+public abstract class AbstractTransientProperty implements TransientProperty, JsInteropAttribute {
 
 	private final String name;
 	private final Class<?> type;
@@ -57,6 +57,16 @@ public abstract class AbstractTransientProperty implements TransientProperty {
 	@Override
 	public boolean isNullable() {
 		return type.isPrimitive();
+	}
+
+	@Override
+	public <T> T getJs(GenericEntity entity) {
+		return get(entity);
+	}
+
+	@Override
+	public void setJs(GenericEntity entity, Object value) {
+		set(entity, value);
 	}
 
 	@Override

@@ -1,14 +1,3 @@
-// ============================================================================
-// Copyright BRAINTRIBE TECHNOLOGY GMBH, Austria, 2002-2022
-// 
-// This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
-// 
-// This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-// 
-// You should have received a copy of the GNU Lesser General Public License along with this library; See http://www.gnu.org/licenses/.
-// ============================================================================
 package com.braintribe.gwt.customization.client.tests;
 
 import static com.braintribe.utils.lcd.CollectionTools2.asList;
@@ -22,14 +11,11 @@ import com.braintribe.model.generic.GmfException;
 import com.braintribe.model.generic.reflection.EntityType;
 import com.braintribe.model.generic.reflection.Property;
 import com.braintribe.model.meta.GmMetaModel;
-import com.braintribe.model.util.meta.NewMetaModelGeneration;
 
 /**
  * @author peter.gazdik
  */
 public class EssentialMdTest extends AbstractGmGwtTest {
-
-	private final NewMetaModelGeneration mmg = new NewMetaModelGeneration();
 
 	private static final List<EntityType<?>> types = asList( //
 			EssentialMdEntity.T, //
@@ -39,7 +25,7 @@ public class EssentialMdTest extends AbstractGmGwtTest {
 
 	@Override
 	protected void tryRun() throws GmfException {
-		GmMetaModel model = generateModel();
+		GmMetaModel model = generateModel("test.gwt:essential-md-test-model", types);
 
 		makeSignaturesDynamic(model);
 		ensureModelTypes(model);
@@ -48,12 +34,6 @@ public class EssentialMdTest extends AbstractGmGwtTest {
 		testConfidential(EssentialMdEntity.class.getName(), EssentialMdEntity.confidential);
 		testConfidential(EssentialMdSubEntity.class.getName(), EssentialMdEntity.confidential);
 		testConfidential(EssentialMdSubEntity.class.getName(), EssentialMdSubEntity.siblingConfidential);
-	}
-
-	private GmMetaModel generateModel() {
-		log("generating model");
-
-		return mmg.buildMetaModel("test.gwt.EssentialMdTestModel", types);
 	}
 
 	private void testConfidential(String typeSignature, String propertyName) {

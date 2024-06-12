@@ -1,14 +1,3 @@
-// ============================================================================
-// Copyright BRAINTRIBE TECHNOLOGY GMBH, Austria, 2002-2022
-// 
-// This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
-// 
-// This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-// 
-// You should have received a copy of the GNU Lesser General Public License along with this library; See http://www.gnu.org/licenses/.
-// ============================================================================
 package com.braintribe.gwt.customization.client.tests;
 
 import static com.braintribe.utils.lcd.CollectionTools2.newList;
@@ -58,7 +47,6 @@ import com.braintribe.model.processing.session.api.notifying.interceptors.Collec
 import com.braintribe.model.processing.session.api.notifying.interceptors.InterceptorIdentification;
 import com.braintribe.model.processing.session.impl.notifying.BasicNotifyingGmSession;
 import com.braintribe.model.processing.session.impl.session.collection.CollectionEnhancingPropertyAccessInterceptor;
-import com.braintribe.model.util.meta.NewMetaModelGeneration;
 
 /**
  * @author peter.gazdik
@@ -80,7 +68,6 @@ public class BasicItwTest extends AbstractGmGwtTest {
 	@Override
 	protected void tryRun() {
 		log("generating basic-itw model");
-		NewMetaModelGeneration mmg = new NewMetaModelGeneration();
 		// @formatter:off
 			List<EntityType<?>> types = Arrays.asList(
 					RI_CI_CI.T,
@@ -95,7 +82,7 @@ public class BasicItwTest extends AbstractGmGwtTest {
 			);
 			// @formatter:on
 
-		GmMetaModel metaModel = mmg.buildMetaModel("gm:BasicItwTestModel", types);
+		GmMetaModel metaModel = generateModel("gwt-test:basic-itw-test-model", types);
 		makeSignaturesDynamic(metaModel);
 		addSubTypeForI_ToStr(metaModel);
 
@@ -212,7 +199,7 @@ public class BasicItwTest extends AbstractGmGwtTest {
 				oType = ref.getType(osi);
 				log("found compile time entity type: " + osi);
 			} catch (Exception e) {
-				logError("did not find compile time entity type: " + osi, e);
+				logErrorDetail("did not find compile time entity type: " + osi, e);
 				continue;
 			}
 
@@ -220,7 +207,7 @@ public class BasicItwTest extends AbstractGmGwtTest {
 				type = ref.getType(si);
 				log("found runtime time entity type: " + si);
 			} catch (Exception e) {
-				logError("did not find runtime time entity type: " + si, e);
+				logErrorDetail("did not find runtime time entity type: " + si, e);
 				continue;
 			}
 
@@ -238,7 +225,7 @@ public class BasicItwTest extends AbstractGmGwtTest {
 					logError("name of runtime time class is not matching: " + className + ", expected: " + si);
 				}
 			} catch (Exception e) {
-				logError("error while checking class", e);
+				logErrorDetail("error while checking class", e);
 			}
 
 			try {
@@ -258,7 +245,7 @@ public class BasicItwTest extends AbstractGmGwtTest {
 					log("interface class");
 				}
 			} catch (Exception e) {
-				logError("error while checking super class", e);
+				logErrorDetail("error while checking super class", e);
 			}
 
 			// checking instantiability
@@ -285,7 +272,7 @@ public class BasicItwTest extends AbstractGmGwtTest {
 					plainInstance = createInstance(type, si, "plain runtime", true);
 
 				} catch (Exception e) {
-					logError("Error creating entities", e);
+					logErrorDetail("Error creating entities", e);
 				}
 
 				// instanceof validation
@@ -376,7 +363,7 @@ public class BasicItwTest extends AbstractGmGwtTest {
 					}
 				}
 			} catch (Exception e) {
-				logError("failed scanning properties", e);
+				logErrorDetail("failed scanning properties", e);
 			}
 
 			if (entityType == IdEntity.T) {
@@ -452,7 +439,7 @@ public class BasicItwTest extends AbstractGmGwtTest {
 			// reset property value for potential expressive access
 			property.set(instance, property.getType().getDefaultValue());
 		} catch (Exception e) {
-			logError("        " + "error while accessing set/get; mode=" + mode, e);
+			logErrorDetail("        " + "error while accessing set/get; mode=" + mode, e);
 
 		} finally {
 			session.listeners().remove(manipulationCollector);
@@ -483,7 +470,7 @@ public class BasicItwTest extends AbstractGmGwtTest {
 			// reset property value for potential expressive access
 			property.setDirect(instance, property.getType().getDefaultValue());
 		} catch (Exception e) {
-			logError("        " + "error while DIRECTLY accessing set/get; mode=" + mode, e);
+			logErrorDetail("        " + "error while DIRECTLY accessing set/get; mode=" + mode, e);
 
 		} finally {
 			session.listeners().remove(manipulationCollector);
@@ -496,7 +483,7 @@ public class BasicItwTest extends AbstractGmGwtTest {
 		try {
 			entity.setId(id);
 		} catch (Exception e) {
-			logError("        " + "error while DIRECTLY writing persistence id; mode=" + mode, e);
+			logErrorDetail("        " + "error while DIRECTLY writing persistence id; mode=" + mode, e);
 		}
 
 		Object retrievedId = entity.getId();

@@ -11,13 +11,6 @@
 // ============================================================================
 package com.braintribe.gwt.genericmodel.client.itw;
 
-import static com.braintribe.gwt.genericmodel.client.itw.GenericAccessorMethods.buildFloatBoxingSetter;
-import static com.braintribe.gwt.genericmodel.client.itw.GenericAccessorMethods.buildIntBoxingSetter;
-import static com.braintribe.gwt.genericmodel.client.itw.GenericAccessorMethods.buildLongBoxingSetter;
-import static com.braintribe.gwt.genericmodel.client.itw.GenericAccessorMethods.buildLongUnboxingGetter;
-import static com.braintribe.gwt.genericmodel.client.itw.GenericAccessorMethods.buildNullableFloatBoxingSetter;
-import static com.braintribe.gwt.genericmodel.client.itw.GenericAccessorMethods.buildNullableIntBoxingSetter;
-import static com.braintribe.gwt.genericmodel.client.itw.GenericAccessorMethods.buildUnboxingGetter;
 import static com.braintribe.gwt.genericmodel.client.itw.ScriptOnlyItwTools.eval;
 import static com.braintribe.utils.lcd.CollectionTools2.index;
 import static com.braintribe.utils.lcd.CollectionTools2.iteratorAtTheEndOf;
@@ -37,6 +30,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.braintribe.common.lcd.Pair;
+import com.braintribe.common.lcd.Tuple.Tuple3;
 import com.braintribe.gwt.async.client.Future;
 import com.braintribe.gwt.browserfeatures.client.JsStringMap;
 import com.braintribe.gwt.genericmodel.client.reflect.GwtEntityType;
@@ -51,6 +45,7 @@ import com.braintribe.model.generic.reflection.EnumType;
 import com.braintribe.model.generic.reflection.GenericModelType;
 import com.braintribe.model.generic.reflection.GmtsEnhancedEntityStub;
 import com.braintribe.model.generic.reflection.ItwTypeReflection;
+import com.braintribe.model.generic.reflection.MapType;
 import com.braintribe.model.generic.reflection.Property;
 import com.braintribe.model.generic.reflection.PropertyAccessInterceptor;
 import com.braintribe.model.generic.reflection.TypeCode;
@@ -374,16 +369,22 @@ public class GwtScriptTypeSynthesis {
 				if (pb.primitive)
 					enhancedPrototype.setProperty(property.getFieldName(), property.getType().getDefaultValue());
 
-				/* We don't have to set getter/setter in GME case, because nobody calls them for runtime properties, so they are not needed on the
-				 * enhanced prototype (see above the code that handles super-properties) */
+				/* We don't have to set getter/setter for runtime properties because nobody calls them. So they are not needed on the enhanced
+				 * prototype (see above the code that handles super-properties) */
 
-				Pair<JavaScriptObject, JavaScriptObject> functionsPair = buildRuntimeAccessors(property);
+				Pair<JavaScriptObject, JavaScriptObject> functionsPair;
 
+				functionsPair = buildGetterSetterAccessors(property);
 				pb.getterFunction = functionsPair.first;
 				pb.setterFunction = functionsPair.second;
 
-				functionsPair = buildVirtualPropertyAccessors(pb, property);
+				Tuple3<TypeCode, TypeCode, TypeCode> typeCodes = resolveCollectionKeyValueTypeCodes(property);
+				
+				functionsPair = buildVirtualPropertyAccessors(pb, property, typeCodes);
 				enhancedPrototype.defineVirtualProperty(pb.propertyName, functionsPair.first, functionsPair.second);
+
+				functionsPair = buildJsConvertingPropertyAccessors(property, typeCodes);
+				setJsConvertingPropertyAccessors(property, functionsPair.first, functionsPair.second);
 
 				property.setPropertyBinding(pb);
 
@@ -407,6 +408,11 @@ public class GwtScriptTypeSynthesis {
 			entityType.setInitializers(toArrayOrNull(initializers));
 		}
 
+		private native void setJsConvertingPropertyAccessors(GwtRuntimeProperty property, JavaScriptObject get, JavaScriptObject set) /*-{
+			property.get = get;
+			property.set = set;
+		}-*/;
+
 		/**
 		 * If we cannot use a property from super-type, either because we are adding some annotation data, or because we inherit annotation data from
 		 * multiple superTypes, we have to create a new {@link GwtRuntimeProperty} instance with new data.
@@ -415,7 +421,7 @@ public class GwtScriptTypeSynthesis {
 		 * {@link com.braintribe.gwt.genericmodel.build.GenericModelTypeReflectionGenerator.GmtrGeneratorHelper#getTypeWhereWeDeclareTheProperty}.
 		 * 
 		 * <pre>
-		 *  init | conf | property   // "init" means we are decalring an @Initializer on this level, "conf" means we declare it as @Confiedntial
+		 *  init | conf | property   // "init" means we are decalring an @Initializer on this level, "conf" means we declare it as @Confidential
 		 *  NO   |  NO  | existing
 		 *  YES  |  NO  | initP if exists, or new
 		 *  NO   |  YES | confP if exists, or new
@@ -427,7 +433,7 @@ public class GwtScriptTypeSynthesis {
 			GwtScriptProperty confidP = findConfidentialSuperProperty(propertyName);
 			boolean isConfidential = confidP != null;
 
-			// If PO exists, it affects whether property is conditional. If it also defines initializer, we need a new property
+			// If PO exists, it affects whether property is confidential. If it also defines initializer, we need a new property
 			GmPropertyOverride po = propertyOverridesByName.get(propertyName);
 			if (po != null) {
 				isConfidential |= isConfidential(po);
@@ -526,61 +532,51 @@ public class GwtScriptTypeSynthesis {
 			return result;
 		}
 
-		/**
-		 * When it comes to the actual field holding a value, that is of type Object, so we always want the Java wrapper in there.
-		 * 
-		 * <p>
-		 * int/float - the primitive value is native JS number. Hence:
-		 * <ul>
-		 * <li>when calling the primitive getter and setter, we do the boxing/unboxing.
-		 * <li>when using virtual property assignment, we also do boxing/unboxing, but we also allow <tt>null</tt>.
-		 * </ul>
-		 * 
-		 * <p>
-		 * long/Long - the primitive value is the same object as Long:
-		 * <ul>
-		 * <li>when calling the primitive getter and setter, we do the boxing/unboxing.
-		 * <li>when use generic getter/setter, which throws an exception when we try to assign JS number.
-		 * </ul>
-		 */
-		private Pair<JavaScriptObject, JavaScriptObject> buildRuntimeAccessors(GwtScriptProperty property) {
-			if (!property.isNullable() && property.getType() != null) {
-				switch (property.getType().getTypeCode()) {
-					case integerType:
-						return Pair.of(buildUnboxingGetter(property), buildIntBoxingSetter(property));
-					case floatType:
-						return Pair.of(buildUnboxingGetter(property), buildFloatBoxingSetter(property));
-					case longType:
-						return Pair.of(buildLongUnboxingGetter(property), buildLongBoxingSetter(property));
-					default:
-						break;
-				}
-			}
-
-			return new Pair<>(GenericAccessorMethods.buildGenericGetter(property), GenericAccessorMethods.buildGenericSetter(property));
+		/** @see GenericAccessorMethods#buildGetterSetterAccessors */
+		private Pair<JavaScriptObject, JavaScriptObject> buildGetterSetterAccessors(GwtScriptProperty property) {
+			return GenericAccessorMethods.buildGetterSetterAccessors(property);
 		}
 
+		/** @see GenericAccessorMethods#buildJsConvertingAccessors */
 		private Pair<JavaScriptObject, JavaScriptObject> buildVirtualPropertyAccessors(PropertyBinding propertyBinding, Property property) {
-			if (property.getType() != null) {
+			Tuple3<TypeCode, TypeCode, TypeCode> typeCodes = resolveCollectionKeyValueTypeCodes(property);
 
-				TypeCode typeCode = property.getType().getTypeCode();
+			return buildVirtualPropertyAccessors(propertyBinding, property, typeCodes);
+		}
 
-				if (property.isNullable()) {
-					switch (typeCode) {
-						case integerType:
-							return Pair.of(buildUnboxingGetter(property), buildNullableIntBoxingSetter(property));
-						case floatType:
-							return Pair.of(buildUnboxingGetter(property), buildNullableFloatBoxingSetter(property));
-						default:
-							break;
-					}
-				} else if (typeCode == TypeCode.longType) {
-					// primitive long -> both field and value should be Long, so generic getter
-					return Pair.of(GenericAccessorMethods.buildGenericGetter(property), GenericAccessorMethods.buildGenericSetter(property));
+		private Pair<JavaScriptObject, JavaScriptObject> buildVirtualPropertyAccessors( //
+				PropertyBinding propertyBinding, Property property, Tuple3<TypeCode, TypeCode, TypeCode> typeCodes) {
+
+			return GenericAccessorMethods.buildJsConvertingAccessors( //
+					property, propertyBinding.getterFunction, propertyBinding.setterFunction, //
+					typeCodes.val0(), typeCodes.val1(), typeCodes.val2());
+		}
+
+		private Pair<JavaScriptObject, JavaScriptObject> buildJsConvertingPropertyAccessors( //
+				Property property, Tuple3<TypeCode, TypeCode, TypeCode> typeCodes) {
+
+			return GenericAccessorMethods.buildJsConvertingPropertyAccessors(property, typeCodes.val0(), typeCodes.val1(), typeCodes.val2());
+		}
+
+		private Tuple3<TypeCode, TypeCode, TypeCode> resolveCollectionKeyValueTypeCodes(Property property) {
+			GenericModelType type = property.getType();
+			TypeCode collectionType = null;
+			TypeCode keyType = null;
+			TypeCode valueType = type.getTypeCode();
+
+			if (type.isCollection()) {
+				collectionType = valueType;
+
+				if (collectionType == TypeCode.mapType) {
+					MapType mapType = (MapType) type;
+					keyType = mapType.getKeyType().getTypeCode();
+					valueType = mapType.getValueType().getTypeCode();
+				} else {
+					valueType = ((CollectionType) type).getCollectionElementType().getTypeCode();
 				}
 			}
 
-			return Pair.of(propertyBinding.getterFunction, propertyBinding.setterFunction);
+			return Tuple3.of(collectionType, keyType, valueType);
 		}
 
 		// let's take all other methods we can find on all the other super-types

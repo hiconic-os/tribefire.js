@@ -22,7 +22,6 @@ export import service = $tf.service;
 export import session = $tf.session;
 export import time = $tf.time;
 export import util = $tf.util;
-export import view = $tf.view;
 export import tc = $tf.tc;
 export declare namespace lang {
     export import BiConsumer = $tf.BiConsumer;

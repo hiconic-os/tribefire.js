@@ -12,10 +12,11 @@
 package com.braintribe.model.processing.session.impl.session.collection;
 
 import com.braintribe.model.generic.base.CollectionBase;
+import com.braintribe.model.generic.collection.JsWrappableCollection;
 import com.braintribe.model.generic.manipulation.LocalEntityProperty;
 import com.braintribe.model.generic.tracking.ManipulationListener;
 
-public interface EnhancedCollection extends CollectionBase {
+public interface EnhancedCollection extends CollectionBase, JsWrappableCollection {
 
 	void setCollectionOwner(LocalEntityProperty owner);
 

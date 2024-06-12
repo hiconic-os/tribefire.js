@@ -137,12 +137,12 @@ public class DomDecodingContextImpl extends AbstractCodingContext implements Dom
 		try {
 			switch (c) {
 			// simple values
-			case 'b': return new Boolean(getTextContent(element));
+			case 'b': return Boolean.valueOf(getTextContent(element));
 			case 's': return getTextContent(element);
-			case 'i': return new Integer(getTextContent(element));
-			case 'l': return new Long(getTextContent(element));
-			case 'f': return new Float(getTextContent(element));
-			case 'd': return new Double(getTextContent(element));
+			case 'i': return Integer.valueOf(getTextContent(element));
+			case 'l': return Long.valueOf((getTextContent(element)));
+			case 'f': return Float.valueOf(getTextContent(element));
+			case 'd': return Double.valueOf(getTextContent(element));
 			case 'D': return new BigDecimal(getTextContent(element));
 			case 'T': return dateFormat.parseStrict(getTextContent(element));
 			

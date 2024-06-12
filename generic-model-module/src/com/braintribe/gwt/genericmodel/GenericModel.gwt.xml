@@ -3,7 +3,7 @@
     <inherits name="com.braintribe.Codec"/>
 	<inherits name="com.braintribe.common.AttributeApi"/>
     <inherits name="com.braintribe.common.CommonLcd"/>
-    	<inherits name="com.braintribe.common.Lcd"/>
+    <inherits name="com.braintribe.common.Lcd"/>
     <inherits name="com.braintribe.gwt.async.Async"/>
     <inherits name="com.braintribe.gwt.browserfeatures.BrowserFeatures"/>
     <inherits name="com.braintribe.gwt.fileapi.FileApi"/>
@@ -38,6 +38,7 @@
     <inherits name="com.google.gwt.xml.XML"/>
     <!--Resource Module-->
     <inherits name="jsinterop.JsInteropBase"/>
+    <entry-point class="com.braintribe.gwt.genericmodel.client.jsinterop.GmTypesInteropEntryPoint"/>
     <source path="client"/>
     <generate-with class="com.braintribe.gwt.genericmodel.build.GenericModelTypeReflectionGenerator">
     	<when-type-assignable class="com.braintribe.model.generic.reflection.GenericModelTypeReflection"/>

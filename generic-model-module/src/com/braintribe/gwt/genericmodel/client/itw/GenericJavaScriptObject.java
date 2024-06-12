@@ -97,8 +97,7 @@ public class GenericJavaScriptObject extends JavaScriptObject {
 	private final native void defineActualVirtualProperty(String propertyName, JavaScriptObject getter, JavaScriptObject setter) /*-{
 		Object.defineProperty(this, propertyName, {
 			get: getter,
-			set: setter,
-			configurable: true
+			set: setter
 		})
 	}-*/;
 

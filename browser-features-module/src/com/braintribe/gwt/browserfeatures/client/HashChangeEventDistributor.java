@@ -14,7 +14,6 @@ package com.braintribe.gwt.browserfeatures.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.braintribe.gwt.ioc.client.Configurable;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -38,13 +37,11 @@ public class HashChangeEventDistributor {
 		//Instantiation disabled
 	}
 	
-	@Configurable
 	public void setHashChangeListeners(List<HashChangeListener> hashChangeListeners) {
 		this.hashChangeListeners = hashChangeListeners;
 		manageActivity();
 	}
 	
-	@Configurable
 	public void setPollIntervalInMillies(int pollIntervalInMillies) {
 		this.pollIntervalInMillies = pollIntervalInMillies;
 	}

@@ -1,10 +1,14 @@
 package ${package};
 #if ($scriptMode)
 
+import com.braintribe.gwt.genericmodel.client.itw.DefaultLiterals;
 import com.braintribe.gwt.genericmodel.client.itw.EntityTypeBinding;
 import com.braintribe.gwt.genericmodel.client.itw.PropertyBinding;
+import com.braintribe.gwt.genericmodel.client.itw.GenericAccessorMethods;
 import com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType;
 import com.braintribe.gwt.genericmodel.client.itw.GwtScriptProperty;
+import com.braintribe.gwt.genericmodel.client.itw.GwtCompileTimeProperty;
+import com.braintribe.gwt.genericmodel.client.itw.JsPropertyNameReflector;
 import com.braintribe.gwt.genericmodel.client.itw.JsReflectionTools;
 #end
 
@@ -101,7 +105,7 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
     	var enhancedConstructorFunction = @JsReflectionTools::extractConstructor(*)(newEnhancedInstanceFunction);
     	
     	var prototype = @JsReflectionTools::prototypeOf(*)(enhancedConstructorFunction);
-        var prototypeReflection = @com.braintribe.gwt.genericmodel.client.itw.JsPropertyNameReflector::create(Lcom/google/gwt/core/client/JavaScriptObject;)(prototype);
+        var prototypeReflection = @JsPropertyNameReflector::create(*)(prototype);
         
         // enrich and transfer castable typemap from java class to entitytype
 		var et = @${className}::INSTANCE;
@@ -113,14 +117,23 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
         
 #foreach($property in $properties)
 #if(${property.primitive} && !${entityDesc.isInheritedFromSuperclass($property.name)})
-		transit = ${property.singletonInstanceJsniRef}.@com.braintribe.gwt.genericmodel.client.itw.GwtCompileTimeProperty::getFieldName()();
-		prototype[transit] = @com.braintribe.gwt.genericmodel.client.itw.DefaultLiterals::default_${property.originalType};
+		transit = ${property.singletonInstanceJsniRef}.@GwtCompileTimeProperty::getFieldName()();
+		prototype[transit] = @DefaultLiterals::default_${property.originalType};
 #end
 
 #if (!${entityDesc.getIsInheritedFromSuperclass($property.name)} || !${property.isOverlay})
+		var accessorPair = @GenericAccessorMethods::buildJsConvertingAccessors(*)(
+					${property.singletonInstanceJsniRef},
+					prototype.@$property.declaringType.qualifiedSourceName::${property.getterName}(),
+					prototype.@$property.declaringType.qualifiedSourceName::${property.setterName}(*),
+					${property.collectionTypeCodeJsniRefOrNull},
+					${property.keyTypeCodeJsniRefIfSimpleOrObject},
+					${property.valueTypeCodeJsniRefIfSimpleOrObject}
+				)
+
 		@JsReflectionTools::defineProperty(*)(prototype, "$property.virtualPropertyName()", {
-			${property.getGetterPrototype($property.declaringType.qualifiedSourceName, $property.getterName, $property.name)},
-         	${property.getSetterPrototype($property.declaringType.qualifiedSourceName, $property.setterName, $property.jType.getJNISignature(), $property.name)}
+			get: accessorPair.@com.braintribe.common.lcd.Pair::first,
+			set: accessorPair.@com.braintribe.common.lcd.Pair::second
         });
 #end
 
@@ -134,10 +147,8 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
         pb.@PropertyBinding::property = ${property.singletonInstanceJsniRef};
         pb.@PropertyBinding::runtime = false;
         pb.@PropertyBinding::primitive = ${property.isPrimitive()};
-        
-        ${property.singletonInstanceJsniRef}
-        	.@GwtScriptProperty::setPropertyBinding(Lcom/braintribe/gwt/genericmodel/client/itw/PropertyBinding;)
-        	(pb);
+
+        ${property.singletonInstanceJsniRef}.@GwtScriptProperty::setPropertyBinding(*)(pb);
 #end#end ## fooreach (property...) if (!isOverlay)
         
     	var defaultMethods = {};

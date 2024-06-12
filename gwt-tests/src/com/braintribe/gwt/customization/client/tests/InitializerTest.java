@@ -1,17 +1,4 @@
-// ============================================================================
-// Copyright BRAINTRIBE TECHNOLOGY GMBH, Austria, 2002-2022
-// 
-// This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
-// 
-// This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-// 
-// You should have received a copy of the GNU Lesser General Public License along with this library; See http://www.gnu.org/licenses/.
-// ============================================================================
 package com.braintribe.gwt.customization.client.tests;
-
-import static com.braintribe.utils.lcd.CollectionTools2.asList;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -23,7 +10,6 @@ import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.GmfException;
 import com.braintribe.model.generic.reflection.EntityType;
 import com.braintribe.model.meta.GmMetaModel;
-import com.braintribe.model.util.meta.NewMetaModelGeneration;
 import com.braintribe.utils.lcd.CommonTools;
 
 /**
@@ -35,7 +21,7 @@ public class InitializerTest extends AbstractGmGwtTest {
 
 	@Override
 	protected void tryRun() throws GmfException {
-		GmMetaModel metaModel = generateModel();
+		GmMetaModel metaModel = generateModel("test.gwt27.InitializerModel", InitializedEntity.T, InitializedSubEntity.T);
 
 		makeSignaturesDynamic(metaModel, false);
 		ensureModelTypes(metaModel);
@@ -45,10 +31,10 @@ public class InitializerTest extends AbstractGmGwtTest {
 
 		EntityType<?> et = typeReflection.getEntityType(makeSignatureDynamic(InitializedEntity.class.getName()));
 		GenericEntity entity = et.create();
-		
+
 		log("OldBoolean: " + et.getProperty("uninitializedBooleanValue").setDirect(entity, true));
 		log("OldLong: " + et.getProperty("uninitializedLongValue").setDirect(entity, 0l));
-		
+
 		testInitializedSub(InitializedSubEntity.class.getName());
 		testInitializedSub(makeSignatureDynamic(InitializedSubEntity.class.getName()));
 	}
@@ -102,12 +88,11 @@ public class InitializerTest extends AbstractGmGwtTest {
 	private void assertProperty(EntityType<?> et, String type, GenericEntity entity, String propertyName, Object expected) {
 		Object actual = et.getProperty(propertyName).get(entity);
 
-		if (!CommonTools.equalsOrBothNull(expected, actual)) {
+		if (CommonTools.equalsOrBothNull(expected, actual))
+			log("    property '" + propertyName + "' [OK]");
+		else
 			logError("Property: [" + type + "] " + et.getTypeSignature() + "." + propertyName + " has wrong value. Expected: " + expected
 					+ ", actual: " + actual);
-		} else {
-			log("    property '" + propertyName + "' [OK]");
-		}
 	}
 
 	private void assertDateNow(EntityType<?> et, String type, GenericEntity entity, String propertyName) {
@@ -128,12 +113,6 @@ public class InitializerTest extends AbstractGmGwtTest {
 
 	private void logTestingEntity(EntityType<?> et, String type) {
 		log("Testing '" + et.getTypeSignature() + "'[" + type + "]");
-	}
-
-	private GmMetaModel generateModel() {
-		log("generating meta model");
-
-		return new NewMetaModelGeneration().buildMetaModel("test.gwt27.InitializerModel", asList(InitializedEntity.T, InitializedSubEntity.T));
 	}
 
 }

@@ -1,5 +1,7 @@
 package ${package};
 
+import com.braintribe.gwt.genericmodel.client.itw.GwtCompileTimeProperty;
+
 @java.lang.SuppressWarnings({"deprecation", "unusable-by-js"})
 public #if(${entityDesc.isAbstract})abstract#end class ${enhancedName} extends ${entityDesc.enhancedSuperClassFullName}
 		implements ${entityDesc.entityIfaceFullName} {
@@ -11,8 +13,8 @@ public #if(${entityDesc.isAbstract})abstract#end class ${enhancedName} extends $
 	public static class _Properties {
 #foreach($property in $properties)
 #if(!${property.isOverlay})
-		public static final com.braintribe.gwt.genericmodel.client.itw.GwtCompileTimeProperty ${property.literalName} = 
-		new com.braintribe.gwt.genericmodel.client.itw.GwtCompileTimeProperty(
+		public static final GwtCompileTimeProperty ${property.literalName} = 
+		new GwtCompileTimeProperty(
 			"${property.name}",
 			${property.nullableFlag},
 			${property.confidentialFlag}
