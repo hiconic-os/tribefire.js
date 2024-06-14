@@ -39,7 +39,6 @@ export declare namespace lang {
     export import List = $tf.List;
     export import Map = $tf.Map;
     export import Set = $tf.Set;
-    export import BigDecimal = $tf.BigDecimal;
     export import BinaryOperator = $tf.BinaryOperator;
     export import Byte = $tf.Byte;
     export import Character = $tf.Character;

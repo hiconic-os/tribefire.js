@@ -29,7 +29,6 @@ export var lang;
 (function (lang) {
     lang.Function = $tf.Function;
     // Classes
-    lang.BigDecimal = $tf.BigDecimal;
     lang.BinaryOperator = $tf.BinaryOperator;
     lang.Byte = $tf.Byte;
     lang.Character = $tf.Character;

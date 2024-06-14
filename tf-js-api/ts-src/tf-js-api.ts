@@ -50,7 +50,6 @@ export namespace lang {
     export import Set = $tf.Set;
 
     // Classes
-    export import BigDecimal = $tf.BigDecimal;
     export import BinaryOperator = $tf.BinaryOperator;
     export import Byte = $tf.Byte;
     export import Character = $tf.Character;
