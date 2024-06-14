@@ -21,7 +21,7 @@ import com.google.gwt.dom.client.NodeList;
 
 public class TribefireRuntime {
 	private static final String TF_PREFIX = "tf:";
-	private static Map<String, String> envProps = new HashMap<String, String>();
+	private static Map<String, String> envProps = new HashMap<>();
 	
 	static {
 		Document document = Document.get();
