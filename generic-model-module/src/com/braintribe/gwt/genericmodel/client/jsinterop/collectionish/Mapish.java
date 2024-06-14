@@ -11,8 +11,10 @@ import com.google.gwt.i18n.client.Messages.Optional;
 
 import jsinterop.annotations.JsProperty;
 import jsinterop.annotations.JsType;
+import jsinterop.annotations.custom.TsIgnore;
 import jsinterop.utils.Lambdas.JsUnaryFunction;
 
+@TsIgnore
 @JsType(namespace = TypePackage.GM_TYPE_NAMESPACE)
 public class Mapish<K, V> extends AbstractCollectionish<V> {
 

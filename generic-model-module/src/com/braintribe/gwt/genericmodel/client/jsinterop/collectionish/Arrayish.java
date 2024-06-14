@@ -17,11 +17,13 @@ import jsinterop.annotations.JsFunction;
 import jsinterop.annotations.JsOptional;
 import jsinterop.annotations.JsProperty;
 import jsinterop.annotations.JsType;
+import jsinterop.annotations.custom.TsIgnore;
 import jsinterop.utils.Lambdas.JsUnaryFunction;
 
 /**
  * {@link List} wrapper that fulfills (most of) the JS Array contract.
  */
+@TsIgnore
 @JsType(namespace = TypePackage.GM_TYPE_NAMESPACE)
 public class Arrayish<T> extends AbstractCollectionish<T> {
 
