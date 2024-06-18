@@ -40,7 +40,6 @@ import com.braintribe.model.processing.session.api.managed.ManagedGmSession;
 import com.braintribe.model.processing.session.api.managed.ManipulationApplicationContext;
 import com.braintribe.model.processing.session.api.managed.ManipulationApplicationContextBuilder;
 import com.braintribe.model.processing.session.api.managed.ManipulationLenience;
-import com.braintribe.model.processing.session.api.managed.ManipulationMode;
 import com.braintribe.model.processing.session.api.managed.ManipulationReport;
 import com.braintribe.model.processing.session.api.managed.MergeBuilder;
 import com.braintribe.model.processing.session.api.managed.ModelAccessory;
@@ -245,8 +244,7 @@ public abstract class AbstractManagedGmSession extends BasicNotifyingGmSession i
 					.ignoreUnknownEntitiesManipulations(context.getLenience() == ManipulationLenience.ignoreOnUnknownEntity) //
 					.manifestUnkownEntities(context.getLenience() == ManipulationLenience.manifestOnUnknownEntity) //
 					.ignoreAbsentCollectionManipulations(context.getLenience() == ManipulationLenience.manifestOnUnknownEntity) //
-					.localRequest(context.getMode() == ManipulationMode.LOCAL) //
-					.instantiations(context.getInstantiations()) //
+					.manipulationMode(context.getMode()) //
 					.request(manipulationRequest);
 
 		} catch (ModelAccessException e) {

@@ -20,12 +20,12 @@ import com.braintribe.model.accessapi.ManipulationResponse;
 import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.reflection.EntityType;
 import com.braintribe.model.generic.value.PreliminaryEntityReference;
+import com.braintribe.model.processing.session.api.managed.ManipulationMode;
 import com.braintribe.model.processing.session.api.managed.ManipulationReport;
 
 /**
  * 
  */
-@SuppressWarnings("unusable-by-js")
 public class ContextBuilder implements ManipulationApplicationBuilder {
 
 	private final Smood smood;
@@ -34,7 +34,7 @@ public class ContextBuilder implements ManipulationApplicationBuilder {
 	private boolean ignoreManipulationsReferingToUnknownEntities = false;
 	private boolean manifestUnknownEntities;
 	private boolean ignoreAbsentCollectionManipulations;
-	private boolean isLocalRequest = false;
+	private ManipulationMode mode;
 	private boolean checkRefereesOnDelete = false;
 	private ManipulationApplicationListener listener;
 	private Map<PreliminaryEntityReference, GenericEntity> instantiations;
@@ -123,19 +123,20 @@ public class ContextBuilder implements ManipulationApplicationBuilder {
 	}
 
 	@Override
-	public ManipulationApplicationBuilder localRequest(boolean _isLocalRequest) {
-		this.isLocalRequest = _isLocalRequest;
+	public ManipulationApplicationBuilder manipulationMode(ManipulationMode mode) {
+		this.mode = mode;
 		return this;
+	}
+
+	@Override
+	public ManipulationMode getManipulationMode() {
+		return mode;
 	}
 
 	@Override
 	public ManipulationApplicationBuilder checkRefereesOnDelete(boolean _checkRefereesOnDelete) {
 		this.checkRefereesOnDelete = _checkRefereesOnDelete;
 		return this;
-	}
-
-	public boolean isLocalRequest() {
-		return isLocalRequest;
 	}
 
 	/** @see ManipulationApplicationBuilder#checkRefereesOnDelete(boolean) */
@@ -152,12 +153,6 @@ public class ContextBuilder implements ManipulationApplicationBuilder {
 	@Override
 	public ManipulationApplicationListener getManipulationApplicationListener() {
 		return listener;
-	}
-	
-	@Override
-	public ManipulationApplicationBuilder instantiations(Map<PreliminaryEntityReference, GenericEntity> instantiations) {
-		this.instantiations = instantiations;
-		return this;
 	}
 
 }

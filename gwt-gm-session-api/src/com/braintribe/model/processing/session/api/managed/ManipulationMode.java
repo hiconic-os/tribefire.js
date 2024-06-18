@@ -15,6 +15,9 @@ import com.braintribe.model.generic.GmCoreApiInteropNamespaces;
 import com.braintribe.model.generic.manipulation.EntityProperty;
 import com.braintribe.model.generic.manipulation.LocalEntityProperty;
 import com.braintribe.model.generic.value.EntityReference;
+import com.braintribe.model.generic.value.GlobalEntityReference;
+import com.braintribe.model.generic.value.PersistentEntityReference;
+import com.braintribe.model.generic.value.PreliminaryEntityReference;
 
 import jsinterop.annotations.JsType;
 
@@ -23,17 +26,29 @@ import jsinterop.annotations.JsType;
  * 
  * @see ManipulationApplicationContext#getMode()
  */
-@JsType(namespace=GmCoreApiInteropNamespaces.session)
+@JsType(namespace = GmCoreApiInteropNamespaces.session)
 @SuppressWarnings("unusable-by-js")
 public enum ManipulationMode {
 
 	/**
-	 * Manipulations that use {@link LocalEntityProperty} as it's owner and values for properties are directly GM entities.
+	 * Manipulations that use {@link LocalEntityProperty} as it's owner and directly references GM entities.
 	 */
 	LOCAL,
 
 	/**
-	 * Manipulations that use {@link EntityProperty} as owner and values for properties are {@link EntityReference}s.
+	 * Manipulations that use {@link EntityProperty} as owner and values for properties are {@link EntityReference}s. In case an entity has not id a
+	 * {@link PreliminaryEntityReference} is used, otherwise a {@link PersistentEntityReference} is used.
+	 * <p>
+	 * The <code>globalId</code> property is not treated in any special way in this mode.
 	 */
-	REMOTE
+	REMOTE,
+
+	/**
+	 * Similar to {@link #REMOTE} but uses {@link GlobalEntityReference} instead of {@link PersistentEntityReference} in case the entity has its
+	 * globalId set.
+	 * <p>
+	 * The <code>id</code> property is not treated in any special way in this mode.
+	 */
+	REMOTE_GLOBAL,
+
 }

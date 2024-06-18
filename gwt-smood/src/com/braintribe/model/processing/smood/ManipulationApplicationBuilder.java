@@ -11,15 +11,12 @@
 // ============================================================================
 package com.braintribe.model.processing.smood;
 
-import java.util.Map;
-
 import com.braintribe.model.access.ModelAccessException;
 import com.braintribe.model.accessapi.ManipulationRequest;
-import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.manipulation.CollectionManipulation;
 import com.braintribe.model.generic.manipulation.DeleteMode;
-import com.braintribe.model.generic.value.PreliminaryEntityReference;
 import com.braintribe.model.processing.session.api.managed.ManipulationLenience;
+import com.braintribe.model.processing.session.api.managed.ManipulationMode;
 import com.braintribe.model.processing.session.api.managed.ManipulationReport;
 
 public interface ManipulationApplicationBuilder extends ManipulationReport {
@@ -46,7 +43,8 @@ public interface ManipulationApplicationBuilder extends ManipulationReport {
 	ManipulationApplicationBuilder ignoreAbsentCollectionManipulations(boolean ignoreAbsentCollectionManipulations);
 	boolean ignoreAbsentCollectionManipulations();
 
-	ManipulationApplicationBuilder localRequest(boolean isLocalRequest);
+	ManipulationApplicationBuilder manipulationMode(ManipulationMode mode);
+	ManipulationMode getManipulationMode();
 
 	/**
 	 * Forces the Smood to keep referential integrity. This means that manipulations with {@link DeleteMode#ignoreReferences} are treated as if the
@@ -56,7 +54,5 @@ public interface ManipulationApplicationBuilder extends ManipulationReport {
 
 	ManipulationApplicationBuilder manipulationApplicationListener(ManipulationApplicationListener listener);
 	ManipulationApplicationListener getManipulationApplicationListener();
-	
-	ManipulationApplicationBuilder instantiations(Map<PreliminaryEntityReference, GenericEntity> instantiations);
 
 }
