@@ -26,21 +26,18 @@ import jsinterop.annotations.JsMethod;
 import jsinterop.annotations.JsType;
 
 /**
- * An extension of {@link NotifyingGmSession} which provides some advanced functionality regarding the entities
- * belonging to this session. The main difference is, that this session is aware of the entities attached to it.
+ * An extension of {@link NotifyingGmSession} which provides some advanced functionality regarding the entities belonging to this session. The main
+ * difference is, that this session is aware of the entities attached to it.
  * <p>
- * It is possible to query these entities and also to apply manipulations on them. An important aspect of a managed
- * session (and sub-types) is the so called identity management, which is a guarantee that queries for the same entity
- * (same means having same id) always return the same instance.
+ * It is possible to query these entities and also to apply manipulations on them. An important aspect of a managed session (and sub-types) is the so
+ * called identity management, which is a guarantee that queries for the same entity (same means having same id) always return the same instance.
  * <p>
- * Another important change compared to {@link NotifyingGmSession} is the semantics of the
- * {@link #deleteEntity(GenericEntity)}.
+ * Another important change compared to {@link NotifyingGmSession} is the semantics of the {@link #deleteEntity(GenericEntity)}.
  * 
  * <h3>Querying attached entities</h3>
  * 
- * This session keeps track of the entities attached to it and is able to evaluate queries on these entities and also
- * resolve entity references. If an entity for given reference is not attached to the session, <tt>null</tt> is returned
- * (unlike in case of {@link PersistenceGmSession}).
+ * This session keeps track of the entities attached to it and is able to evaluate queries on these entities and also resolve entity references. If an
+ * entity for given reference is not attached to the session, <tt>null</tt> is returned (unlike in case of {@link PersistenceGmSession}).
  * 
  * @see NotifyingGmSession
  * @see PersistenceGmSession
@@ -74,9 +71,7 @@ public interface ManagedGmSession extends NotifyingGmSession, HasResourceReadAcc
 	 */
 	ModelAccessory getModelAccessory();
 
-	/**
-	 * Creates a {@link ManipulationApplicationContextBuilder} that can be used to execute {@link Manipulation}s.
-	 */
+	/** Creates a {@link ManipulationApplicationContextBuilder} to execute a {@link Manipulation} stack. */
 	ManipulationApplicationContextBuilder manipulate();
 
 	/**
