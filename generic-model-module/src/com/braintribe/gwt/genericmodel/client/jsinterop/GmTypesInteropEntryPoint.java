@@ -21,9 +21,9 @@ public class GmTypesInteropEntryPoint implements EntryPoint {
 	 * @see Mapish
 	 */
 	private native void makeCollectionishesIterable() /*-{
-		$wnd.$T.Arrayish.prototype[Symbol.iterator] = $wnd.$T.Arrayish.prototype.values;
-		$wnd.$T.Setish.prototype[Symbol.iterator] = $wnd.$T.Setish.prototype.values;
-		$wnd.$T.Mapish.prototype[Symbol.iterator] = $wnd.$T.Mapish.prototype.entries;
+		$wnd.$T.Array.prototype[Symbol.iterator] = $wnd.$T.Array.prototype.values;
+		$wnd.$T.Set.prototype[Symbol.iterator] = $wnd.$T.Set.prototype.values;
+		$wnd.$T.Map.prototype[Symbol.iterator] = $wnd.$T.Map.prototype.entries;
 	}-*/;
 
 	// The inner brackets around class definitions are mandatory!!!

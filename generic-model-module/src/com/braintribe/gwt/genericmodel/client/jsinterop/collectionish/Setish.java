@@ -1,5 +1,7 @@
 package com.braintribe.gwt.genericmodel.client.jsinterop.collectionish;
 
+import static com.braintribe.model.generic.reflection.EssentialCollectionTypes.TYPE_SET;
+
 import java.util.Set;
 
 import com.braintribe.gwt.browserfeatures.client.interop.JsIterableIterator;
@@ -13,14 +15,14 @@ import jsinterop.annotations.custom.TsIgnore;
 import jsinterop.utils.Lambdas.JsUnaryFunction;
 
 @TsIgnore
-@JsType(namespace = TypePackage.GM_TYPE_NAMESPACE)
+@JsType(name = "Set", namespace = TypePackage.GM_TYPE_NAMESPACE)
 public class Setish<T> extends AbstractCollectionish<T> {
 
 	private final Set<Object> set;
 
 	public Setish(Set<Object> set, JsUnaryFunction<Object, T> javaToJs, JsUnaryFunction<T, Object> jsToJava) {
-		super(javaToJs, jsToJava);
-		this.set = set;
+		super(set, javaToJs, jsToJava);
+		this.set = set != null ? set : TYPE_SET.createPlain();
 	}
 
 	@Override

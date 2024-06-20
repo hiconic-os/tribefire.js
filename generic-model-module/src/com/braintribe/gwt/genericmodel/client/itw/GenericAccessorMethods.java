@@ -11,12 +11,19 @@
 // ============================================================================
 package com.braintribe.gwt.genericmodel.client.itw;
 
+import static com.braintribe.utils.lcd.CollectionTools2.asMap;
+import static com.braintribe.utils.lcd.CollectionTools2.asSet;
+
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.braintribe.common.lcd.Pair;
+import com.braintribe.gwt.browserfeatures.client.JsArray;
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Arrayish;
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Mapish;
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Setish;
@@ -128,7 +135,7 @@ public class GenericAccessorMethods {
 			Property property, JavaScriptObject getterFunction, JavaScriptObject setterFunction, //
 			TypeCode collectionType, TypeCode keyType, TypeCode valueType) {
 
-		Pair<JsUnaryFunction<?, ?>, JsUnaryFunction<?, ?>> converters = resolveConverters(property, true, collectionType, keyType, valueType);
+		Pair<JsUnaryFunction<?, ?>, JsUnaryFunction<?, ?>> converters = resolveConverters(collectionType, keyType, valueType);
 
 		return Pair.of( //
 				converters.first != null ? convGetter(property, converters.first) : getterFunction, //
@@ -160,7 +167,7 @@ public class GenericAccessorMethods {
 	public static Pair<JavaScriptObject, JavaScriptObject> buildJsConvertingPropertyAccessors( //
 			Property property, TypeCode collectionType, TypeCode keyType, TypeCode valueType) {
 
-		Pair<JsUnaryFunction<?, ?>, JsUnaryFunction<?, ?>> converters = resolveConverters(property, false, collectionType, keyType, valueType);
+		Pair<JsUnaryFunction<?, ?>, JsUnaryFunction<?, ?>> converters = resolveConverters(collectionType, keyType, valueType);
 
 		return Pair.of( //
 				convGet(property, converters.first), //
@@ -187,47 +194,32 @@ public class GenericAccessorMethods {
 	// #################################################
 
 	private static Pair<JsUnaryFunction<?, ?>, JsUnaryFunction<?, ?>> resolveConverters(//
-			Property property, boolean hasBoxUnboxFallback, //
 			TypeCode collectionType, TypeCode keyType, TypeCode valueType) {
 
 		if (collectionType != null) {
 			switch (collectionType) {
 				case listType:
-					return Pair.of(jToJsListConverter(valueType), C_UNWRAP_COLLECTION);
+					return Pair.of(jToJsListConverter(valueType), C_UNWRAP_OR_CONVERT_LIST);
 				case setType:
-					return Pair.of(jToJsSetConverter(valueType), C_UNWRAP_COLLECTION);
+					return Pair.of(jToJsSetConverter(valueType), C_UNWRAP_OR_CONVERT_SET);
 				case mapType:
-					return Pair.of(jToJsMapConverter(keyType, valueType), C_UNWRAP_COLLECTION);
+					return Pair.of(jToJsMapConverter(keyType, valueType), C_UNWRAP_OR_CONVERT_MAP);
 				default:
 					break;
 			}
 		}
 
 		if (valueType != null) {
-			if (property.isNullable()) {
-				switch (valueType) {
-					case integerType:
-						return Pair.of(C_UNBOX, C_BOX_INT);
-					case floatType:
-						return Pair.of(C_J_TO_JS_FLOAT, C_BOX_FLOAT);
-					default:
-						break;
-				}
-			}
-
 			switch (valueType) {
 				case objectType:
 					return Pair.of(C_OBJECT_TO_JS, C_JS_TO_OBJECT);
 				case integerType:
-					return hasBoxUnboxFallback ? Pair.of(null, null) : Pair.of(C_UNBOX, C_BOX_INT);
+					return Pair.of(C_UNBOX, C_BOX_INT);
 				case floatType:
-					// primitive ->
-					// getter uses PAI, we need to unbox and mark type;
-					// setter accepts primitive float, which is number
-					return Pair.of(C_J_TO_JS_FLOAT, hasBoxUnboxFallback ? null : C_BOX_FLOAT);
+					return Pair.of(C_J_TO_JS_FLOAT, C_BOX_FLOAT);
 				case doubleType:
 					// both primitive and wrapper return number, so we just need to mark it and setter works
-					return Pair.of(C_J_TO_JS_DOUBLE, null);
+					return Pair.of(C_J_TO_JS_DOUBLE, C_BOX_DOUBLE);
 				case longType:
 					// both primitive and wrapper
 					return Pair.of(C_LONG_TO_BIG_INT, C_BIG_INT_TO_LONG);
@@ -343,8 +335,11 @@ public class GenericAccessorMethods {
 	private static final JsUnaryFunction<Object, Object> C_BOX_INT = C::boxInt;
 	private static final JsUnaryFunction<Object, Object> C_BIG_INT_TO_LONG = C::bigIntToLong;
 	private static final JsUnaryFunction<Object, Object> C_BOX_FLOAT = C::boxFloat;
+	private static final JsUnaryFunction<Object, Object> C_BOX_DOUBLE = C::boxDouble;
 	private static final JsUnaryFunction<Object, Object> C_JS_TO_J_DATE = C::jsToJDate;
-	private static final JsUnaryFunction<Object, Object> C_UNWRAP_COLLECTION = C::unwrapCollection;
+	private static final JsUnaryFunction<Object, Object> C_UNWRAP_OR_CONVERT_LIST = C::unwrapOrConvertList;
+	private static final JsUnaryFunction<Object, Object> C_UNWRAP_OR_CONVERT_SET = C::unwrapOrConvertSet;
+	private static final JsUnaryFunction<Object, Object> C_UNWRAP_OR_CONVERT_MAP = C::unwrapOrConvertMap;
 	private static final JsUnaryFunction<Object, Object> C_NON_COLLECTION_JS_TO_OBJECT = C::nonCollectionJsToObject;
 
 	// J TO JS
@@ -357,6 +352,14 @@ public class GenericAccessorMethods {
 	private static final JsUnaryFunction<Object, Object> C_UNBOX_LONG = C::unboxLong;
 	private static final JsUnaryFunction<Object, Object> C_NON_COLLECTION_OBJECT_TO_JS = C::nonCollectionObjectToJs;
 
+	public static <T> JsUnaryFunction<Object, T> jToJsNonCollectionConverter() {
+		return (JsUnaryFunction<Object, T>) C_NON_COLLECTION_OBJECT_TO_JS;
+	}
+
+	public static <T> JsUnaryFunction<T, Object> jsToJNonCollectionConverter() {
+		return (JsUnaryFunction<T, Object>) C_NON_COLLECTION_JS_TO_OBJECT;
+	}
+
 	// converters
 	private static class C {
 
@@ -364,8 +367,38 @@ public class GenericAccessorMethods {
 			return boxer.valueOf();
 		}-*/;
 
-		public static Object unwrapCollection(Object c) {
-			return ((Collectionish) c).wrappedCollection();
+		public static Object unwrapOrConvertList(Object c) {
+			if (c instanceof Arrayish)
+				return ((Arrayish<?>) c).wrappedCollection();
+
+			if (isJsArray(c))
+				return jsArrayToList(c);
+
+			throw unsupportedCollection(c, "List");
+		}
+
+		public static Object unwrapOrConvertSet(Object c) {
+			if (c instanceof Setish)
+				return ((Setish<?>) c).wrappedCollection();
+
+			if (isJsSet(c))
+				return jsToJSet(c);
+
+			throw unsupportedCollection(c, "Set");
+		}
+
+		public static Object unwrapOrConvertMap(Object c) {
+			if (c instanceof Mapish)
+				return ((Mapish<?, ?>) c).wrappedCollection();
+
+			if (isJsMap(c))
+				return jsToJMap(c);
+
+			throw unsupportedCollection(c, "Map");
+		}
+
+		private static IllegalArgumentException unsupportedCollection(Object value, String type) {
+			return new IllegalArgumentException("Property of type " + type + " cannt be assigned with value: " + value);
 		}
 
 		@SuppressWarnings("unusable-by-js")
@@ -380,6 +413,10 @@ public class GenericAccessorMethods {
 
 		public native static Object boxFloat(Object v) /*-{
 			return @Float::valueOf(F)(v.valueOf());
+		}-*/;
+
+		public native static Object boxDouble(Object v) /*-{
+			return @Double::valueOf(D)(v.valueOf());
 		}-*/;
 
 		public native static JavaScriptObject longToBigInt(Object v) /*-{
@@ -444,8 +481,14 @@ public class GenericAccessorMethods {
 		private static Object jsToObject(Object v) {
 			if (v instanceof Collectionish)
 				return ((Collectionish) v).wrappedCollection();
-			else
-				return nonCollectionJsToObject(v);
+			if (isJsArray(v))
+				return jsArrayToList(v);
+			if (isJsSet(v))
+				return jsToJSet(v);
+			if (isJsMap(v))
+				return jsToJMap(v);
+
+			return nonCollectionJsToObject(v);
 		}
 
 		private native static Object nonCollectionJsToObject(Object v) /*-{
@@ -488,16 +531,63 @@ public class GenericAccessorMethods {
 			return date == null ? null : date.@Date::toJsDate()();
 		}-*/;
 
+		private static List<Object> jsArrayToList(Object c) {
+			return Arrays.asList(jsToJArray(jsArrayToArray(c)));
+		}
+
+		private static HashSet<Object> jsToJSet(Object c) {
+			return asSet(jsToJArray(jsSetToArray(c)));
+		}
+
+		private static HashMap<Object, Object> jsToJMap(Object c) {
+			return asMap(jsToJArray(jsMapToArray(c)));
+		}
+
+		private static Object[] jsToJArray(Object[] jsArrayToArray) {
+			Object[] result = new Object[jsArrayToArray.length];
+			for (int i = 0; i < jsArrayToArray.length; i++) {
+				Object o = jsArrayToArray[i];
+				result[i] = o == null ? null : nonCollectionJsToObject(o);
+			}
+
+			return result;
+		}
+
+		private static Object[] jsArrayToArray(Object array) {
+			return ((JsArray<?>) array).toArray();
+		}
+
+		private static native Object[] jsSetToArray(Object set) /*-{
+			var result = [];
+			set.forEach(function(e) {
+				result.push(e);
+			});
+			return result;
+		}-*/;
+
+		private static native Object[] jsMapToArray(Object map) /*-{
+			var result = [];
+			map.forEach(function(v, k) {
+				result.push(k);
+				result.push(v);
+			});
+			return result;
+		}-*/;
+
 		/**
 		 * This is more robust than "instanceof Date", as instanceof checks don't work across frames<br>
 		 * <a href="https://stackoverflow.com/a/643827">See StackOverflow</a>.
 		 */
-		private static native boolean isJsDate(JavaScriptObject o) /*-{
-			return Object.prototype.toString.call(o) === '[object Date]';
-		}-*/;
+		// @formatter:off
+		private static boolean isJsDate(JavaScriptObject o) { return isJsType(o, "Date"); }
+		private static boolean isJsNumber(JavaScriptObject o) { return isJsType(o, "Number"); }
+		private static boolean isJsArray(Object o) { return isJsType(o, "Array"); }
+		private static boolean isJsSet(Object o) { return isJsType(o, "Set"); }
+		private static boolean isJsMap(Object o) { return isJsType(o, "Map"); }
+		// @formatter:on
 
-		private static native boolean isJsNumber(JavaScriptObject o) /*-{
-			return Object.prototype.toString.call(o) === '[object Number]';
+		private static native boolean isJsType(Object o, String type) /*-{
+			return Object.prototype.toString.call(o) === '[object '+type+']';
 		}-*/;
 	}
 

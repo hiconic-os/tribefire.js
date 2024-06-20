@@ -1,5 +1,6 @@
 package com.braintribe.gwt.genericmodel.client.jsinterop.collectionish;
 
+import static com.braintribe.model.generic.reflection.EssentialCollectionTypes.TYPE_LIST;
 import static com.braintribe.utils.lcd.CollectionTools2.newList;
 
 import java.util.Arrays;
@@ -24,14 +25,14 @@ import jsinterop.utils.Lambdas.JsUnaryFunction;
  * {@link List} wrapper that fulfills (most of) the JS Array contract.
  */
 @TsIgnore
-@JsType(namespace = TypePackage.GM_TYPE_NAMESPACE)
+@JsType(name = "Array", namespace = TypePackage.GM_TYPE_NAMESPACE)
 public class Arrayish<T> extends AbstractCollectionish<T> {
 
 	private final List<Object> list;
 
 	public Arrayish(List<Object> list, JsUnaryFunction<Object, T> javaToJs, JsUnaryFunction<T, Object> jsToJava) {
-		super(javaToJs, jsToJava);
-		this.list = list;
+		super(list, javaToJs, jsToJava);
+		this.list = list != null ? list : TYPE_LIST.createPlain();
 	}
 
 	@Override

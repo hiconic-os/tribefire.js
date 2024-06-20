@@ -18,6 +18,7 @@ public class SetishTest extends AbstractCollectionishTest{
 		testMethods(set, jsSet);
 	}
 
+	// $wnd is GWT's local variable for the right window/globalThis object
 	private native JavaScriptObject abcJsSet() /*-{
 		return new $wnd.Set(['A', 'B', 'C']);
 	}-*/;

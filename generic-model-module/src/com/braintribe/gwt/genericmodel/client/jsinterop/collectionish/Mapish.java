@@ -1,10 +1,13 @@
 package com.braintribe.gwt.genericmodel.client.jsinterop.collectionish;
 
+import static com.braintribe.model.generic.reflection.EssentialCollectionTypes.TYPE_MAP;
+
 import java.util.Iterator;
 import java.util.Map;
 
 import com.braintribe.gwt.browserfeatures.client.interop.JsIterableIterator;
 import com.braintribe.gwt.browserfeatures.client.interop.JsMap;
+import com.braintribe.gwt.genericmodel.client.itw.GenericAccessorMethods;
 import com.braintribe.gwt.genericmodel.client.reflect.TypePackage;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.i18n.client.Messages.Optional;
@@ -15,23 +18,23 @@ import jsinterop.annotations.custom.TsIgnore;
 import jsinterop.utils.Lambdas.JsUnaryFunction;
 
 @TsIgnore
-@JsType(namespace = TypePackage.GM_TYPE_NAMESPACE)
+@JsType(name = "Map", namespace = TypePackage.GM_TYPE_NAMESPACE)
 public class Mapish<K, V> extends AbstractCollectionish<V> {
 
 	private final Map<Object, Object> map;
 
-	public JsUnaryFunction<Object, K> keyJavaToJs;
-	public JsUnaryFunction<K, Object> keyJsToJava;
+	private final JsUnaryFunction<Object, K> keyJavaToJs;
+	private final JsUnaryFunction<K, Object> keyJsToJava;
 
 	public Mapish( //
 			Map<Object, Object> map, //
 			JsUnaryFunction<Object, V> javaToJs, JsUnaryFunction<V, Object> jsToJava, //
 			JsUnaryFunction<Object, K> keyJavaToJs, JsUnaryFunction<K, Object> keyJsToJava) {
 
-		super(javaToJs, jsToJava);
-		this.map = map;
-		this.keyJavaToJs = keyJavaToJs;
-		this.keyJsToJava = keyJsToJava;
+		super(map, javaToJs, jsToJava);
+		this.keyJavaToJs = map != null ? keyJavaToJs : GenericAccessorMethods.jToJsNonCollectionConverter();
+		this.keyJsToJava = map != null ? keyJsToJava : GenericAccessorMethods.jsToJNonCollectionConverter();
+		this.map = map != null ? map : TYPE_MAP.createPlain();
 	}
 
 	@Override

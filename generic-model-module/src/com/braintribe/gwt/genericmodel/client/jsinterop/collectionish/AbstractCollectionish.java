@@ -1,5 +1,6 @@
 package com.braintribe.gwt.genericmodel.client.jsinterop.collectionish;
 
+import com.braintribe.gwt.genericmodel.client.itw.GenericAccessorMethods;
 import com.braintribe.model.generic.collection.Collectionish;
 import com.braintribe.model.generic.collection.JsWrappableCollection;
 
@@ -18,9 +19,13 @@ public abstract class AbstractCollectionish<T> implements Collectionish {
 	protected final JsUnaryFunction<Object, T> javaToJs;
 	protected final JsUnaryFunction<T, Object> jsToJava;
 
-	public AbstractCollectionish(JsUnaryFunction<Object, T> javaToJs, JsUnaryFunction<T, Object> jsToJava) {
-		this.javaToJs = javaToJs;
-		this.jsToJava = jsToJava;
+	/**
+	 * @param jCollection
+	 *            may be <code>null</code> when created in JS. Then we want to treat it as containing Objects.
+	 */
+	public AbstractCollectionish(Object jCollection, JsUnaryFunction<Object, T> javaToJs, JsUnaryFunction<T, Object> jsToJava) {
+		this.javaToJs = jCollection != null ? javaToJs : GenericAccessorMethods.jToJsNonCollectionConverter();
+		this.jsToJava = jCollection != null ? jsToJava : GenericAccessorMethods.jsToJNonCollectionConverter();
 	}
 
 	protected T[] toJsArrayIfNeeded(Object[] jArray) {

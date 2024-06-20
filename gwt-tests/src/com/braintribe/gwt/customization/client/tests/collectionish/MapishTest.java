@@ -18,6 +18,7 @@ public class MapishTest extends AbstractCollectionishTest {
 		testMethods(map, jsMap);
 	}
 
+	// $wnd is GWT's local variable for the right window/globalThis object
 	private native JavaScriptObject abcJsMap() /*-{
 		return new $wnd.Map([[1, "A"], [2, "B"], [3, "C"]]);
 	}-*/;

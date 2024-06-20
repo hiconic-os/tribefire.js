@@ -1,11 +1,15 @@
 package com.braintribe.gwt.customization.client.tests;
 
 import static com.braintribe.utils.lcd.CollectionTools2.asMap;
+import static com.braintribe.utils.lcd.CollectionTools2.asSet;
 import static com.braintribe.utils.lcd.CollectionTools2.first;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.braintribe.gwt.customization.client.tests.model.simple.PropsEntity;
 import com.braintribe.model.generic.GenericEntity;
@@ -49,6 +53,8 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 		testSettingInJavaGettingInJs();
 
 		testConversionsForObjectProperty();
+
+		testSettingNativeJavaCollections();
 	}
 
 	private void testInJava_SimpleValues() {
@@ -155,6 +161,7 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 		assertEqual(first(e.getMapFloatDate().values()), date, "first(mapDateDate.values())");
 	}
 
+	// $wnd is GWT's local variable for the right window/globalThis object
 	private native void fillNativeJs(PropsEntity entity, String longVal, JsDate dateVal) /*-{
 		entity.primitiveBoolean = true;
 		entity.booleanWrapper = true;
@@ -162,10 +169,10 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 		entity.integerWrapper = 23;
 		entity.primitiveLong = BigInt(longVal);
 		entity.longWrapper = BigInt(longVal);
-		entity.primitiveFloat = 123;
-		entity.floatWrapper = 123;
-		entity.primitiveDouble = 420;
-		entity.doubleWrapper = 420;
+		entity.primitiveFloat = new $wnd.$T.Double(123);
+		entity.floatWrapper = new $wnd.$T.Double(123);
+		entity.primitiveDouble = new $wnd.$T.Double(420);
+		entity.doubleWrapper = new $wnd.$T.Double(420);
 		entity.string = "unnamed string";
 		entity.date = dateVal;
 
@@ -244,6 +251,11 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 		this.assertEqual(e.string, "unnamed string", "string == 'unnamed string'");
 		this.assertEqual(e.date.valueOf(), dateVal.valueOf(), "date.valueOf() == " + dateVal + ".valueOf() == " + dateVal.valueOf());
 
+		this.assertOperation(e, 'x.primitiveFloat.type()', 'f');
+		this.assertOperation(e, 'x.floatWrapper.type()', 'f');
+		this.assertOperation(e, 'x.primitiveDouble.type()', 'd');
+		this.assertOperation(e, 'x.doubleWrapper.type()', 'd');
+
 		this.assertOperation(e, '[...x.listObject][0].valueOf()', dateVal.valueOf());
 		this.assertOperation(e, '[...x.listString][0]', "unnamed string");
 		this.assertOperation(e, '[...x.listFloat][0]', 42);
@@ -295,13 +307,13 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 		// Float
 		e.setId(1f);
 		assertIdIsJsNumber(e, "f");
-		setIdAsNumberInJs(e, "new globalThis.parent.$T.Float(1)");
+		setIdAsNumberInJs(e, "new $wnd.$T.Float(1)");
 		assertEqual(e.getId(), 1f, "id (Float)");
 
 		// Double
 		e.setId(1d);
 		assertIdIsJsNumber(e, "d");
-		setIdAsNumberInJs(e, "new globalThis.parent.$T.Double(1)");
+		setIdAsNumberInJs(e, "new $wnd.$T.Double(1)");
 		assertEqual(e.getId(), 1d, "id (Double)");
 
 		// Date
@@ -378,6 +390,84 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 	private native void assertIdIsArrayish(PropsEntity e) /*-{
 	 	this.@Props_CompileTimeEntity_Test::assertTrue(*)(@Props_CompileTimeEntity_Test::isJsDate(*)(entity.id), "id is Date");
 		this.@Props_CompileTimeEntity_Test::assertTrue(*)(entity.id.valueOf() == 1, "id.valueOf() == 1");
+	}-*/;
+
+	private void testSettingNativeJavaCollections() {
+		logTesting("Set native Java collection");
+
+		PropsEntity e = PropsEntity.T.create();
+
+		// String[]
+		setStringArrayInJs(e, "listString");
+		setStringArrayInJs(e, "id");
+		assertEqual(e.getId(), Arrays.asList("a"), "listString");
+		assertEqual(e.getListString(), Arrays.asList("a"), "listString");
+
+		// Date[]
+		setDateArrayInJs(e, "listDate");
+		setDateArrayInJs(e, "id");
+		assertEqual(first(e.getListDate()), new Date(5), "listDate");
+		assertEqual(first((List<?>) e.getId()), new Date(5), "id");
+
+		// Set<String>
+		setStringSetInJs(e, "setString");
+		setStringSetInJs(e, "id");
+		assertEqual(e.getSetString(), asSet("a"), "setString");
+		assertEqual(e.getId(), asSet("a"), "id");
+
+		// Set<Date>
+		setDateSetInJs(e, "setDate");
+		setDateSetInJs(e, "id");
+		assertEqual(first(e.getSetDate()), new Date(5), "setDate");
+		assertEqual(first((Set<?>) e.getId()), new Date(5), "id");
+
+		// Map<Integer, String>
+		setMapIntegerStringInJs(e, "mapIntegerString");
+		setMapIntegerStringInJs(e, "id");
+		assertEqual(firstKey(e.getMapIntegerString()), 1, "mapIntegerString.key");
+		assertEqual(firstValue(e.getMapIntegerString()), "one", "mapIntegerString.value");
+		assertEqual(firstKey(e.getId()), 1, "id.key");
+		assertEqual(firstValue(e.getId()), "one", "id.value");
+
+		// Map<Float, Date>
+		setMapFloatDateInJs(e, "mapFloatDate");
+		setMapFloatDateInJs(e, "id");
+		assertEqual(firstKey(e.getMapFloatDate()), 11f, "mapFloatDate.key");
+		assertEqual(firstValue(e.getMapFloatDate()), new Date(12), "mapFloatDate.value");
+		assertEqual(firstKey(e.getId()), 11f, "id.key");
+		assertEqual(firstValue(e.getId()), new Date(12), "id.value");
+	}
+
+	private Object firstKey(Object map) {
+		return first(((Map<?, ?>) map).keySet());
+	}
+
+	private Object firstValue(Object map) {
+		return first(((Map<?, ?>) map).values());
+	}
+
+	private native void setStringArrayInJs(PropsEntity e, String prop) /*-{
+		e[prop] = ["a"];
+	}-*/;
+
+	private native void setDateArrayInJs(PropsEntity e, String prop) /*-{
+		e[prop] = [new Date(5)];
+	}-*/;
+
+	private native void setStringSetInJs(PropsEntity e, String prop) /*-{
+		e[prop] = new Set(["a"]);
+	}-*/;
+
+	private native void setDateSetInJs(PropsEntity e, String prop) /*-{
+		e[prop] = new Set([new Date(5)]);
+	}-*/;
+
+	private native void setMapIntegerStringInJs(PropsEntity e, String prop) /*-{
+		e[prop] = new Map([[1, "one"]]);
+	}-*/;
+
+	private native void setMapFloatDateInJs(PropsEntity e, String prop) /*-{
+		e[prop] = new Map([[new $wnd.$T.Float(11), new Date(12)]]);
 	}-*/;
 
 	private void logTesting(String useCase) {
