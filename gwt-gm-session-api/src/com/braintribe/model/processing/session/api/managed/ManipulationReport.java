@@ -18,7 +18,7 @@ import com.braintribe.model.accessapi.ManipulationResponse;
 import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.GmCoreApiInteropNamespaces;
 import com.braintribe.model.generic.reflection.EntityType;
-import com.braintribe.model.generic.value.PreliminaryEntityReference;
+import com.braintribe.model.generic.value.EntityReference;
 
 import jsinterop.annotations.JsType;
 
@@ -26,7 +26,7 @@ import jsinterop.annotations.JsType;
 @SuppressWarnings("unusable-by-js")
 public interface ManipulationReport {
 
-	Map<PreliminaryEntityReference, GenericEntity> getInstantiations();
+	Map<EntityReference, GenericEntity> getInstantiations();
 
 	ManipulationResponse getManipulationResponse();
 
