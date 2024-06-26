@@ -30,12 +30,10 @@ import com.braintribe.model.generic.collection.JsWrappableCollection;
 import com.braintribe.model.generic.collection.PlainList;
 import com.braintribe.model.generic.collection.PlainMap;
 import com.braintribe.model.generic.collection.PlainSet;
+import com.braintribe.model.generic.reflection.EssentialCollectionTypes;
 import com.braintribe.model.generic.reflection.GmtsEnhancedEntityStub;
-import com.braintribe.model.generic.reflection.ListType;
-import com.braintribe.model.generic.reflection.MapType;
 import com.braintribe.model.generic.reflection.Property;
 import com.braintribe.model.generic.reflection.PropertyAccessInterceptor;
-import com.braintribe.model.generic.reflection.SetType;
 import com.braintribe.model.generic.reflection.TypeCode;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsDate;
@@ -536,19 +534,19 @@ public class GenericAccessorMethods {
 		}-*/;
 
 		private static PlainList<Object> jsArrayToJList(Object c) {
-			PlainList<Object> result = new PlainList<>(ListType.TYPE_LIST);
+			PlainList<Object> result = new PlainList<>(EssentialCollectionTypes.TYPE_LIST);
 			result.addAll(Arrays.asList(convertArrayElementsJsToJ(jsArrayToArray(c))));
 			return result;
 		}
 
 		private static PlainSet<Object> jsToJSet(Object c) {
-			PlainSet<Object> result = new PlainSet<>(SetType.TYPE_SET);
+			PlainSet<Object> result = new PlainSet<>(EssentialCollectionTypes.TYPE_SET);
 			result.addAll(Arrays.asList(convertArrayElementsJsToJ(jsSetToArray(c))));
 			return result;
 		}
 
 		private static PlainMap<Object, Object> jsToJMap(Object c) {
-			PlainMap<Object, Object> result = new PlainMap<>(MapType.TYPE_MAP);
+			PlainMap<Object, Object> result = new PlainMap<>(EssentialCollectionTypes.TYPE_MAP);
 			result.putAll(asMap(convertArrayElementsJsToJ(jsMapToArray(c))));
 			return result;
 		}

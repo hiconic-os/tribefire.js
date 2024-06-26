@@ -19,7 +19,7 @@ import com.braintribe.model.generic.GmfException;
 import com.braintribe.model.generic.reflection.BaseType;
 import com.braintribe.model.generic.reflection.EntityType;
 import com.braintribe.model.generic.reflection.GenericModelType;
-import com.braintribe.model.generic.reflection.SimpleType;
+import com.braintribe.model.generic.reflection.SimpleTypes;
 import com.braintribe.model.meta.GmMetaModel;
 import com.braintribe.model.meta.GmType;
 import com.braintribe.model.util.meta.NewMetaModelGeneration;
@@ -38,9 +38,9 @@ public class EvaluatesToTest extends AbstractGmGwtTest {
 		makeSignaturesDynamic(metaModel);
 		ensureModelTypes(metaModel);
 
-		testEvaluatesToSetCorrectly(EvalEntity.class.getName(), SimpleType.TYPE_STRING);
+		testEvaluatesToSetCorrectly(EvalEntity.class.getName(), SimpleTypes.TYPE_STRING);
 		testEvaluatesToSetCorrectly(UnboundWildcardEvalEntity.class.getName(), BaseType.INSTANCE);
-		testEvaluatesToSetCorrectly(ListEvalEntity.class.getName(), GMF.getTypeReflection().getListType(SimpleType.TYPE_STRING));
+		testEvaluatesToSetCorrectly(ListEvalEntity.class.getName(), GMF.getTypeReflection().getListType(SimpleTypes.TYPE_STRING));
 		testEvaluatesToSetCorrectly(BoundWildcardEvalEntity.class.getName(), GenericEntity.T);
 
 		metaModel = generateModelWithSubTypeAsResult(metaModel);
