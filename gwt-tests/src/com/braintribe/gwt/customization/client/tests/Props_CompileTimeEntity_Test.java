@@ -402,6 +402,8 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 		setStringArrayInJs(e, "id");
 		assertEqual(e.getListString(), Arrays.asList("a"), "listString");
 		assertEqual(e.getId(), Arrays.asList("a"), "listString");
+		assertFirstValueInJs(e, "listString", "a");
+		assertFirstValueInJs(e, "id", "a");
 		assertType("listString", e.getListString(), PlainList.class);
 		assertType("id", e.getId(), PlainList.class);
 
@@ -418,6 +420,8 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 		setStringSetInJs(e, "id");
 		assertEqual(e.getSetString(), asSet("a"), "setString");
 		assertEqual(e.getId(), asSet("a"), "id");
+		assertFirstValueInJs(e, "listString", "a");
+		assertFirstValueInJs(e, "id", "a");
 		assertType("setString", e.getSetString(), PlainSet.class);
 		assertType("id", e.getId(), PlainSet.class);
 
@@ -436,6 +440,10 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 		assertEqual(firstValue(e.getMapIntegerString()), "one", "mapIntegerString.value");
 		assertEqual(firstKey(e.getId()), 1, "id.key");
 		assertEqual(firstValue(e.getId()), "one", "id.value");
+		assertFirstKeyInJs(e, "mapIntegerString", 1);
+		assertFirstValueInJs(e, "mapIntegerString", "one");
+		assertFirstKeyInJs(e, "id", 1);
+		assertFirstValueInJs(e, "id", "one");
 		assertType("mapIntegerString", e.getMapIntegerString(), PlainMap.class);
 		assertType("id", e.getId(), PlainMap.class);
 
@@ -480,6 +488,14 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 
 	private native void setMapFloatDateInJs(PropsEntity e, String prop) /*-{
 		e[prop] = new Map([[new $wnd.$T.Float(11), new Date(12)]]);
+	}-*/;
+
+	private native void assertFirstKeyInJs(PropsEntity e, String prop, Object expected) /*-{
+		this.assertEqual(e[prop].keys().next().value, expected, "firstKey(e." + prop + ") == " + expected);
+	}-*/;
+	
+	private native void assertFirstValueInJs(PropsEntity e, String prop, Object expected) /*-{
+		this.assertEqual(e[prop].values().next().value, expected, "firstValue(e." + prop + ") == " + expected);
 	}-*/;
 
 	private void assertType(String desc, Object o, Class<?> clazz) {
