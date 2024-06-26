@@ -400,26 +400,34 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 		// String[]
 		setStringArrayInJs(e, "listString");
 		setStringArrayInJs(e, "id");
-		assertEqual(e.getId(), Arrays.asList("a"), "listString");
 		assertEqual(e.getListString(), Arrays.asList("a"), "listString");
+		assertEqual(e.getId(), Arrays.asList("a"), "listString");
+		assertType("listString", e.getListString(), PlainList.class);
+		assertType("id", e.getId(), PlainList.class);
 
 		// Date[]
 		setDateArrayInJs(e, "listDate");
 		setDateArrayInJs(e, "id");
 		assertEqual(first(e.getListDate()), new Date(5), "listDate");
 		assertEqual(first((List<?>) e.getId()), new Date(5), "id");
+		assertType("listDate", e.getListDate(), PlainList.class);
+		assertType("id", e.getId(), PlainList.class);
 
 		// Set<String>
 		setStringSetInJs(e, "setString");
 		setStringSetInJs(e, "id");
 		assertEqual(e.getSetString(), asSet("a"), "setString");
 		assertEqual(e.getId(), asSet("a"), "id");
+		assertType("setString", e.getSetString(), PlainSet.class);
+		assertType("id", e.getId(), PlainSet.class);
 
 		// Set<Date>
 		setDateSetInJs(e, "setDate");
 		setDateSetInJs(e, "id");
 		assertEqual(first(e.getSetDate()), new Date(5), "setDate");
 		assertEqual(first((Set<?>) e.getId()), new Date(5), "id");
+		assertType("setDate", e.getSetDate(), PlainSet.class);
+		assertType("id", e.getId(), PlainSet.class);
 
 		// Map<Integer, String>
 		setMapIntegerStringInJs(e, "mapIntegerString");
@@ -428,6 +436,8 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 		assertEqual(firstValue(e.getMapIntegerString()), "one", "mapIntegerString.value");
 		assertEqual(firstKey(e.getId()), 1, "id.key");
 		assertEqual(firstValue(e.getId()), "one", "id.value");
+		assertType("mapIntegerString", e.getMapIntegerString(), PlainMap.class);
+		assertType("id", e.getId(), PlainMap.class);
 
 		// Map<Float, Date>
 		setMapFloatDateInJs(e, "mapFloatDate");
@@ -436,6 +446,8 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 		assertEqual(firstValue(e.getMapFloatDate()), new Date(12), "mapFloatDate.value");
 		assertEqual(firstKey(e.getId()), 11f, "id.key");
 		assertEqual(firstValue(e.getId()), new Date(12), "id.value");
+		assertType("mapFloatDate", e.getMapFloatDate(), PlainMap.class);
+		assertType("id", e.getId(), PlainMap.class);
 	}
 
 	private Object firstKey(Object map) {
@@ -469,6 +481,12 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 	private native void setMapFloatDateInJs(PropsEntity e, String prop) /*-{
 		e[prop] = new Map([[new $wnd.$T.Float(11), new Date(12)]]);
 	}-*/;
+
+	private void assertType(String desc, Object o, Class<?> clazz) {
+		if (o.getClass() != clazz)
+			logError("Property: [" + desc + "] " + " has wrong type. " + //
+					"Expected: " + clazz.getSimpleName() + ", actual: " + o.getClass().getSimpleName());
+	}
 
 	private void logTesting(String useCase) {
 		log("UseCase: " + useCase);
