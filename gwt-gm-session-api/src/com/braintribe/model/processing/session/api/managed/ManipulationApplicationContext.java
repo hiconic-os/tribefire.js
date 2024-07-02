@@ -24,11 +24,7 @@
 // ============================================================================
 package com.braintribe.model.processing.session.api.managed;
 
-import java.util.Map;
-
-import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.GmCoreApiInteropNamespaces;
-import com.braintribe.model.generic.value.PreliminaryEntityReference;
 
 import jsinterop.annotations.JsType;
 
@@ -41,5 +37,5 @@ public interface ManipulationApplicationContext {
 
 	ManipulationMode getMode();
 	ManipulationLenience getLenience();
-	Map<PreliminaryEntityReference, GenericEntity> getInstantiations();
+
 }

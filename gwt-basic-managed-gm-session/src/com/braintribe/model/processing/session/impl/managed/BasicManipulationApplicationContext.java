@@ -24,12 +24,8 @@
 // ============================================================================
 package com.braintribe.model.processing.session.impl.managed;
 
-import java.util.Map;
-
-import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.manipulation.Manipulation;
 import com.braintribe.model.generic.session.exception.GmSessionException;
-import com.braintribe.model.generic.value.PreliminaryEntityReference;
 import com.braintribe.model.processing.session.api.managed.ManipulationApplicationContext;
 import com.braintribe.model.processing.session.api.managed.ManipulationApplicationContextBuilder;
 import com.braintribe.model.processing.session.api.managed.ManipulationLenience;
@@ -45,7 +41,6 @@ public class BasicManipulationApplicationContext implements ManipulationApplicat
 	private final AbstractManagedGmSession session;
 	private ManipulationMode mode;
 	private ManipulationLenience lenience = ManipulationLenience.none;
-	private Map<PreliminaryEntityReference, GenericEntity> instantiations;
 
 	public BasicManipulationApplicationContext(AbstractManagedGmSession session) {
 		this.session = session;
@@ -83,14 +78,4 @@ public class BasicManipulationApplicationContext implements ManipulationApplicat
 		return this;
 	}
 	
-	@Override
-	public ManipulationApplicationContextBuilder instantiations(Map<PreliminaryEntityReference, GenericEntity> instantiations) {
-		this.instantiations = instantiations;
-		return this;
-	}
-	
-	@Override
-	public Map<PreliminaryEntityReference, GenericEntity> getInstantiations() {
-		return instantiations;
-	}
 }
