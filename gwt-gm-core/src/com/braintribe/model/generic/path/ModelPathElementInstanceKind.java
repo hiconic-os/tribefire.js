@@ -23,10 +23,10 @@ import com.braintribe.model.generic.reflection.EnumTypes;
 public enum ModelPathElementInstanceKind implements EnumBase {
 	any, preliminary, persistent;
 	
-	public static final EnumType T = EnumTypes.T(ModelPathElementInstanceKind.class);
+	public static final EnumType<ModelPathElementInstanceKind> T = EnumTypes.T(ModelPathElementInstanceKind.class);
 	
 	@Override
-	public EnumType type() {
+	public EnumType<ModelPathElementInstanceKind> type() {
 		return T;
 	}
 }

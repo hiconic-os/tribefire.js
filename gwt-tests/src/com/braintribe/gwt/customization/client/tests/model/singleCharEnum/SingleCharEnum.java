@@ -29,10 +29,10 @@ public enum SingleCharEnum implements EnumBase {
 //	A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, 
 	// @formatter:on
 
-	public static final EnumType T = EnumTypes.T(SingleCharEnum.class);
+	public static final EnumType<SingleCharEnum> T = EnumTypes.T(SingleCharEnum.class);
 
 	@Override
-	public EnumType type() {
+	public EnumType<SingleCharEnum> type() {
 		return T;
 	}
 

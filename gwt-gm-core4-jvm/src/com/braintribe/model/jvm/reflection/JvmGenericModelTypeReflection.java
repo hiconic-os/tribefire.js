@@ -43,7 +43,6 @@ import com.braintribe.model.generic.GmfException;
 import com.braintribe.model.generic.mdec.ModelDeclaration;
 import com.braintribe.model.generic.reflection.AbstractGenericModelTypeReflection;
 import com.braintribe.model.generic.reflection.EntityType;
-import com.braintribe.model.generic.reflection.EnumType;
 import com.braintribe.model.generic.reflection.GenericModelException;
 import com.braintribe.model.generic.reflection.GenericModelType;
 import com.braintribe.model.generic.reflection.Model;
@@ -116,15 +115,17 @@ public class JvmGenericModelTypeReflection extends AbstractGenericModelTypeRefle
 
 	@Override
 	protected <T extends GenericEntity> EntityType<T> createEntityType(Class<?> entityClass) throws GenericModelException {
-		/* We use proto JTA here because we cannot be sure we can use the regular one. In case this method is called from within a class initializer
-		 * of on of the meta-model types (e.g. if somebody started with doing GmIntegerType.T.create(), we must use the proto analysis. Since we
-		 * cannot easily tell if that's the case, and proto types are probably faster than regular entities, we simply use always use proto JTA.) */
+		/* We use proto JTA here because we cannot be sure we can use the regular one. In case this method is called from within
+		 * a class initializer of on of the meta-model types (e.g. if somebody started with doing GmIntegerType.T.create(), we
+		 * must use the proto analysis. Since we cannot easily tell if that's the case, and proto types are probably faster than
+		 * regular entities, we simply use always use proto JTA.) */
 
-		/* The above is not entirely true. We can easily detect the first access to ITW, because it always starts with creating EntityType for
-		 * GenericEntity (triggered by EntityBase.T static initialization). BUt we use proto analysis, because it's faster, ignores most MDs. */
+		/* The above is not entirely true. We can easily detect the first access to ITW, because it always starts with creating
+		 * EntityType for GenericEntity (triggered by EntityBase.T static initialization). BUt we use proto analysis, because
+		 * it's faster, ignores most MDs. */
 
 		ProtoGmEntityType twEntityType = (ProtoGmEntityType) getProtoAnalysis().getProtoGmType(entityClass);
-		return getGenericModelTypeSynthesis().ensureEntityType(twEntityType);
+		return getGenericModelTypeSynthesis().ensureEntityType(twEntityType, false);
 	}
 
 	@Override
@@ -138,32 +139,6 @@ public class JvmGenericModelTypeReflection extends AbstractGenericModelTypeRefle
 		}
 
 		return null;
-	}
-
-	@Override
-	@Deprecated
-	public EnumType getEnumType(String typeName, boolean require) {
-		EnumType enumType = super.getEnumType(typeName);
-
-		if (enumType != null)
-			return enumType;
-
-		try {
-			Class<?> clazz = Class.forName(typeName, false, getClassLoader());
-			return getEnumType((Class<? extends Enum<?>>) clazz);
-
-		} catch (ClassNotFoundException e) {
-			if (require)
-				throw new GenericModelException("aquired custom type " + typeName + " not found", e);
-
-			return null;
-		}
-	}
-
-	@Override
-	@Deprecated
-	public EnumType getEnumType(String typeName) {
-		return getEnumType(typeName, true);
 	}
 
 	@Override
@@ -193,8 +168,8 @@ public class JvmGenericModelTypeReflection extends AbstractGenericModelTypeRefle
 					}
 				}
 
-				/* We are using the "lookup" method on purpose, as that does the lookup with a different key (CollectionTypeKey) than what we did now
-				 * (Type), so it might actually find the instance, and if not, it registers it with that key... */
+				/* We are using the "lookup" method on purpose, as that does the lookup with a different key (CollectionTypeKey) than
+				 * what we did now (Type), so it might actually find the instance, and if not, it registers it with that key... */
 				T collectionType = (T) getCollectionType(rawClass, parameterization);
 				javaTypeMap.put(type, collectionType);
 
@@ -254,7 +229,7 @@ public class JvmGenericModelTypeReflection extends AbstractGenericModelTypeRefle
 	private GenericModelType ensureProtoEntityType(JavaTypeAnalysis protoAnalysis, Class<? extends GenericEntity> clazz) {
 		try {
 			ProtoGmType twType = protoAnalysis.getProtoGmType(clazz);
-			return getGenericModelTypeSynthesis().ensureType(twType);
+			return getGenericModelTypeSynthesis().ensureType(twType, false);
 
 		} catch (GenericModelTypeSynthesisException | JavaTypeAnalysisException e) {
 			throw new GenericModelException("Error while ensuring proto entity type: " + clazz.getName(), e);

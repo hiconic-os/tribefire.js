@@ -199,7 +199,7 @@ public class JseScriptFunctions extends JavaScriptObject {
 		}
 	}
 	
-	public static Enum<?> resolveEnum(EnumType enumType, String name) {
+	public static Enum<?> resolveEnum(EnumType<?> enumType, String name) {
 		return enumType.getEnumValue(name);
 	}
 	
@@ -207,7 +207,7 @@ public class JseScriptFunctions extends JavaScriptObject {
 		return scalarType.instanceFromString(name);
 	}
 	
-	public static Enum<?> resolveEnumTypeLenient(EnumType enumType, String name) {
+	public static Enum<?> resolveEnumTypeLenient(EnumType<?> enumType, String name) {
 		if (enumType == null)
 			return null;
 		

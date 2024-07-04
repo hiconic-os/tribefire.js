@@ -29,7 +29,7 @@ public class DeferredEnumInstantiator implements DeferredApplier {
 
 	@Override
 	public void apply() {
-		EnumType enumType = GMF.getTypeReflection().findType(proxyEnum.type().getTypeSignature());
+		EnumType<?> enumType = GMF.getTypeReflection().findType(proxyEnum.type().getTypeSignature());
 		
 		Enum<?> enumConstant = null;
 		if (enumType != null) {

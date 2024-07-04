@@ -46,8 +46,8 @@ public abstract class AbstractGwtGenericModelTypeReflection extends AbstractGene
 	}
 
 	@Override
-	public EnumType deployEnumType(Class<? extends Enum<?>> enumClass) {
-		EnumType type = new EnumTypeImpl(enumClass);
+	public EnumType<?> deployEnumType(Class<? extends Enum<?>> enumClass) {
+		EnumType<?> type = new EnumTypeImpl<>(enumClass);
 
 		registerGenericModelType(enumClass, type);
 
@@ -55,7 +55,7 @@ public abstract class AbstractGwtGenericModelTypeReflection extends AbstractGene
 		return type;
 	}
 
-	private JavaScriptObject constants(EnumType type) {
+	private JavaScriptObject constants(EnumType<?> type) {
 		JavaScriptObject result = JavaScriptObject.createObject();
 
 		for (Enum<?> value : type.getEnumValues())

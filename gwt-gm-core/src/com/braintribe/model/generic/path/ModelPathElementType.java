@@ -23,10 +23,10 @@ import com.braintribe.model.generic.reflection.EnumTypes;
 public enum ModelPathElementType implements EnumBase {
 	EntryPoint, ListItem, MapKey, MapValue, Property, Root, SetItem;
 
-	public static final EnumType T = EnumTypes.T(ModelPathElementType.class);
-	
+	public static final EnumType<ModelPathElementType> T = EnumTypes.T(ModelPathElementType.class);
+
 	@Override
-	public EnumType type() {
+	public EnumType<ModelPathElementType> type() {
 		return T;
 	}
 }

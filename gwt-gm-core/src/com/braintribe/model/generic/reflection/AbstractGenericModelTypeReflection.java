@@ -132,69 +132,32 @@ public abstract class AbstractGenericModelTypeReflection implements ItwTypeRefle
 
 	@Override
 	public SimpleType getSimpleType(Class<?> javaType) {
-		return getSimpleTypeMap().get(javaType);
+		return simpleTypeMap.get(javaType);
 	}
 
 	@Override
-	@Deprecated
-	public List<SimpleType> getSimpleTypes() {
-		return TYPES_SIMPLE;
-	}
-
-	@Override
-	@Deprecated
-	public Map<Class<?>, SimpleType> getSimpleTypeMap() {
-		return simpleTypeMap;
-	}
-
-	@Override
-	@Deprecated
-	public Map<String, SimpleType> getSimpleTypeNameMap() {
-		return simpleTypeNameMap;
-	}
-
-	@Override
-	@Deprecated
-	public Set<Class<?>> getSimpleTypeClasses() {
-		return getSimpleTypeMap().keySet();
-	}
-
-	@Override
-	@Deprecated
-	public Set<String> getSimpleTypeNames() {
-		return getSimpleTypeNameMap().keySet();
-	}
-
-	@Override
-	@Deprecated
-	public EnumType getEnumType(Enum<?> enumConstant) {
-		Class<? extends Enum<?>> enumClass = (Class<? extends Enum<?>>) enumConstant.getClass();
-		return getEnumType(enumClass);
-	}
-
-	@Override
-	public EnumType getEnumType(String typeSignature) {
+	public EnumType<?> getEnumType(String typeSignature) {
 		return getType(typeSignature);
 	}
 
 	@Override
-	public EnumType findEnumType(String typeSignature) {
+	public EnumType<?> findEnumType(String typeSignature) {
 		return findType(typeSignature);
 	}
 
 	@Override
-	@Deprecated
-	public EnumType getEnumType(String typeName, boolean require) {
-		EnumType type = findEnumType(typeName);
-		if (require && type == null)
-			throw new GenericModelException("no enum type found for typeSignature " + typeName);
-
-		return type;
+	public EnumType<?> getEnumType(Enum<?> enumConstant) {
+		return getEnumType((Class<? extends Enum<?>>) enumConstant.getClass());
 	}
 
 	@Override
-	public EnumType getEnumType(Class<? extends Enum<?>> enumClass) {
-		EnumType type = (EnumType) javaTypeMap.get(enumClass);
+	public <E extends Enum<E>> EnumType<E> getEnumTypeSafe(Class<E> enumClass) {
+		return (EnumType<E>) getEnumType(enumClass);
+	}
+
+	@Override
+	public EnumType<?> getEnumType(Class<? extends Enum<?>> enumClass) {
+		EnumType<?> type = (EnumType<?>) javaTypeMap.get(enumClass);
 		if (type != null)
 			return type;
 
@@ -204,9 +167,10 @@ public abstract class AbstractGenericModelTypeReflection implements ItwTypeRefle
 		return deployEnumType(enumClass);
 	}
 
+
 	@Override
-	public EnumType deployEnumType(Class<? extends Enum<?>> enumClass) {
-		EnumType type = new EnumTypeImpl(enumClass);
+	public EnumType<?> deployEnumType(Class<? extends Enum<?>> enumClass) {
+		EnumType<?> type = new EnumTypeImpl<>(enumClass);
 		registerGenericModelType(enumClass, type);
 
 		return type;
@@ -538,11 +502,10 @@ public abstract class AbstractGenericModelTypeReflection implements ItwTypeRefle
 	@Override
 	public Model getModel(String modelName) {
 		Model result = findModel(modelName);
-		if (result == null) {
+		if (result == null)
 			throw new GenericModelException("Model not found '" + modelName
-					+ "'. Did you really use the qualified model name? Also make sure you have the model-declaration.xml on the classpath."
-					+ " For troubleshooting see log entries starting with '[PACKAGED MODELS]' prefix.");
-		}
+					+ "'. Check the name is correct. Also make sure you have the corresponding [model-declaration.xml] on classpath."
+					+ " For troubleshooting see server startup log entries starting with '[PACKAGED MODELS]'.");
 
 		return result;
 	}

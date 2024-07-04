@@ -37,9 +37,11 @@ public enum KeywordEnum implements EnumBase {
 	with,
 	yield;
 
+	public static final EnumType<KeywordEnum> T = EnumTypes.T(KeywordEnum.class);
+
 	@Override
-	public EnumType type() {
-		return EnumTypes.T(KeywordEnum.class);
+	public EnumType<KeywordEnum> type() {
+		return T;
 	}
 
 }

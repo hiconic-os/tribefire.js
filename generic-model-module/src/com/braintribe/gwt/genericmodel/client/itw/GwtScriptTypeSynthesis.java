@@ -167,7 +167,7 @@ public class GwtScriptTypeSynthesis {
 		return index != -1 ? typeSignature.substring(index + 1) : typeSignature;
 	}
 
-	private EnumType createEnumType(GmEnumType gmEnumType) {
+	private EnumType<?> createEnumType(GmEnumType gmEnumType) {
 		String valueArray[] = null;
 		List<GmEnumConstant> constants = gmEnumType.getConstants();
 
