@@ -26,7 +26,7 @@ limitations under the License.
         <V.com.braintribe.gm>[2.0,2.1)</V.com.braintribe.gm>
         <V.com.braintribe.templatetools>[2.0,2.1)</V.com.braintribe.templatetools>
         <V.tribefire.extension.js>[2.1,2.2)</V.tribefire.extension.js>
-        <V.com.google.gwt>2.8.0</V.com.google.gwt>
+        <V.com.google.gwt>2.10.0</V.com.google.gwt>
         <V.javax.servlet>2.4</V.javax.servlet>
         <V.joda-time>2.3</V.joda-time>
         <V.junit>4.11</V.junit>

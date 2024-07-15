@@ -1,18 +1,19 @@
-// ============================================================================
-// Copyright BRAINTRIBE TECHNOLOGY GMBH, Austria, 2002-2022
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-// ============================================================================
+/*
+ * Copyright 2011 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package com.google.gwt.dev.codeserver;
 
 import com.google.gwt.core.ext.TreeLogger;
@@ -67,7 +68,7 @@ public class CodeServer {
       try {
         File baseCacheDir =
             DiskCachingUtil.computePreferredCacheDir(options.getModuleNames(), logger);
-        UnitCache unitCache = UnitCacheSingleton.get(logger, null, baseCacheDir);
+        UnitCache unitCache = UnitCacheSingleton.get(logger, null, baseCacheDir, new CompilerOptionsImpl(options));
         MinimalRebuildCacheManager minimalRebuildCacheManager =
             createMinimalRebuildCacheManager(logger, options, baseCacheDir);
 
@@ -120,12 +121,10 @@ public class CodeServer {
         baseCacheDir,
         ImmutableMap.of(
             "style", options.getOutput().name(),
-            "closureFormattedOutput",
-                Boolean.valueOf(options.isClosureFormattedOutput()).toString(),
-            "generateJsInteropExports",
-                Boolean.valueOf(options.shouldGenerateJsInteropExports()).toString(),
-            "methodDisplayMode", options.getMethodNameDisplayMode().name())
-    );
+            "closureFormattedOutput", String.valueOf(options.isClosureFormattedOutput()),
+            "generateJsInteropExports", String.valueOf(options.shouldGenerateJsInteropExports()),
+            "exportFilters", options.getJsInteropExportFilter().toString(),
+            "methodDisplayMode", options.getMethodNameDisplayMode().name()));
   }
 
   /**
@@ -142,7 +141,7 @@ public class CodeServer {
     TreeLogger startupLogger = topLogger.branch(Type.INFO, "Super Dev Mode starting up");
     File baseCacheDir =
         DiskCachingUtil.computePreferredCacheDir(options.getModuleNames(), startupLogger);
-    UnitCache unitCache = UnitCacheSingleton.get(startupLogger, null, baseCacheDir);
+    UnitCache unitCache = UnitCacheSingleton.get(startupLogger, null, baseCacheDir, new CompilerOptionsImpl(options));
     MinimalRebuildCacheManager minimalRebuildCacheManager =
         createMinimalRebuildCacheManager(topLogger, options, baseCacheDir);
     OutboxTable outboxTable =
