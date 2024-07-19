@@ -79,7 +79,7 @@ public interface ModelMetaDataEditor {
 	@JsMethod(name="onEnumTypeViaTypeSignature")
 	EnumTypeMetaDataEditor onEnumType(String typeSignature);
 	
-	EnumTypeMetaDataEditor onEnumType(EnumType enumType);
+	EnumTypeMetaDataEditor onEnumType(EnumType<?> enumType);
 
 	@JsMethod(name="onEnumTypeViaTypeInfo")
 	EnumTypeMetaDataEditor onEnumType(GmEnumTypeInfo gmEnumTypeInfo);

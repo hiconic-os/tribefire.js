@@ -143,7 +143,7 @@ public class KeywordTest extends AbstractGmGwtTest {
 		e.keywordPackage = $wnd.$T.com.braintribe.gwt.customization.client.tests.model.keyword.with_.non_dynamic.KeywordPackageEntity.create();
 	}-*/;
 
-	private void testKeywordEnum(EnumType enumType) {
+	private void testKeywordEnum(EnumType<?> enumType) {
 		log("Testing Keyword enum: " + enumType.getTypeSignature());
 
 		JavaScriptObject typeJso = resolvTypeJso(enumType);
@@ -155,7 +155,7 @@ public class KeywordTest extends AbstractGmGwtTest {
 		}
 	}
 
-	private JavaScriptObject resolvTypeJso(EnumType enumType) {
+	private JavaScriptObject resolvTypeJso(EnumType<?> enumType) {
 		JavaScriptObject jso = TypePackage.getRoot();
 
 		for (String part : enumType.getTypeSignature().split("\\."))

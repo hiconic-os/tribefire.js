@@ -121,7 +121,7 @@ public interface ModelOracle {
 
 	/** Same as {@link #getTypeOracle(CustomType)}. */
 	@JsMethod(name = "getEnumTypeOracleViaEnumType")
-	EnumTypeOracle getEnumTypeOracle(EnumType type);
+	EnumTypeOracle getEnumTypeOracle(EnumType<?> type);
 
 	/** @return {@link EnumTypeOracle} for given {@link Enum} class. */
 	@JsMethod(name = "getEnumTypeOracleViaEnumClass")
@@ -162,7 +162,7 @@ public interface ModelOracle {
 
 	/** Same as {@link #findTypeOracle(CustomType)}. */
 	@JsMethod(name = "findEnumTypeOracleViaEnumType")
-	EnumTypeOracle findEnumTypeOracle(EnumType type);
+	EnumTypeOracle findEnumTypeOracle(EnumType<?> type);
 
 	/** @return {@link EnumTypeOracle} for given {@link Enum} class. */
 	@JsMethod(name = "findEnumTypeOracleViaEnumClass")

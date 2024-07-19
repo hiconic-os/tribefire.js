@@ -114,7 +114,7 @@ public class ModelMdResolverImpl extends MdResolverImpl<ModelMdResolver> impleme
 	}
 
 	@Override
-	public EnumMdResolver enumType(EnumType enumType) {
+	public EnumMdResolver enumType(EnumType<?> enumType) {
 		return enumTypeSignature(enumType.getTypeSignature());
 	}
 

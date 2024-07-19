@@ -160,7 +160,7 @@ public class BasicItwTest extends AbstractGmGwtTest {
 	private void testEnum() {
 		String enumSignature = adaptTypeSignature(ItwTestColor.class.getName());
 
-		EnumType enumType = GMF.getTypeReflection().getType(enumSignature);
+		EnumType<?> enumType = GMF.getTypeReflection().getType(enumSignature);
 		if (enumType == null) {
 			logError("EnumType not found: " + enumSignature);
 			return;

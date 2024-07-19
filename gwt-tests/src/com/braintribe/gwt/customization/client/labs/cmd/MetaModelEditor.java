@@ -314,7 +314,7 @@ public class MetaModelEditor {
 	// ## . . . . . . . . . . . . Enum . . . . . . . . . . . . . .##
 	// #############################################################
 
-	public GmEnumType loadEnumType(EnumType et) {
+	public GmEnumType loadEnumType(EnumType<?> et) {
 		return loadEnumType(et.getTypeSignature());
 	}
 
@@ -333,7 +333,7 @@ public class MetaModelEditor {
 		return getType(clazz.getName());
 	}
 
-	public GmEnumType getEnumType(EnumType enumType) {
+	public GmEnumType getEnumType(EnumType<?> enumType) {
 		return getType(enumType);
 	}
 
@@ -349,7 +349,7 @@ public class MetaModelEditor {
 		return acquireEnumOverride(enumClass.getName());
 	}
 
-	public GmEnumTypeOverride acquireEnumOverride(EnumType enumType) {
+	public GmEnumTypeOverride acquireEnumOverride(EnumType<?> enumType) {
 		return acquireEnumOverride(enumType.getTypeSignature());
 	}
 

@@ -167,7 +167,7 @@ public class BasicModelMetaDataEditor implements ModelMetaDataEditor {
 	}
 
 	@Override
-	public EnumTypeMetaDataEditor onEnumType(EnumType enumType) {
+	public EnumTypeMetaDataEditor onEnumType(EnumType<?> enumType) {
 		return enumyEditorsIndex.acquireFor(enumType.getTypeSignature());
 	}
 

@@ -60,7 +60,7 @@ public abstract class AbstractGmGwtTest extends AbstractGwtTest {
 		return GMF.getTypeReflection().getEntityType(makeSignatureDynamic(type.getTypeSignature()));
 	}
 
-	protected EnumType getDynamicCounterpart(EnumType type) {
+	protected EnumType<?> getDynamicCounterpart(EnumType<?> type) {
 		return GMF.getTypeReflection().getEnumType(makeSignatureDynamic(type.getTypeSignature()));
 	}
 
