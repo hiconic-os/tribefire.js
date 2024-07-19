@@ -17,6 +17,7 @@ package com.braintribe.model.processing.session.api.managed;
 
 import java.util.List;
 
+import com.braintribe.model.generic.GmCoreApiInteropNamespaces;
 import com.braintribe.model.generic.pr.criteria.TraversingCriterion;
 import com.braintribe.model.generic.session.exception.GmSessionException;
 import com.braintribe.model.query.EntityQuery;
@@ -28,7 +29,7 @@ import com.braintribe.model.query.SelectQuery;
 import jsinterop.annotations.JsMethod;
 import jsinterop.annotations.JsType;
 
-@JsType
+@JsType(namespace=GmCoreApiInteropNamespaces.session)
 @SuppressWarnings("unusable-by-js")
 public interface QueryResultConvenience {
 	

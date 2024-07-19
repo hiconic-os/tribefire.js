@@ -15,14 +15,16 @@
 // ============================================================================
 package com.braintribe.gwt.tribefirejs.client.error;
 
+import com.braintribe.model.generic.GmCoreApiInteropNamespaces;
+
 import jsinterop.annotations.JsIgnore;
 import jsinterop.annotations.JsMethod;
 import jsinterop.annotations.JsProperty;
 import jsinterop.annotations.JsType;
 
 @SuppressWarnings({ "unusable-by-js", "serial" })
-@JsType
-public class TfJsError extends Throwable{
+@JsType(namespace = GmCoreApiInteropNamespaces.util)
+public class TfJsError extends Throwable {
 	
 	Object t;
 	
