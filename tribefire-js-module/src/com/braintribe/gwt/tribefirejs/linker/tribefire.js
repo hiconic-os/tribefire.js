@@ -4,13 +4,13 @@
  */
 export const $tf = globalThis.$tf = {};
 export const $T = globalThis.$T = {};
+$tf.Symbol={};
+$tf.Symbol.enumType = Symbol("enumType");
+$tf.version = function(){return "{tf-version}";}
 console.time('start-hiconic-js');
 var $wnd = globalThis;
 // generated script start
 {tf-script}
 // generated script end
-$wnd.$tf.version = function(){
-	return "{tf-version}";
-}
 console.timeEnd('start-hiconic-js');
-console.log("hiconic.js JavaScript Library {tf-version}");
+console.log("hiconic.js v.{tf-version}");
