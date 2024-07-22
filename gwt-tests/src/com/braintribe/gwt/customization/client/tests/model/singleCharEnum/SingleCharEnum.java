@@ -20,7 +20,7 @@ import com.braintribe.model.generic.reflection.EnumTypes;
 /**
  * @author peter.gazdik
  */
-public enum SingleCharEnum implements EnumBase {
+public enum SingleCharEnum implements EnumBase<SingleCharEnum> {
 
 	off;
 

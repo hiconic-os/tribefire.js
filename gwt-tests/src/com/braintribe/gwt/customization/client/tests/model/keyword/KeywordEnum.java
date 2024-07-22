@@ -20,7 +20,7 @@ import com.braintribe.model.generic.reflection.EnumTypes;
 /**
  * @author peter.gazdik
  */
-public enum KeywordEnum implements EnumBase {
+public enum KeywordEnum implements EnumBase<KeywordEnum> {
 
 	arguments,
 	await,

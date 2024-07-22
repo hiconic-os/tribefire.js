@@ -20,7 +20,7 @@ import com.braintribe.model.generic.reflection.EnumType;
 import com.braintribe.model.generic.reflection.EnumTypes;
 
 //@JsType(namespace = ModelPath.MODEL_PATH_NAMESPACE)
-public enum ModelPathElementInstanceKind implements EnumBase {
+public enum ModelPathElementInstanceKind implements EnumBase<ModelPathElementInstanceKind> {
 	any, preliminary, persistent;
 	
 	public static final EnumType<ModelPathElementInstanceKind> T = EnumTypes.T(ModelPathElementInstanceKind.class);
