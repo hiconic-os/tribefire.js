@@ -166,7 +166,7 @@ public class BasicItwTest extends AbstractGmGwtTest {
 			return;
 		}
 
-		Enum<?> enumInstance = enumType.getInstance("red");
+		Enum<?> enumInstance = enumType.getEnumValue("red");
 		if (enumInstance == null) {
 			logError("EnumInstance is null for constant: red");
 			return;

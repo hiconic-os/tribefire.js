@@ -18,16 +18,12 @@ limitations under the License.
     <parent>
         <groupId>tribefire.js</groupId>
         <artifactId>parent</artifactId>
-        <version>[${major}.${minor},${major}.${nextMinor})</version>
+        <version>[3.0,3.1)</version>
     </parent>
     <artifactId>gwt-tests</artifactId>
-    <version>${major}.${minor}.${revision}</version>
+    <version>3.0.1</version>
     <packaging>war</packaging>
     <properties>
-        <major>3</major>
-        <minor>0</minor>
-        <nextMinor>1</nextMinor>
-        <revision>3</revision>
         <archetype>war</archetype>
         <!-- Exclude dependencies tagged with 'serverdeps' -->
         <tagRule.classpath>!serverdeps</tagRule.classpath>
