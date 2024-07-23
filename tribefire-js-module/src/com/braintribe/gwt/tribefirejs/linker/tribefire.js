@@ -4,8 +4,6 @@
  */
 export const $tf = globalThis.$tf = {};
 export const $T = globalThis.$T = {};
-$tf.Symbol={};
-$tf.Symbol.enumType = Symbol("enumType");
 $tf.version = function(){return "{tf-version}";}
 console.time('start-hiconic-js');
 var $wnd = globalThis;

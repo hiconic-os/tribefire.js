@@ -40,6 +40,16 @@ import jsinterop.context.JsKeywords;
  */
 public abstract class AbstractGwtGenericModelTypeReflection extends AbstractGenericModelTypeReflection {
 
+	static {
+		ensureSymbols();
+	}
+
+	private static native void ensureSymbols() /*-{
+		$wnd.$tf = $wnd.$tf || {};
+		$wnd.$tf.Symbol = $wnd.$tf.Symbol || {};
+		$wnd.$tf.Symbol.enumType = "$enumType";
+	}-*/;
+
 	@Override
 	public Object getItwClassLoader() {
 		return null;
@@ -51,12 +61,14 @@ public abstract class AbstractGwtGenericModelTypeReflection extends AbstractGene
 
 		registerGenericModelType(enumClass, type);
 
-		TypePackage.register(type, constants(type));
+		TypePackage.register(type, enumObject(type));
 		return type;
 	}
 
-	private JavaScriptObject constants(EnumType<?> type) {
+	private JavaScriptObject enumObject(EnumType<?> type) {
 		JavaScriptObject result = JavaScriptObject.createObject();
+
+		defineEnumType(result, type);
 
 		for (Enum<?> value : type.getEnumValues())
 			defineConstant(result, JsKeywords.javaIdentifierToJs(value.name()), value);
@@ -64,8 +76,12 @@ public abstract class AbstractGwtGenericModelTypeReflection extends AbstractGene
 		return result;
 	}
 
-	private static native void defineConstant(JavaScriptObject constants, String name, Enum<?> value)/*-{
-		constants[name] = value;
+	private static native void defineEnumType(JavaScriptObject enumObject, EnumType<?> type) /*-{
+		enumObject[$wnd.$tf.Symbol.enumType] = type;
+	}-*/;
+
+	private static native void defineConstant(JavaScriptObject enumObject, String name, Enum<?> value) /*-{
+		enumObject[name] = value;
 	}-*/;
 
 	@Override
