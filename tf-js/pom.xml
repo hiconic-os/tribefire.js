@@ -25,6 +25,7 @@ limitations under the License.
     <properties>
         <gwt-compatible>true</gwt-compatible>
         <jsinterop>true</jsinterop>
+        <npmPackaging>gwtTerminal</npmPackaging>
     </properties>
     <licenses>
         <license>
