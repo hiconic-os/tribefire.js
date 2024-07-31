@@ -21,17 +21,15 @@ import com.braintribe.model.generic.reflection.EntityTypes;
 import com.braintribe.model.securityservice.credentials.Credentials;
 
 public interface RemoteSessionConfig extends GenericEntity {
+
 	EntityType<RemoteSessionConfig> T = EntityTypes.T(RemoteSessionConfig.class);
 
-	/**
-	 * The url to the tribefire services endpoint root or null if this should be automatically determined
-	 */
+	/** The url to the tribefire services endpoint root or null if this should be automatically determined */
 	String getServicesUrl();
 	void setServicesUrl(String servicesUrl);
 
-	/**
-	 * The credentials to authenticate
-	 */
+	/** The credentials to authenticate */
 	Credentials getCredentials();
 	void setCredentials(Credentials credentials);
+
 }
