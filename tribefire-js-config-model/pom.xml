@@ -22,6 +22,7 @@ limitations under the License.
     <artifactId>tribefire-js-config-model</artifactId>
     <version>3.0.12</version>
     <properties>
+        <archetype>model</archetype>
     </properties>
     <licenses>
         <license>
