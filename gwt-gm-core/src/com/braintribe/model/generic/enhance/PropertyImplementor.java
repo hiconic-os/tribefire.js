@@ -16,5 +16,6 @@
 package com.braintribe.model.generic.enhance;
 
 public enum PropertyImplementor {
-	bean, enhancer
+	bean,
+	enhancer
 }

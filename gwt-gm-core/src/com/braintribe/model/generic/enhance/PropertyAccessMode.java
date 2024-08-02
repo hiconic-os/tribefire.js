@@ -18,4 +18,7 @@
  */
 package com.braintribe.model.generic.enhance;
 
-public enum PropertyAccessMode {set, get}
+public enum PropertyAccessMode {
+	set,
+	get
+}

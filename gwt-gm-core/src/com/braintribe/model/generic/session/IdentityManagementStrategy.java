@@ -16,8 +16,6 @@
 package com.braintribe.model.generic.session;
 
 public enum IdentityManagementStrategy {
-	
 	decode,
 	clone
-
 }

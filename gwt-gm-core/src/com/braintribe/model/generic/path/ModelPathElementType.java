@@ -15,18 +15,14 @@
 // ============================================================================
 package com.braintribe.model.generic.path;
 
-import com.braintribe.model.generic.base.EnumBase;
-import com.braintribe.model.generic.reflection.EnumType;
-import com.braintribe.model.generic.reflection.EnumTypes;
-
 //@JsType(namespace = ModelPath.MODEL_PATH_NAMESPACE)
-public enum ModelPathElementType implements EnumBase<ModelPathElementType> {
-	EntryPoint, ListItem, MapKey, MapValue, Property, Root, SetItem;
+public enum ModelPathElementType {
+	EntryPoint,
+	ListItem,
+	MapKey,
+	MapValue,
+	Property,
+	Root,
+	SetItem;
 
-	public static final EnumType<ModelPathElementType> T = EnumTypes.T(ModelPathElementType.class);
-
-	@Override
-	public EnumType<ModelPathElementType> type() {
-		return T;
-	}
 }
