@@ -15,8 +15,6 @@
 // ============================================================================
 package com.braintribe.gwt.genericmodel.client.itw;
 
-import java.util.Map;
-
 import com.google.gwt.core.client.GwtScriptOnly;
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -34,8 +32,6 @@ public class EntityTypeBinding {
 	public JsConstructorFunction enhancedConstructorFunction;
 	public JsConstructorFunction plainConstructorFunction;
 
-	public Map<String, JavaScriptObject> defaultMethods;
-	
 	public JavaScriptObject toStringMethod;
 	public JavaScriptObject getSelectiveInformationForMethod;
 

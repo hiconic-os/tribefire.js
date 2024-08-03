@@ -17,7 +17,6 @@ package com.braintribe.gwt.genericmodel.client.itw;
 
 import static com.braintribe.gwt.genericmodel.client.itw.ScriptOnlyItwTools.eval;
 import static com.braintribe.utils.lcd.CollectionTools2.index;
-import static com.braintribe.utils.lcd.CollectionTools2.iteratorAtTheEndOf;
 import static com.braintribe.utils.lcd.CollectionTools2.newLinkedMap;
 import static com.braintribe.utils.lcd.CollectionTools2.newList;
 import static com.braintribe.utils.lcd.CollectionTools2.newMap;
@@ -25,7 +24,6 @@ import static com.braintribe.utils.lcd.CollectionTools2.nullSafe;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -36,7 +34,6 @@ import java.util.stream.Stream;
 import com.braintribe.common.lcd.Pair;
 import com.braintribe.common.lcd.Tuple.Tuple3;
 import com.braintribe.gwt.async.client.Future;
-import com.braintribe.gwt.browserfeatures.client.JsStringMap;
 import com.braintribe.gwt.genericmodel.client.reflect.GwtEntityType;
 import com.braintribe.model.generic.GMF;
 import com.braintribe.model.generic.GenericEntity;
@@ -246,7 +243,6 @@ public class GwtScriptTypeSynthesis {
 			prepareProperties(context);
 			takeEverythingElseFromAllTheSuperTypes();
 			prepareToStringToSelectiveInfo();
-			prepareDefaultMethods();
 		}
 
 		private void pickSuperTypeWithMostProperties() {
@@ -606,21 +602,6 @@ public class GwtScriptTypeSynthesis {
 			if (etb.getSelectiveInformationForMethod != null)
 				ScriptOnlyItwTools.setProperty(entityType, RuntimeMethodNames.instance.abstractEntityTypeGetSelectiveInformationFor(),
 						etb.getSelectiveInformationForMethod);
-		}
-
-		private void prepareDefaultMethods() {
-			etb.defaultMethods = new JsStringMap<>();
-			ListIterator<GwtScriptEntityType<?>> it = iteratorAtTheEndOf(entityType.getGwtScriptSuperTypes());
-			while (it.hasPrevious()) {
-				GwtScriptEntityType<?> superType = it.previous();
-				for (Map.Entry<String, JavaScriptObject> dmEntry : superType.getEntityTypeBinding().defaultMethods.entrySet()) {
-					String dmName = dmEntry.getKey();
-					JavaScriptObject dmFunction = dmEntry.getValue();
-
-					etb.defaultMethods.put(dmName, dmFunction);
-					enhancedPrototype.setProperty(dmName, dmFunction);
-				}
-			}
 		}
 
 	}

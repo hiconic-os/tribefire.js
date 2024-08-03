@@ -18,6 +18,8 @@ package com.braintribe.gwt.genericmodel.client.itw;
 import com.google.gwt.core.client.GwtScriptOnly;
 import com.google.gwt.core.client.JavaScriptObject;
 
+import javaemul.internal.annotations.DoNotInline;
+
 /**
  * @author peter.gazdik
  */
@@ -59,6 +61,7 @@ public class JsReflectionTools {
 	}
 
 	/** This is here to avoid inline implementation, because this will be obfuscated and thus shorter. This one doesn't seem to work though. */
+	@DoNotInline // PGA: Not sure this anno works, let's see what happens
 	public static native JavaScriptObject prototypeOf(JavaScriptObject jso) /*-{
 	 	return jso.prototype;
 	}-*/;

@@ -14,8 +14,22 @@
 package com.braintribe.gwt.customization.client;
 
 import com.braintribe.gwt.customization.client.tests.BasicItwTest;
+import com.braintribe.gwt.customization.client.tests.DefaultMethodsTest;
+import com.braintribe.gwt.customization.client.tests.EssentialMdTest;
+import com.braintribe.gwt.customization.client.tests.EvaluatesToTest;
+import com.braintribe.gwt.customization.client.tests.InitializerTest;
+import com.braintribe.gwt.customization.client.tests.InstanceOfTest;
+import com.braintribe.gwt.customization.client.tests.KeywordTest;
+import com.braintribe.gwt.customization.client.tests.MethodsMultiInheritanceTest;
+import com.braintribe.gwt.customization.client.tests.PartialModelTest;
 import com.braintribe.gwt.customization.client.tests.Props_CompileTimeEntity_Test;
 import com.braintribe.gwt.customization.client.tests.Props_RuntimeEntity_Test;
+import com.braintribe.gwt.customization.client.tests.SingleCharEnumTest;
+import com.braintribe.gwt.customization.client.tests.ToStringTest;
+import com.braintribe.gwt.customization.client.tests.TransientPropertyTest;
+import com.braintribe.gwt.customization.client.tests.collectionish.ArrayishTest;
+import com.braintribe.gwt.customization.client.tests.collectionish.MapishTest;
+import com.braintribe.gwt.customization.client.tests.collectionish.SetishTest;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.PreElement;
@@ -29,26 +43,26 @@ public class GwtTestsEntryPoint implements EntryPoint {
 	/** Entry point method. */
 	@Override
 	public void onModuleLoad() {
-		// new SimpleTypesOverview().run();
-//		new MapishTest().run();
-//		new SetishTest().run();
-//		new ArrayishTest().run();
 		new Props_CompileTimeEntity_Test().run();
 		new Props_RuntimeEntity_Test().run();
 		new BasicItwTest().run();
-		// TODO see if this test still works
-		// new VirtualPropertyTest().run();
-		// new SingleCharEnumTest().run();
-		// new EssentialMdTest().run();
-		// new InitializerTest().run();
-		// new MethodsMultiInheritanceTest().run();
-		// new DefaultMethodsTest().run();
-		// new ToStringTest().run();
-		// new EvaluatesToTest().run();
-		// new InstanceOfTest().run();
-		// new TransientPropertyTest().run();
-		// new PartialModelTest().run();
-		// new KeywordTest().run();
+		new MapishTest().run();
+		new SetishTest().run();
+		new ArrayishTest().run();
+		new SingleCharEnumTest().run();
+		new EssentialMdTest().run();
+		new InitializerTest().run();
+		new MethodsMultiInheritanceTest().run();
+		new DefaultMethodsTest().run();
+		new ToStringTest().run();
+		new EvaluatesToTest().run();
+		new InstanceOfTest().run();
+		new TransientPropertyTest().run();
+		new PartialModelTest().run();
+		new KeywordTest().run();
+
+		// NOT a test
+		// new SimpleTypesOverview().run();
 
 		// new JseReadTest().run();
 	}

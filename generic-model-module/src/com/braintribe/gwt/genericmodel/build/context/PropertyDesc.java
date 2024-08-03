@@ -39,7 +39,7 @@ public class PropertyDesc {
 
 	private TypeCode collectionTypeCode;
 	private TypeCode keyTypeCode;
-	private TypeCode valueTypeCode;
+	private TypeCode valueTypeCode; // only if simple of object
 
 	public String getSingletonInstanceRef() {
 		return getPropertyWrapperClassName() + "." + getLiteralName();
@@ -78,6 +78,10 @@ public class PropertyDesc {
 
 	public boolean isPrimitive() {
 		return isPrimitive;
+	}
+
+	public boolean getIsCollection() {
+		return collectionTypeCode != null;
 	}
 
 	public String getNullableFlag() {

@@ -30,7 +30,6 @@ import jsinterop.annotations.JsType;
  * @param <S>
  *            type of the second of the pair's two objects
  */
-@JsType(namespace = "$tf.util")
 public class Pair<F, S> {
 	public final F first;
 	public final S second;

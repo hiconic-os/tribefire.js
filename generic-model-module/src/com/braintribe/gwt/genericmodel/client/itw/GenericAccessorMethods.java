@@ -133,6 +133,13 @@ public class GenericAccessorMethods {
 	// ## . . . . . . Virtual Properties . . . . . . .##
 	// #################################################
 
+	// This si called from EntityType.java.vm to prevent tons of "null,null," being written in final JS code
+	public static Pair<JavaScriptObject, JavaScriptObject> buildNonCollectionJsConvertingAccessors( //
+			Property property, JavaScriptObject getterFunction, JavaScriptObject setterFunction, //
+			TypeCode valueType) {
+		return buildJsConvertingAccessors(property, getterFunction, setterFunction, null, null, valueType);
+	}
+	
 	/**
 	 * Types can be null. It's only passed if the property might need a conversion, i.e. for collections/simple/object, but not entities/enums.
 	 */
