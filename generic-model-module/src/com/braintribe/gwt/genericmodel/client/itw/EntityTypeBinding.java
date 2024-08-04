@@ -29,7 +29,6 @@ public class EntityTypeBinding {
 	public Class<?> enhancedClass;
 
 	public JsConstructorFunction enhancedConstructorFunction;
-	public JsConstructorFunction plainConstructorFunction;
 
 	public JavaScriptObject toStringMethod;
 	public JavaScriptObject getSelectiveInformationForMethod;

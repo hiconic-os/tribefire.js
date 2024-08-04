@@ -262,7 +262,6 @@ public class GwtScriptTypeSynthesis {
 			etb.enhancedClass = RuntimeClassTools.createForClass(enhancedSignature, superBinding.enhancedClass);
 
 			etb.enhancedConstructorFunction = JsConstructorFunction.create(etb.enhancedClass, superBinding.enhancedConstructorFunction);
-			etb.plainConstructorFunction = etb.enhancedConstructorFunction;
 
 			if (!Boolean.TRUE.equals(gmEntityType.getIsAbstract())) {
 				if (entityType instanceof GwtRuntimeEntityType)

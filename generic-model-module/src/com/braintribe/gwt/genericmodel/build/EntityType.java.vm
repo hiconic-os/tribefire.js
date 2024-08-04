@@ -174,7 +174,6 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
 
         eb = @EntityTypeBinding::new()();
 		eb.@EntityTypeBinding::enhancedConstructorFunction = constructorFunction;
-		eb.@EntityTypeBinding::plainConstructorFunction = enhancedConstructorFunction;
 		eb.@EntityTypeBinding::enhancedClass = @${entityDesc.enhancedClassFullName}::class;
 		eb.@EntityTypeBinding::entityType = ${entityDesc.entityTypeSingletonJsniRef};
 
