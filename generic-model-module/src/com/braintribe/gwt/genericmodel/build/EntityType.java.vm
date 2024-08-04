@@ -10,6 +10,7 @@ import com.braintribe.gwt.genericmodel.client.itw.GwtScriptProperty;
 import com.braintribe.gwt.genericmodel.client.itw.GwtCompileTimeProperty;
 import com.braintribe.gwt.genericmodel.client.itw.JsPropertyNameReflector;
 import com.braintribe.gwt.genericmodel.client.itw.JsReflectionTools;
+import com.braintribe.gwt.genericmodel.client.reflect.GwtEntityType;
 #end
 
 @java.lang.SuppressWarnings({"deprecation", "unusable-by-js"})
@@ -103,36 +104,35 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
     
 ##      the generated JS only has one var, so the code is shorter
     	var
-    		newEnhancedInstanceFunction,
-    		enhancedConstructorFunction,
-    		prototype,
-    		prototypeReflection,
-    		et,
-    		castableTypeMap,
-    		transit,
-    		accessorPair;   
+			constructorFunction,
+			prototype,
+			prototypeReflection,
+			et,
+			transit,
+			accessorPair,
+			pb,
+			eb;
 
-    	newEnhancedInstanceFunction = @${enhancedName}::new();
-    	enhancedConstructorFunction = @JsReflectionTools::extractConstructor(*)(newEnhancedInstanceFunction);
+##      This is what we do, but without local variable so the output is shorter:
+##    	var newEnhancedInstanceFunction = @${enhancedName}::new();
+##    	constructorFunction = @JsReflectionTools::extractConstructor(*)(newEnhancedInstanceFunction);
+##
+		constructorFunction = @JsReflectionTools::extractConstructor(*)(@${enhancedName}::new());
     	
-    	prototype = @JsReflectionTools::prototypeOf(*)(enhancedConstructorFunction);
+		prototype = @JsReflectionTools::prototypeOf(*)(constructorFunction);
         prototypeReflection = @JsPropertyNameReflector::create(*)(prototype);
         
-        // enrich and transfer castable typemap from java class to entitytype
+##      enrich and transfer castable typemap from java class to entitytype
 		et = @${className}::INSTANCE;
-		castableTypeMap = prototype.@java.lang.Object::castableTypeMap;
-       	et.@com.braintribe.gwt.genericmodel.client.reflect.GwtEntityType::castableTypeMap = castableTypeMap;
-       	et.@com.braintribe.gwt.genericmodel.client.reflect.GwtEntityType::protoInstance = prototype;
+       	et.@GwtEntityType::protoInstance = prototype;
+       	et.@GwtEntityType::castableTypeMap = prototype.@java.lang.Object::castableTypeMap;
 
 #foreach($property in $properties)
 #if(${property.primitive} && !${entityDesc.isInheritedFromSuperclass($property.name)})
 		transit = ${property.singletonInstanceJsniRef}.@GwtCompileTimeProperty::getFieldName()();
 		prototype[transit] = @DefaultLiterals::default_${property.originalType};
 #end
-
-#if (!${property.isOverlay})
-// NOT OVERLAY
-#end
+##
 #if (!${property.isInheritedFromSuperclass} || !${property.isOverlay})
 #if (${property.isCollection})
 		accessorPair = @GenericAccessorMethods::buildJsConvertingAccessors(*)(
@@ -159,7 +159,7 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
 #end
 
 #if(!${property.isOverlay})        
-        var pb = @PropertyBinding::new()();        
+        pb = @PropertyBinding::new()();        
         pb.@PropertyBinding::propertyName = "${property.name}";
         pb.@PropertyBinding::getterFunction = transit = prototype.@$property.declaringType.qualifiedSourceName::${property.getterName}();
         pb.@PropertyBinding::setterFunction = transit = prototype.@$property.declaringType.qualifiedSourceName::${property.setterName}(${property.jType.getJNISignature()});
@@ -171,25 +171,23 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
 #end
         ${property.singletonInstanceJsniRef}.@GwtScriptProperty::setPropertyBinding(*)(pb);
 #end#end ## fooreach (property...) if (!isOverlay)
-        
-        var eb = @EntityTypeBinding::new()();
-		eb.@EntityTypeBinding::enhancedConstructorFunction = enhancedConstructorFunction;
+
+        eb = @EntityTypeBinding::new()();
+		eb.@EntityTypeBinding::enhancedConstructorFunction = constructorFunction;
 		eb.@EntityTypeBinding::plainConstructorFunction = enhancedConstructorFunction;
 		eb.@EntityTypeBinding::enhancedClass = @${entityDesc.enhancedClassFullName}::class;
-		eb.@EntityTypeBinding::plainClass = @${entityDesc.enhancedClassFullName}::class;
 		eb.@EntityTypeBinding::entityType = ${entityDesc.entityTypeSingletonJsniRef};
 
+## WARNING: Here we re-uassign constructorFunction and prototype
 #if (${toStringInformation} || ${selectiveInformation})
-		var newEntityTypeInstanceFunction, entityTypeConstructorFunction, etPrototype  
-    	newEntityTypeInstanceFunction = @${className}::new();
-    	entityTypeConstructorFunction = @JsReflectionTools::extractConstructor(*)(newEntityTypeInstanceFunction);
-    	etPrototype = @JsReflectionTools::prototypeOf(*)(entityTypeConstructorFunction);
+		constructorFunction = @JsReflectionTools::extractConstructor(*)(@${className}::new());
+		prototype = @JsReflectionTools::prototypeOf(*)(constructorFunction);
 
 #if (${toStringInformation})
-        eb.@EntityTypeBinding::toStringMethod = transit = etPrototype.@${className}::toString(${entityDesc.entityIfaceJniSignature});
+        eb.@EntityTypeBinding::toStringMethod = transit = prototype.@${className}::toString(${entityDesc.entityIfaceJniSignature});
 #end
 #if (${selectiveInformation})
-        eb.@EntityTypeBinding::getSelectiveInformationForMethod = transit = etPrototype.@${className}::getSelectiveInformationFor(Lcom/braintribe/model/generic/GenericEntity;);
+        eb.@EntityTypeBinding::getSelectiveInformationForMethod = transit = prototype.@${className}::getSelectiveInformationFor(*);
 #end
 
 #end

@@ -29,7 +29,7 @@ public class JsReflectionTools {
 	private static final String RETURN_NEW = "return new";
 	private static final String THIS_DOT = "this.";
 
-	/** Expects source to be like "function() { return new ${package}.${SuperclassName};}" */
+	/** Expects source to be like "function() { return new Xyz;}", where Xyz is a constructor function (created as a constructor for a java class) */
 	public static Object extractConstructor(JavaScriptObject constructorFunction) {
 		String constructor = trimmedSubstring(constructorFunction, RETURN_NEW, "}");
 		constructor = ensureJsExpressionWithoutSemicolon(constructor);

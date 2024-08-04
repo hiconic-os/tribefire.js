@@ -27,7 +27,6 @@ public class EntityTypeBinding {
 	public GwtScriptEntityType<?> entityType;
 
 	public Class<?> enhancedClass;
-	public Class<?> plainClass;
 
 	public JsConstructorFunction enhancedConstructorFunction;
 	public JsConstructorFunction plainConstructorFunction;

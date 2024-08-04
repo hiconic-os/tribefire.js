@@ -176,6 +176,14 @@ public class EntityDesc {
 			int impls = directSubTypes.stream().mapToInt(d -> d.getNonAbstractSubTypeCount()).sum();
 
 			if (isAbstract) {
+				// Imagine we have an abstract type A which has exactly one instantiable sub-type I
+				// GWT compiler can change (entity instanceof A) to (entity instanceof I).
+				// This is a problem if later at runtime we create a different instantiable sub-type of A
+				// Thus we need a decoy, a dummy sub-type of A, to prevent this optimization.
+
+				// Imagine we have an abstract type A with no instantiable sub-types
+				// GWT compiler could change (entity instanceof A) to false
+				// Again, we need a decoy. Actually two decoys, to prevent the single instantiable sub-type optimization
 				if (impls <= 1) {
 					needsDecoy = true;
 					impls++;

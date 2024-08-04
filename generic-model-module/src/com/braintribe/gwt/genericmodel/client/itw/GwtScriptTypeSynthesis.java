@@ -260,7 +260,6 @@ public class GwtScriptTypeSynthesis {
 			EntityTypeBinding superBinding = superTypeWithMostProperties.getEntityTypeBinding();
 
 			etb.enhancedClass = RuntimeClassTools.createForClass(enhancedSignature, superBinding.enhancedClass);
-			etb.plainClass = etb.enhancedClass;
 
 			etb.enhancedConstructorFunction = JsConstructorFunction.create(etb.enhancedClass, superBinding.enhancedConstructorFunction);
 			etb.plainConstructorFunction = etb.enhancedConstructorFunction;

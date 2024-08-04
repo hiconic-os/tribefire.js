@@ -632,8 +632,14 @@ public class GenericModelTypeReflectionGenerator extends Generator {
 		private Pair<PropertyDesc, String> extractInitializerString(JClassType entityClass, PropertyDesc pd, String propertyName, JMethod getter) {
 			Initializer gi = getInitializer(getter);
 
-			if (gi != null)
-				return new Pair<>(pd, gi.value());
+			if (gi != null) {
+				JClassType getterDeclaringType = getter.getEnclosingType();
+
+				if (getterDeclaringType == entityClass)
+					return new Pair<>(pd, gi.value());
+				else
+					return getInitializerDescFromSuperType(getterDeclaringType, propertyName);
+			}
 
 			for (JClassType iface : entityClass.getImplementedInterfaces()) {
 				if (!isGenericEntity(iface))
