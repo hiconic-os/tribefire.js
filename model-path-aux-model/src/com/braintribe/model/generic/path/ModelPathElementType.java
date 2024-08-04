@@ -15,9 +15,25 @@
 // ============================================================================
 package com.braintribe.model.generic.path;
 
-//@JsType(namespace = ModelPath.MODEL_PATH_NAMESPACE)
-public enum ModelPathElementInstanceKind {
-	any,
-	preliminary,
-	persistent;
+import com.braintribe.model.generic.base.EnumBase;
+import com.braintribe.model.generic.reflection.EnumType;
+import com.braintribe.model.generic.reflection.EnumTypes;
+
+public enum ModelPathElementType implements EnumBase<ModelPathElementType> {
+
+	EntryPoint,
+	ListItem,
+	MapKey,
+	MapValue,
+	Property,
+	Root,
+	SetItem;
+
+	public static final EnumType<ModelPathElementType> T = EnumTypes.T(ModelPathElementType.class);
+
+	@Override
+	public EnumType<ModelPathElementType> type() {
+		return T;
+	}
+
 }

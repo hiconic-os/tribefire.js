@@ -1,0 +1,9 @@
+These two enums (ModelPathElementInstanceKind, ModelPathElementType) were originally in gwt-gm-core.
+
+As such, they are not EnumBases, because for NPM packaging we insist that model types are only present in models.
+
+Otherwise it a GwtTerminal would have to import all the APIs (along the models), just in case there is a model type to reflect.
+
+However, somehow there are entities in gm-view-api (tf.gwt) which use these enums as property types.
+
+No idea how that works, as that artifact is also not a model, but... this is the easiest way to make it all work.  
