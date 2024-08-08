@@ -67,8 +67,8 @@ public class RuntimeClassTools {
 	}
 
 	private static Enum<?> createEnumInstance(String name, int ordinal, Class<? extends Enum<?>> enumClass) {
-		return ScriptOnlyItwTools.createEnumInstance(name, ordinal, RuntimeMethodNames.instance.objectGetClass(),
-				RuntimeMethodNames.instance.enumGetDeclaringClass(), enumClass);
+		return ScriptOnlyItwTools.createEnumInstance(name, ordinal, //
+				RuntimeMethodNames.objectGetClass(), RuntimeMethodNames.enumGetDeclaringClass(), enumClass);
 	}
 
 	// @formatter:off

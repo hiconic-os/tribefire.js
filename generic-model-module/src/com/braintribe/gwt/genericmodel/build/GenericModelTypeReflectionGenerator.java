@@ -197,15 +197,28 @@ public class GenericModelTypeReflectionGenerator extends Generator {
 		private void findEntityClasses() {
 			uninitializedTypes.add(genericEntityJClassType);
 			for (JClassType subType : genericEntityJClassType.getSubtypes()) {
-				/* If our GenericEntity sub-type is not an interface, we automatically treat it as a GmSystemInterface now. Currently, this is the
-				 * case for example for the special "pseudo" classes used in JavaTypeAnalysis. */
+				/* If our GenericEntity sub-type is not an interface, we automatically treat it as a GmSystemInterface now. Currently,
+				 * this is the case for example for the special "pseudo" classes used in JavaTypeAnalysis. */
 				if (subType.isInterface() != null && subType.getAnnotation(GmSystemInterface.class) == null) {
-					if (essentialTypes.isEmpty() || essentialTypes.contains(subType.getQualifiedSourceName()))
+					if (essentialTypes.isEmpty() || isEssentialType(subType))
 						uninitializedTypes.add(subType);
 					else
 						maybeNextEntityTypes.add(subType);
 				}
 			}
+		}
+
+		private boolean isEssentialType(JClassType subType) {
+			String name = subType.getQualifiedSourceName();
+			return essentialTypes.contains(name) || isHardcodedEssentialType(name);
+		}
+
+		private boolean isHardcodedEssentialType(String name) {
+			return isEssentialMd(name);
+		}
+
+		private boolean isEssentialMd(String name) {
+			return name.startsWith("com.braintribe.model.meta.data");
 		}
 
 		/* package */ String generateExtraInitialTypes() throws Exception {
@@ -240,7 +253,7 @@ public class GenericModelTypeReflectionGenerator extends Generator {
 
 		private void findExtraClasses() {
 			for (JClassType entityType : maybeNextEntityTypes)
-				if (essentialTypes.contains(entityType.getQualifiedSourceName()))
+				if (isEssentialType(entityType))
 					uninitializedTypes.add(entityType);
 		}
 
@@ -493,7 +506,7 @@ public class GenericModelTypeReflectionGenerator extends Generator {
 					propertyDesc.jType = originalReturnType;
 					propertyDesc.ownerTypeDesc = entityDesc;
 					propertyDesc.isPrimitive = originalReturnType.isPrimitive() != null;
-					propertyDesc.defaultLiteral = propertyDesc.isPrimitive() ? getDefaultLiteral((JPrimitiveType) originalReturnType) : null;
+					propertyDesc.defaultLiteral = propertyDesc.isPrimitive ? getDefaultLiteral((JPrimitiveType) originalReturnType) : null;
 
 					Pair<PropertyDesc, String> initEntry = extractInitializerString(entityIface, propertyDesc, propertyName, getter);
 					PropertyDesc confidentialDesc = isConfidential(entityIface, propertyDesc, propertyName, getter);
@@ -888,12 +901,13 @@ public class GenericModelTypeReflectionGenerator extends Generator {
 		}
 
 		/**
-		 * So the question is where is the place our property is declared, meaning where the {@link GwtCompileTimeProperty} instance is created.
+		 * So the question is where is the place our property is declared, meaning where the {@link GwtCompileTimeProperty}
+		 * instance is created.
 		 * <p>
-		 * If the property is not inherited, it must be this type. If it is inherited, we have to check if we can use the supe-property or have to
-		 * re-declare it. This decision depends on annotation-based information for this property. For example, if some super-type declares an
-		 * initializer, we use that property. If however some other super-type declares it as confidential, we have no super-type with the combined
-		 * information and have to re-declare it.
+		 * If the property is not inherited, it must be this type. If it is inherited, we have to check if we can use the
+		 * supe-property or have to re-declare it. This decision depends on annotation-based information for this property. For
+		 * example, if some super-type declares an initializer, we use that property. If however some other super-type declares
+		 * it as confidential, we have no super-type with the combined information and have to re-declare it.
 		 * <p>
 		 * The entire logic with current implementation is explained here:
 		 * 

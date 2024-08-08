@@ -47,7 +47,7 @@ public abstract class AbstractGwtGenericModelTypeReflection extends AbstractGene
 	private static native void ensureSymbols() /*-{
 		$wnd.$tf = $wnd.$tf || {};
 		$wnd.$tf.Symbol = $wnd.$tf.Symbol || {};
-		$wnd.$tf.Symbol.enumType = "$enumType";
+		$wnd.$tf.Symbol.enumType = Symbol('$enumType');
 	}-*/;
 
 	@Override

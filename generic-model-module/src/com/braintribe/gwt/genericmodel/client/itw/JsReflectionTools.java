@@ -15,6 +15,7 @@
 // ============================================================================
 package com.braintribe.gwt.genericmodel.client.itw;
 
+import com.braintribe.common.lcd.Pair;
 import com.google.gwt.core.client.GwtScriptOnly;
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -67,8 +68,11 @@ public class JsReflectionTools {
 	}-*/;
 
 	/** This is here to avoid inline implementation, because this will be obfuscated and thus shorter */
-	public static native void defineProperty(JavaScriptObject prototype, JavaScriptObject name, JavaScriptObject getterSetter) /*-{
-		Object.defineProperty(prototype, name, getterSetter);
+	public static native void defineProperty(JavaScriptObject prototype, JavaScriptObject name, Pair<JavaScriptObject, JavaScriptObject> accessorPair) /*-{
+		Object.defineProperty(prototype, name, {
+			get: accessorPair.@com.braintribe.common.lcd.Pair::first,
+			set: accessorPair.@com.braintribe.common.lcd.Pair::second
+        });
 	}-*/;
 
 }

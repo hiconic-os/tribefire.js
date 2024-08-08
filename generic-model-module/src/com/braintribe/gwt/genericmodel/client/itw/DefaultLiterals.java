@@ -15,12 +15,33 @@
 // ============================================================================
 package com.braintribe.gwt.genericmodel.client.itw;
 
+import com.braintribe.model.generic.reflection.TypeCode;
+
 public class DefaultLiterals {
 
-	public static Integer default_int = 0;
-	public static Long default_long = 0L;
-	public static Float default_float = 0F;
-	public static Double default_double = 0D;
+	private static Integer default_int = 0;
+	private static Long default_long = 0L;
+	private static Float default_float = 0F;
+	private static Double default_double = 0D;
+	@Deprecated
 	public static Boolean default_boolean = Boolean.FALSE;
+
+	public static Object forType(TypeCode typeCode) {
+		switch (typeCode) {
+			case booleanType:
+				return Boolean.FALSE;
+			case doubleType:
+				return default_double;
+			case floatType:
+				return default_float;
+			case integerType:
+				return default_int;
+			case longType:
+				return default_long;
+			default:
+				// hopefully unreachable
+				return null;
+		}
+	}
 
 }
