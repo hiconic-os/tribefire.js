@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.braintribe.gwt.genericmodel.client.itw.CastableTypeMap;
+import com.braintribe.gwt.genericmodel.client.itw.ScriptOnlyItwTools;
 import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.enhance.EnhancedEntity;
 import com.braintribe.model.generic.enhance.FieldAccessingPropertyAccessInterceptor;
@@ -48,12 +49,6 @@ public abstract class GwtEntityType<T extends GenericEntity> extends AbstractEnt
 	private Property[] initializedProperties;
 	private Object protoInstance;
 
-	private CastableTypeMap castableTypeMap;
-
-	public void setCastableTypeMap(CastableTypeMap castableTypeMap) {
-		this.castableTypeMap = castableTypeMap;
-	}
-
 	public void setProtoInstance(Object protoInstance) {
 		this.protoInstance = protoInstance;
 	}
@@ -63,7 +58,7 @@ public abstract class GwtEntityType<T extends GenericEntity> extends AbstractEnt
 	}
 
 	public CastableTypeMap getCastableTypeMap() {
-		return castableTypeMap;
+		return ScriptOnlyItwTools.getCastableTypeMap(protoInstance);
 	}
 
 	public void setHasExplicitToString(boolean hasExplicitToString) {

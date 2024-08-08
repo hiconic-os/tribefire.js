@@ -65,8 +65,8 @@ public class GwtCompileTimeProperty extends GwtScriptProperty {
 		String getDirectSource = "(function(e){return e." + getFieldName() + ";})";
 		String setDirectSource = "(function(e,v){e." + getFieldName() + "=v;})";
 
-		ScriptOnlyItwTools.setProperty(this, RuntimeMethodNames.instance.propertyGetDirectUnsafe(), eval(getDirectSource));
-		ScriptOnlyItwTools.setProperty(this, RuntimeMethodNames.instance.propertySetDirectUnsafe(), eval(setDirectSource));
+		ScriptOnlyItwTools.setProperty(this, RuntimeMethodNames.propertyGetDirectUnsafe(), eval(getDirectSource));
+		ScriptOnlyItwTools.setProperty(this, RuntimeMethodNames.propertySetDirectUnsafe(), eval(setDirectSource));
 	}
 
 }

@@ -15,38 +15,50 @@
 // ============================================================================
 package com.braintribe.gwt.genericmodel.client.itw;
 
-import com.braintribe.model.generic.GenericEntity;
-import com.braintribe.model.generic.base.EntityBase;
+import com.braintribe.model.generic.base.EnumBase;
 import com.braintribe.model.generic.reflection.Property;
 import com.braintribe.model.generic.reflection.type.custom.AbstractEntityType;
-import com.google.gwt.core.client.GWT;
 
 /**
+ * Uses {@link JsNameReflector}
+ * 
  * @author peter.gazdik
  */
-public interface RuntimeMethodNames {
+public class RuntimeMethodNames {
 
-	public static final RuntimeMethodNames instance = GWT.create(RuntimeMethodNames.class);
-	
-	@MethodIdentification(declarationClass=Object.class, name="getClass")
-	String objectGetClass();
+	/** Uses {@link Object} */
+	public static native String objectGetClass() /*-{
+		return @JsNameReflector::JsNR.@Object::getClass();
+	}-*/;
 
-	@MethodIdentification(declarationClass=Enum.class, name="getDeclaringClass")
-	String enumGetDeclaringClass();
+	/** Uses {@link Enum} */
+	public static native String enumGetDeclaringClass()/*-{
+		return @JsNameReflector::JsNR.@Enum::getDeclaringClass();
+	}-*/;
 
-	@MethodIdentification(declarationClass=EntityBase.class, name="type")
-	String entityBaseType();
+	/** Uses {@link EnumBase} */
+	public static native String entityBaseType()/*-{
+		return @JsNameReflector::JsNR.@EnumBase::type();
+	}-*/;
 	
-	@MethodIdentification(declarationClass=Property.class, name="getDirectUnsafe", parameterTypes = {GenericEntity.class})
-	String propertyGetDirectUnsafe();
+	/** Uses {@link Property} */
+	public static native String propertyGetDirectUnsafe()/*-{
+		return @JsNameReflector::JsNR.@Property::getDirectUnsafe(*);
+	}-*/;
 	
-	@MethodIdentification(declarationClass=Property.class, name="setDirectUnsafe", parameterTypes = {GenericEntity.class, Object.class})
-	String propertySetDirectUnsafe();
+	/** Uses {@link Property} */
+	public static native String propertySetDirectUnsafe()/*-{
+		return @JsNameReflector::JsNR.@Property::setDirectUnsafe(*);
+	}-*/;
 
-	@MethodIdentification(declarationClass=AbstractEntityType.class, name="toString", parameterTypes = {GenericEntity.class})
-	String abstractEntityTypeToString();
+	/** Uses {@link AbstractEntityType} */
+	public static native String abstractEntityTypeToString()/*-{
+		return @JsNameReflector::JsNR.@AbstractEntityType::toString(Lcom/braintribe/model/generic/GenericEntity;);
+	}-*/;
 	
-	@MethodIdentification(declarationClass=AbstractEntityType.class, name="getSelectiveInformationFor", parameterTypes = {GenericEntity.class})
-	String abstractEntityTypeGetSelectiveInformationFor();
+	/** Uses {@link AbstractEntityType} */
+	public static native String abstractEntityTypeGetSelectiveInformationFor()/*-{
+		return @JsNameReflector::JsNR.@AbstractEntityType::getSelectiveInformationFor(Lcom/braintribe/model/generic/GenericEntity;);
+	}-*/;
 
 }

@@ -15,6 +15,7 @@
 // ============================================================================
 package com.braintribe.gwt.genericmodel.client.itw;
 
+import com.braintribe.common.lcd.Pair;
 import com.google.gwt.core.client.GwtScriptOnly;
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -61,14 +62,17 @@ public class JsReflectionTools {
 	}
 
 	/** This is here to avoid inline implementation, because this will be obfuscated and thus shorter. This one doesn't seem to work though. */
-	@DoNotInline // PGA: Not sure this anno works, let's see what happens
+	@DoNotInline
 	public static native JavaScriptObject prototypeOf(JavaScriptObject jso) /*-{
 	 	return jso.prototype;
 	}-*/;
 
 	/** This is here to avoid inline implementation, because this will be obfuscated and thus shorter */
-	public static native void defineProperty(JavaScriptObject prototype, JavaScriptObject name, JavaScriptObject getterSetter) /*-{
-		Object.defineProperty(prototype, name, getterSetter);
+	public static native void defineProperty(JavaScriptObject prototype, JavaScriptObject name, Pair<JavaScriptObject, JavaScriptObject> accessorPair) /*-{
+		Object.defineProperty(prototype, name, {
+			get: accessorPair.@com.braintribe.common.lcd.Pair::first,
+			set: accessorPair.@com.braintribe.common.lcd.Pair::second
+        });
 	}-*/;
 
 }

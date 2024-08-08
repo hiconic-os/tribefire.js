@@ -27,15 +27,7 @@ public abstract class GwtScriptProperty extends AbstractProperty {
 		super(propertyName, nullable, confidential);
 	}
 
-	private PropertyBinding propertyBinding;
-
-	public PropertyBinding getPropertyBinding() {
-		return propertyBinding;
-	}
-
-	public void setPropertyBinding(PropertyBinding propertyBinding) {
-		this.propertyBinding = propertyBinding;
-	}
+	public PropertyBinding propertyBinding;
 
 	public String getFieldName() {
 		return ObfuscatedIdentifierSequence.specialChar + getName();

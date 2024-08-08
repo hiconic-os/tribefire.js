@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.braintribe.common.lcd.Pair;
+import com.braintribe.common.lcd.Tuple.Tuple3;
 import com.braintribe.gwt.browserfeatures.client.JsArray;
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Arrayish;
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Mapish;
@@ -134,11 +135,13 @@ public class GenericAccessorMethods {
 	// #################################################
 
 	// This si called from EntityType.java.vm to prevent tons of "null,null," being written in final JS code
+	@Deprecated
 	public static Pair<JavaScriptObject, JavaScriptObject> buildNonCollectionJsConvertingAccessors( //
 			Property property, JavaScriptObject getterFunction, JavaScriptObject setterFunction, //
 			TypeCode valueType) {
 		return buildJsConvertingAccessors(property, getterFunction, setterFunction, null, null, valueType);
 	}
+
 	
 	/**
 	 * Types can be null. It's only passed if the property might need a conversion, i.e. for collections/simple/object, but not entities/enums.

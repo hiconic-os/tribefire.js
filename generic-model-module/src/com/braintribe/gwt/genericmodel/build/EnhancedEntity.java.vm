@@ -45,7 +45,7 @@ public #if(${entityDesc.isAbstract})abstract#end class ${enhancedName} extends $
 	public void ${property.setterName}(${property.originalType} value) {
 		pai.setProperty(${property.singletonInstanceRef}, this, value, false);
 	}
-#end#end ## ends: !inheritedFromSuperClass and the for-cycle
+#end#end ## ends: !inheritedFromSuperClass + the for-cycle
 ##
 #foreach($transientProperty in $transientProperties)
 #if (!${transientProperty.isInheritedFromSuperclass})
@@ -60,7 +60,7 @@ public #if(${entityDesc.isAbstract})abstract#end class ${enhancedName} extends $
 	public void ${transientProperty.setterName}(${transientProperty.originalType} value) {
 		this._${transientProperty.name} = value;
 	}
-#end#end ## ends: !inheritedFromSuperClass and the for-cycle
+#end#end ## ends: !inheritedFromSuperClass + the for-cycle
 ##
 #if(!${entityDesc.isAbstract})
 #if($defaultMethods)

@@ -46,11 +46,5 @@
     <generate-with class="com.braintribe.gwt.genericmodel.build.InitialEntityTypesGenerator">
     	<when-type-assignable class="com.braintribe.gwt.genericmodel.client.itw.InitialEntityTypes"/>
   	</generate-with>
-    <generate-with class="com.braintribe.gwt.genericmodel.build.JavascriptMemberReflectionGenerator">
-    	<when-type-assignable class="com.braintribe.gwt.genericmodel.client.itw.JavascriptMemberReflection"/>
-  	</generate-with>
-    <generate-with class="com.braintribe.gwt.genericmodel.build.RuntimeMethodNamesGenerator">
-    	<when-type-assignable class="com.braintribe.gwt.genericmodel.client.itw.RuntimeMethodNames"/>
-  	</generate-with>
     <super-source path="emul"/>
 </module>

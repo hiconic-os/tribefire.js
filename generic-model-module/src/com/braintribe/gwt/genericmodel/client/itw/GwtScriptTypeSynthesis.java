@@ -261,30 +261,29 @@ public class GwtScriptTypeSynthesis {
 
 			etb.enhancedClass = RuntimeClassTools.createForClass(enhancedSignature, superBinding.enhancedClass);
 
-			etb.enhancedConstructorFunction = JsConstructorFunction.create(etb.enhancedClass, superBinding.enhancedConstructorFunction);
+			etb.constrF = JsConstructorFunction.create(etb.enhancedClass, superBinding.constrF);
 
 			if (!Boolean.TRUE.equals(gmEntityType.getIsAbstract())) {
 				if (entityType instanceof GwtRuntimeEntityType)
-					((GwtRuntimeEntityType<?>) entityType).setEnhancedConstructorFunction(etb.enhancedConstructorFunction);
+					((GwtRuntimeEntityType<?>) entityType).setEnhancedConstructorFunction(etb.constrF);
 			}
 
-			enhancedPrototype = etb.enhancedConstructorFunction.getPrototype();
+			enhancedPrototype = etb.constrF.getPrototype();
 			entityType.setProtoInstance(enhancedPrototype);
-			enhancedPrototype.setProperty(RuntimeMethodNames.instance.entityBaseType(), ScriptOnlyItwTools.createProvider(entityType));
+			enhancedPrototype.setProperty(RuntimeMethodNames.entityBaseType(), ScriptOnlyItwTools.createProvider(entityType));
 		}
 
 		private void prepareEnhancedTypeMap() {
-			CastableTypeMap enhancedTypeMap = etb.enhancedConstructorFunction.getCastableTypeMap();
-			entityType.setCastableTypeMap(enhancedTypeMap);
+			CastableTypeMap enhancedTypeMap = ScriptOnlyItwTools.getCastableTypeMap(enhancedPrototype);
 			enhancedTypeMap.addType(entityType.getTypeId());
 
 			/* loop over ALL super types - no matter if compile or script time to combine all typeIds in the castable type map that are not inherited
 			 * from the superTypeWithMostProperties */
 			for (EntityType<?> superType : entityType.getSuperTypes()) {
-				GwtEntityType<?> gwtSuperType = (GwtEntityType<?>) superType;
-
-				if (gwtSuperType != superTypeWithMostProperties)
+				if (superType != superTypeWithMostProperties) {
+					GwtEntityType<?> gwtSuperType = (GwtEntityType<?>) superType;
 					enhancedTypeMap.addTypesFrom(gwtSuperType.getCastableTypeMap());
+				}
 			}
 		}
 
@@ -328,14 +327,14 @@ public class GwtScriptTypeSynthesis {
 				if (superTypeWithMostProperties.findProperty(property.getName()) != null)
 					continue;
 
-				PropertyBinding propertyBinding = property.getPropertyBinding();
+				PropertyBinding propertyBinding = property.propertyBinding;
 
-				if (propertyBinding.primitive)
+				if (!property.isNullable())
 					/* This works cause if the property doesn't come from superclass, no matter if compiletime/runtime, we still implement it */
 					enhancedPrototype.setProperty(property.getFieldName(), property.getType().getDefaultValue());
 
 				Pair<JavaScriptObject, JavaScriptObject> functionsPair = buildVirtualPropertyAccessors(propertyBinding, property);
-				enhancedPrototype.defineVirtualProperty(propertyBinding.propertyName, functionsPair.first(), functionsPair.second());
+				enhancedPrototype.defineVirtualProperty(property.getName(), functionsPair.first(), functionsPair.second());
 				// GbPropertyConvenience.linkProperty(enhancedPrototype, new GbPropertyConvenience(null, entityType,
 				// property), property.getName());
 
@@ -353,18 +352,22 @@ public class GwtScriptTypeSynthesis {
 			// add runtime PropertyBindings
 			for (GmProperty gmProperty : gmEntityType.getProperties()) {
 				Object initializer = gmProperty.getInitializer();
+				String propertyName = gmProperty.getName();
 
 				if (initializer != null)
-					initializerMap.put(gmProperty.getName(), initializer);
+					initializerMap.put(propertyName, initializer);
 
 				GwtRuntimeProperty property = createGwtRuntimeProperty(context, gmProperty);
 				PropertyBinding pb = new PropertyBinding();
-				pb.propertyName = gmProperty.getName();
 				pb.property = property;
 				pb.runtime = true;
-				pb.primitive = !gmProperty.getNullable() && gmProperty.getType() instanceof GmSimpleType;
 
-				if (pb.primitive)
+				// TODO once it's hopefully clear this never happens
+				// old code was setting a primitive flag also checking if type is simple, makes no sense...
+				if (!gmProperty.getNullable() && !(gmProperty.getType() instanceof GmSimpleType)) 
+					throw new GmfException("Non simple prop marked as non-nullable!");
+
+				if (!gmProperty.getNullable())
 					enhancedPrototype.setProperty(property.getFieldName(), property.getType().getDefaultValue());
 
 				/* We don't have to set getter/setter for runtime properties because nobody calls them. So they are not needed on the enhanced
@@ -379,16 +382,16 @@ public class GwtScriptTypeSynthesis {
 				Tuple3<TypeCode, TypeCode, TypeCode> typeCodes = resolveCollectionKeyValueTypeCodes(property);
 				
 				functionsPair = buildVirtualPropertyAccessors(pb, property, typeCodes);
-				enhancedPrototype.defineVirtualProperty(pb.propertyName, functionsPair.first, functionsPair.second);
+				enhancedPrototype.defineVirtualProperty(propertyName, functionsPair.first, functionsPair.second);
 
 				functionsPair = buildJsConvertingPropertyAccessors(property, typeCodes);
 				setJsConvertingPropertyAccessors(property, functionsPair.first, functionsPair.second);
 
-				property.setPropertyBinding(pb);
+				property.propertyBinding = pb;
 
 				properties.add(property);
 
-				propertiesByName.put(pb.propertyName, property);
+				propertiesByName.put(propertyName, property);
 			}
 
 			List<EntityInitializer> initializers = newList();
@@ -487,23 +490,22 @@ public class GwtScriptTypeSynthesis {
 		}
 
 		private GwtRuntimeProperty createOverrideGwtRuntimePropertyAndBinding(GwtScriptProperty p, Object initializer, boolean confidential) {
-			PropertyBinding pb = p.getPropertyBinding();
+			PropertyBinding pb = p.propertyBinding;
+			String propertyName = p.getName();
 
-			GwtRuntimeProperty newP = createGwtRuntimeProperty(p.getName(), p.getType(), initializer, p.isNullable(), confidential);
+			GwtRuntimeProperty newP = createGwtRuntimeProperty(propertyName, p.getType(), initializer, p.isNullable(), confidential);
 
 			PropertyBinding newPb = new PropertyBinding();
-			newPb.propertyName = pb.propertyName;
 			newPb.property = newP;
 			newPb.runtime = pb.runtime;
-			newPb.primitive = pb.primitive;
 			newPb.getterName = pb.getterName;
 			newPb.setterName = pb.setterName;
 			newPb.getterFunction = pb.getterFunction;
 			newPb.setterFunction = pb.setterFunction;
 
-			newP.setPropertyBinding(newPb);
+			newP.propertyBinding = newPb;
 
-			initializerMap.put(pb.propertyName, initializer);
+			initializerMap.put(propertyName, initializer);
 
 			return newP;
 		}
@@ -524,8 +526,8 @@ public class GwtScriptTypeSynthesis {
 			String getDirectSource = "(function(e){return e." + jsPropertyName + ";})";
 			String setDirectSource = "(function(e,v){e." + jsPropertyName + "=v;})";
 
-			ScriptOnlyItwTools.setProperty(result, RuntimeMethodNames.instance.propertyGetDirectUnsafe(), eval(getDirectSource));
-			ScriptOnlyItwTools.setProperty(result, RuntimeMethodNames.instance.propertySetDirectUnsafe(), eval(setDirectSource));
+			ScriptOnlyItwTools.setProperty(result, RuntimeMethodNames.propertyGetDirectUnsafe(), eval(getDirectSource));
+			ScriptOnlyItwTools.setProperty(result, RuntimeMethodNames.propertySetDirectUnsafe(), eval(setDirectSource));
 
 			return result;
 		}
@@ -540,20 +542,6 @@ public class GwtScriptTypeSynthesis {
 			Tuple3<TypeCode, TypeCode, TypeCode> typeCodes = resolveCollectionKeyValueTypeCodes(property);
 
 			return buildVirtualPropertyAccessors(propertyBinding, property, typeCodes);
-		}
-
-		private Pair<JavaScriptObject, JavaScriptObject> buildVirtualPropertyAccessors( //
-				PropertyBinding propertyBinding, Property property, Tuple3<TypeCode, TypeCode, TypeCode> typeCodes) {
-
-			return GenericAccessorMethods.buildJsConvertingAccessors( //
-					property, propertyBinding.getterFunction, propertyBinding.setterFunction, //
-					typeCodes.val0(), typeCodes.val1(), typeCodes.val2());
-		}
-
-		private Pair<JavaScriptObject, JavaScriptObject> buildJsConvertingPropertyAccessors( //
-				Property property, Tuple3<TypeCode, TypeCode, TypeCode> typeCodes) {
-
-			return GenericAccessorMethods.buildJsConvertingPropertyAccessors(property, typeCodes.val0(), typeCodes.val1(), typeCodes.val2());
 		}
 
 		private Tuple3<TypeCode, TypeCode, TypeCode> resolveCollectionKeyValueTypeCodes(Property property) {
@@ -577,6 +565,20 @@ public class GwtScriptTypeSynthesis {
 			return Tuple3.of(collectionType, keyType, valueType);
 		}
 
+		private Pair<JavaScriptObject, JavaScriptObject> buildVirtualPropertyAccessors( //
+				PropertyBinding propertyBinding, Property property, Tuple3<TypeCode, TypeCode, TypeCode> typeCodes) {
+
+			return GenericAccessorMethods.buildJsConvertingAccessors( //
+					property, propertyBinding.getterFunction, propertyBinding.setterFunction, //
+					typeCodes.val0(), typeCodes.val1(), typeCodes.val2());
+		}
+
+		private Pair<JavaScriptObject, JavaScriptObject> buildJsConvertingPropertyAccessors( //
+				Property property, Tuple3<TypeCode, TypeCode, TypeCode> typeCodes) {
+
+			return GenericAccessorMethods.buildJsConvertingPropertyAccessors(property, typeCodes.val0(), typeCodes.val1(), typeCodes.val2());
+		}
+
 		// let's take all other methods we can find on all the other super-types
 		private void takeEverythingElseFromAllTheSuperTypes() {
 			Map<String, Object> mergedSuperProperties = newMap();
@@ -595,10 +597,10 @@ public class GwtScriptTypeSynthesis {
 
 		private void prepareToStringToSelectiveInfo() {
 			if (etb.toStringMethod != null)
-				ScriptOnlyItwTools.setProperty(entityType, RuntimeMethodNames.instance.abstractEntityTypeToString(), etb.toStringMethod);
+				ScriptOnlyItwTools.setProperty(entityType, RuntimeMethodNames.abstractEntityTypeToString(), etb.toStringMethod);
 
 			if (etb.getSelectiveInformationForMethod != null)
-				ScriptOnlyItwTools.setProperty(entityType, RuntimeMethodNames.instance.abstractEntityTypeGetSelectiveInformationFor(),
+				ScriptOnlyItwTools.setProperty(entityType, RuntimeMethodNames.abstractEntityTypeGetSelectiveInformationFor(),
 						etb.getSelectiveInformationForMethod);
 		}
 

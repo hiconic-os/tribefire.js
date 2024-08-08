@@ -76,10 +76,15 @@ public class PropertyDesc {
 		return JsKeywords.javaIdentifierToJs(name);
 	}
 
-	public boolean isPrimitive() {
+	public boolean getIsPrimitive() {
 		return isPrimitive;
 	}
 
+	@Deprecated
+	public String getPrimitivityFlag() {
+		return isPrimitive ? "1" : "0";
+	}
+	
 	public boolean getIsCollection() {
 		return collectionTypeCode != null;
 	}
@@ -110,6 +115,14 @@ public class PropertyDesc {
 
 	public boolean getIsInheritedFromSuperclass() {
 		return ownerTypeDesc.isInheritedFromSuperclass(name);
+	}
+
+	public String getIsInheritedFromSuperclassFlag() {
+		return getIsInheritedFromSuperclass() ? "1" : "0";
+	}
+
+	public String getIsOverlayFlag() {
+		return isOverlay ? "1" : "0";
 	}
 
 	public boolean getIsOverlay() {
