@@ -18,10 +18,12 @@ import static com.braintribe.utils.lcd.CollectionTools2.asSet;
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Setish;
 import com.google.gwt.core.client.JavaScriptObject;
 
+import javaemul.internal.annotations.DoNotInline;
+
 /**
  * Tests for {@link Setish}.
  */
-public class SetishTest extends AbstractCollectionishTest{
+public class SetishTest extends AbstractCollectionishTest {
 
 	@Override
 	protected void tryRun() throws Exception {
@@ -36,8 +38,14 @@ public class SetishTest extends AbstractCollectionishTest{
 		return new $wnd.Set(['A', 'B', 'C']);
 	}-*/;
 
+	@DoNotInline
 	private native void testMethods(Setish<String> sa, JavaScriptObject s) /*-{
-		this.assertEqual(eval("[...Sa]"), ['A', 'B', 'C'], "spread to array");
+		if (eval("typeof Sa") != 'undefined') 
+			this.assertEqual(eval("[...Sa]"), ['A', 'B', 'C'], "spread to array");
+		if (eval("typeof A") != 'undefined') 
+			this.assertEqual(eval("[...A]"), ['A', 'B', 'C'], "spread to array");
+		else
+			this.logWarn("Cannot test 'spread to array' because given Setish has an unexpected name, i.e. other than 'Sa' or 'A'");
 
 		this.assertEqOperation(sa, s, "a.size", 3);
 

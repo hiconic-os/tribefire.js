@@ -17,6 +17,8 @@ import static com.braintribe.utils.lcd.CollectionTools2.asList;
 
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Arrayish;
 
+import javaemul.internal.annotations.DoNotInline;
+
 /**
  * Tests for {@link Arrayish}
  */
@@ -30,9 +32,16 @@ public class ArrayishTest extends AbstractCollectionishTest {
 		testMethods(af, a);
 	}
 
+	@DoNotInline
 	private native void testMethods(Arrayish<String> aa, String[] a) /*-{
 		this.assertEqual(aa.length, a.length, "length");
-		this.assertEqual(eval("[...Aa]"), a, "spread to array");
+
+		if (eval("typeof Aa") != 'undefined') 
+			this.assertEqual(eval("[...Aa]"), a, "spread to array");
+		if (eval("typeof A") != 'undefined') 
+			this.assertEqual(eval("[...A]"), a, "spread to array");
+		else
+			this.logWarn("Cannot test 'spread to array' because given Arrayish has an unexpected name, i.e. other than 'Aa' or 'A'");
 
 		this.assertEqOperation(aa, a, 'a.toLocaleString()');
 

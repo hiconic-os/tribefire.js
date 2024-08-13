@@ -153,9 +153,18 @@ public abstract class AbstractGwtTest {
 
 	@JsMethod
 	protected void logError(String msg) {
+		logMsg(msg, "red");
+	}
+
+	@JsMethod
+	protected void logWarn(String msg) {
+		logMsg(msg, "orange");
+	}
+
+	private void logMsg(String msg, String color) {
 		Document document = Document.get();
 		PreElement preElement = document.createPreElement();
-		preElement.getStyle().setColor("red");
+		preElement.getStyle().setColor(color);
 		preElement.getStyle().setMargin(0, Unit.PX);
 		preElement.appendChild(document.createTextNode(msg));
 		document.getBody().appendChild(preElement);

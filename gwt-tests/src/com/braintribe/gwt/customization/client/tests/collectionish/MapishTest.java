@@ -18,6 +18,8 @@ import static com.braintribe.utils.lcd.CollectionTools2.asMap;
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Mapish;
 import com.google.gwt.core.client.JavaScriptObject;
 
+import javaemul.internal.annotations.DoNotInline;
+
 /**
  * Tests for {@link Mapish}.
  */
@@ -36,6 +38,7 @@ public class MapishTest extends AbstractCollectionishTest {
 		return new $wnd.Map([[1, "A"], [2, "B"], [3, "C"]]);
 	}-*/;
 
+	@DoNotInline
 	private native void testMethods(Mapish<Double, String> ma, JavaScriptObject m) /*-{
 		//this.assertEqual(eval("[...Sa]"), ['A', 'B', 'C'], "spread to array");
 
