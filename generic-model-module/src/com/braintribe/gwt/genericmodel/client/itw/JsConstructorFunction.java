@@ -16,6 +16,7 @@
 package com.braintribe.gwt.genericmodel.client.itw;
 
 import com.google.gwt.core.client.GwtScriptOnly;
+import com.google.gwt.core.client.JavaScriptObject;
 
 @GwtScriptOnly
 public class JsConstructorFunction extends GenericJavaScriptObject {
@@ -24,15 +25,20 @@ public class JsConstructorFunction extends GenericJavaScriptObject {
 
 	}
 
-	public final static JsConstructorFunction create(Class<?> clazz, JsConstructorFunction superConstructor) {
-		Object superPrototype = superConstructor.getPrototype();
-
+	public final static JsConstructorFunction create(Class<?> clazz, JavaScriptObject  superPrototype) {
 		CastableTypeMap superTypeMap = ScriptOnlyItwTools.getCastableTypeMap(superPrototype);
 		CastableTypeMap derivedTypeMap = (CastableTypeMap) ScriptOnlyItwTools.portableObjectCreate(superTypeMap);
 
 		// TODO replace superConstructor with GwtEnhancedEntityStub constructor
 		return createConstructor(superConstructor, clazz, derivedTypeMap);
 	}
+
+	private static JsConstructorFunction superConstructor = enhancedEntityStubConstructor(); 
+
+	/** Uses {@link GwtEnhancedEntityStub} */
+	private static native JsConstructorFunction enhancedEntityStubConstructor() /*-{
+		return @JsReflectionTools::extractConstructor(*)(@GwtEnhancedEntityStub::new());
+	}-*/;
 
 	private static JsConstructorFunction createConstructor(JsConstructorFunction superConstructor, Class<?> javaClass,
 			CastableTypeMap castableTypeMap) {

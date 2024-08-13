@@ -261,14 +261,15 @@ public class GwtScriptTypeSynthesis {
 
 			etb.enhancedClass = RuntimeClassTools.createForClass(enhancedSignature, superBinding.enhancedClass);
 
-			etb.constrF = JsConstructorFunction.create(etb.enhancedClass, superBinding.constrF);
+			JsConstructorFunction constrF = JsConstructorFunction.create(etb.enhancedClass, superBinding.enhancedProto);
+			etb.enhancedProto = constrF.getPrototype();
 
 			if (!Boolean.TRUE.equals(gmEntityType.getIsAbstract())) {
 				if (entityType instanceof GwtRuntimeEntityType)
-					((GwtRuntimeEntityType<?>) entityType).setEnhancedConstructorFunction(etb.constrF);
+					((GwtRuntimeEntityType<?>) entityType).setEnhancedConstructorFunction(constrF);
 			}
 
-			enhancedPrototype = etb.constrF.getPrototype();
+			enhancedPrototype = etb.enhancedProto;
 			entityType.setProtoInstance(enhancedPrototype);
 			enhancedPrototype.setProperty(RuntimeMethodNames.entityBaseType(), ScriptOnlyItwTools.createProvider(entityType));
 		}

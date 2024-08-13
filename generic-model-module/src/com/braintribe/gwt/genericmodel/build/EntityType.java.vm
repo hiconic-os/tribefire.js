@@ -62,7 +62,7 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
 #else
 	@Override
 	public ${entityDesc.entityIfaceFullName} createRaw() {
-		return new ${entityDesc.enhancedClassFullName}();
+		return new ${enhancedName}();
 	}
 
 #end
@@ -95,31 +95,30 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
 	}
 
 #if ($scriptMode)
+## This method might get inlined, for better analysis use @DoNotInline 
     @com.google.gwt.core.client.UnsafeNativeLong
     protected static native void prepareDynamicSubclassing() /*-{
 ##      THE GENERATED JS ONLY HAS ONE "VAR" STATEMENT WITH ALL THE VARIABLES, MAKING THE CODE IS SHORTER
     	var
-			constrF, //               A TODO get rid of constructor function
+    		constrF, //               A
 			proto, //                 B
-			et, //                    D
+			et, //                    C
 			eb; //                    D
 
     	#if (${entityDesc.needsDecoy})
-##      WE USE THE PROTO VARIABLE HERE SO THAT WE DON"T NEED ANOTHER ONE.
+##      WE USE THE "PROTO" VARIABLE HERE SO THAT WE DON"T NEED ANOTHER ONE.
     	proto = function(){@${entityDesc.decoyClassSimpleName}::new()(), @${entityDesc.decoyClassSimpleName}2::new()()};
     	#end
 
-##      THIS IS WHAT WE DO, BUT WITHOUT LOCAL VARIABLE SO THE OUTPUT IS SHORTER:
-##    	var newInstanceFunction = @${enhancedName}::new();
-##    	constrF = @JsReflectionTools::extractConstructor(*)(newInstanceFunction);
-##
-		constrF = @JsReflectionTools::extractConstructor(*)(@${enhancedName}::new());
-    	
-		proto = @JsReflectionTools::prototypeOf(*)(constrF);
-        
-##      ENRICH AND TRANSFER castable typemap from java class to entitytype
+##      WARNING: DO NOTE USE Class.getPrototypeForClass(Class<?>) TO RESOLVE PROTOTYPE, THAT SOMETIMES RETURNS NULL!!!
 		et = @${className}::INSTANCE;
-       	et.@GwtEntityType::protoInstance = proto;
+#if(${entityDesc.isAbstract})
+		constrF = @JsReflectionTools::extractConstructor(*)(@${enhancedName}::new());
+#else
+		constrF = @JsReflectionTools::extractConstructor(*)(et.@GwtEntityType::createRaw());
+#end
+		proto = @JsReflectionTools::prototypeOf(*)(constrF);
+
 
 #foreach($property in $properties)
 #if (!${property.isInheritedFromSuperclass} || !${property.isOverlay})
@@ -141,9 +140,12 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
 #end#end ## foreach property 
 
         eb = @EntityTypeBinding::new()();
-		eb.@EntityTypeBinding::constrF = constrF;
+		eb.@EntityTypeBinding::enhancedProto = proto;
 		eb.@EntityTypeBinding::enhancedClass = @${entityDesc.enhancedClassFullName}::class;
 		eb.@EntityTypeBinding::entityType = ${entityDesc.entityTypeSingletonJsniRef};
+
+       	et.@GwtEntityType::protoInstance = proto;
+        et.@GwtScriptEntityType::setEntityTypeBinding(*)(eb);  	
 
 ## WARNING: Here we re-assign [proto], now it is the prototype of the EntityType, not the entity class
 #if (${toStringInformation} || ${selectiveInformation})
@@ -155,9 +157,7 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
 #if (${selectiveInformation})
         eb.@EntityTypeBinding::getSelectiveInformationForMethod = proto.@${className}::getSelectiveInformationFor(*);
 #end
-
-#end
-        et.@GwtScriptEntityType::setEntityTypeBinding(*)(eb);  	
+#end ## if toString or toSelectiveInfo
     }-*/;
 #end ## if($scriptMode) 
 

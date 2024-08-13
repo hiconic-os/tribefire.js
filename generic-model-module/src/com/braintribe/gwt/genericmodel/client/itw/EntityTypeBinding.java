@@ -24,11 +24,12 @@ import com.google.gwt.core.client.JavaScriptObject;
 @GwtScriptOnly
 public class EntityTypeBinding {
 
+	// not really used, only for debugging?
 	public GwtScriptEntityType<?> entityType;
 
 	public Class<?> enhancedClass;
 
-	public JsConstructorFunction constrF;
+	public GenericJavaScriptObject enhancedProto;
 
 	public JavaScriptObject toStringMethod;
 	public JavaScriptObject getSelectiveInformationForMethod;
