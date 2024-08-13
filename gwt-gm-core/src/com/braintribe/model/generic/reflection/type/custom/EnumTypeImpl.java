@@ -109,6 +109,7 @@ public class EnumTypeImpl<E extends Enum<E>> extends AbstractCustomType implemen
 	}
 
 	@Override
+	@Deprecated
 	public E getInstance(String value) {
 		return Enum.valueOf(getJavaType(), value);
 	}

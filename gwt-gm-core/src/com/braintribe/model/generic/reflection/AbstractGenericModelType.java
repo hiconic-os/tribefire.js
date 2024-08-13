@@ -24,7 +24,7 @@ import com.braintribe.model.generic.reflection.type.custom.EnumTypeImpl;
 import com.braintribe.model.generic.reflection.type.simple.AbstractSimpleType;
 
 @SuppressWarnings("unusable-by-js")
-public abstract class AbstractGenericModelType implements GenericModelType {
+public abstract class AbstractGenericModelType implements GenericModelTypeJs {
 
 	protected Class<?> javaType;
 

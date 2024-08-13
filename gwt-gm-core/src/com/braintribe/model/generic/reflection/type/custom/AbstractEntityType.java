@@ -45,6 +45,7 @@ import com.braintribe.model.generic.reflection.Attribute;
 import com.braintribe.model.generic.reflection.CloningContext;
 import com.braintribe.model.generic.reflection.EntityInitializer;
 import com.braintribe.model.generic.reflection.EntityType;
+import com.braintribe.model.generic.reflection.EntityTypeJs;
 import com.braintribe.model.generic.reflection.GenericModelException;
 import com.braintribe.model.generic.reflection.GenericModelType;
 import com.braintribe.model.generic.reflection.GenericToStringBuilder;
@@ -65,7 +66,7 @@ import com.braintribe.model.generic.value.ValueDescriptor;
  * Subclasses for instantiable entities must override the methods: {@link #createRaw()} and {@link #createPlainRaw()}.
  */
 @SuppressWarnings("unusable-by-js")
-public abstract class AbstractEntityType<T extends GenericEntity> extends AbstractCustomType implements EntityType<T> {
+public abstract class AbstractEntityType<T extends GenericEntity> extends AbstractCustomType implements EntityTypeJs<T> {
 	private boolean isAbstract;
 	private List<Property> properties;
 	private List<TransientProperty> transientProperties;
