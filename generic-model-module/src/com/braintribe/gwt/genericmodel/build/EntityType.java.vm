@@ -29,6 +29,8 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
         INSTANCE.setSuperTypes(
         	${superTypeRefs}
         );
+##
+##
 #if (${transientProperties})
         INSTANCE.setDeclaredTransientProperties(new com.braintribe.model.generic.reflection.TransientProperty[]{
 #foreach($transientProperty in $transientProperties)
@@ -39,6 +41,8 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
 #else ## ends: transientProperties
         INSTANCE.setNoTransientProperties();
 #end
+##
+##
 #if(${entityDesc.evaluatesToRef})
 		INSTANCE.setEvaluatesTo(${entityDesc.evaluatesToRef});
 #end        
@@ -95,15 +99,17 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
 	}
 
 #if ($scriptMode)
+##
 ## This method might get inlined, for better analysis use @DoNotInline 
     @com.google.gwt.core.client.UnsafeNativeLong
     protected static native void prepareDynamicSubclassing() /*-{
+##
 ##      THE GENERATED JS ONLY HAS ONE "VAR" STATEMENT WITH ALL THE VARIABLES, MAKING THE CODE IS SHORTER
     	var
-    		constrF, //               A
-			proto, //                 B
-			et, //                    C
-			eb; //                    D
+    		constrF, //       A
+			proto, //         B
+			et, //            C
+			eb; //            D
 
     	#if (${entityDesc.needsDecoy})
 ##      WE USE THE "PROTO" VARIABLE HERE SO THAT WE DON"T NEED ANOTHER ONE.
@@ -111,14 +117,15 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
     	#end
 
 ##      WARNING: DO NOTE USE Class.getPrototypeForClass(Class<?>) TO RESOLVE PROTOTYPE, THAT SOMETIMES RETURNS NULL!!!
+##
 		et = @${className}::INSTANCE;
+##		
 #if(${entityDesc.isAbstract})
-		constrF = @JsReflectionTools::extractConstructor(*)(@${enhancedName}::new());
+		constrF = @JsReflectionTools::extractConstructor(*)(function(){@${enhancedName}::new()()});
 #else
 		constrF = @JsReflectionTools::extractConstructor(*)(et.@GwtEntityType::createRaw());
 #end
 		proto = @JsReflectionTools::prototypeOf(*)(constrF);
-
 
 #foreach($property in $properties)
 #if (!${property.isInheritedFromSuperclass} || !${property.isOverlay})
@@ -139,13 +146,11 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
         	.@${property.declaringType.qualifiedSourceName}::${property.setterName}(*);
 #end#end ## foreach property 
 
+##      YES, WE COULD BUILD A NEW EB IN A METHOD AND GET A RESULT, SPARING THE "new" KEYWORD, BUT THIS HELPS IDENTIFY THIS METHOD IN THE OBFUSCATED OUTPUT 
         eb = @EntityTypeBinding::new()();
-		eb.@EntityTypeBinding::enhancedProto = proto;
 		eb.@EntityTypeBinding::enhancedClass = @${entityDesc.enhancedClassFullName}::class;
-		eb.@EntityTypeBinding::entityType = ${entityDesc.entityTypeSingletonJsniRef};
 
-       	et.@GwtEntityType::protoInstance = proto;
-        et.@GwtScriptEntityType::setEntityTypeBinding(*)(eb);  	
+        et.@GwtScriptEntityType::bindWith(*)(eb, proto);  	
 
 ## WARNING: Here we re-assign [proto], now it is the prototype of the EntityType, not the entity class
 #if (${toStringInformation} || ${selectiveInformation})

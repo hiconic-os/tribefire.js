@@ -51,6 +51,14 @@ public class GwtScriptEntityType<T extends GenericEntity> extends GwtEntityType<
 		this.entityTypeBinding = entityBinding;
 	}
 
+	public void bindWith(EntityTypeBinding etb, GenericJavaScriptObject proto) {
+		this.entityTypeBinding = etb;
+		this.setProtoInstance(proto);
+
+		etb.entityType = this;
+		etb.enhancedProto = proto;
+	}
+	
 	public List<GwtScriptEntityType<?>> getGwtScriptSuperTypes() {
 		return (List<GwtScriptEntityType<?>>) (List<?>) super.getSuperTypes();
 	}
