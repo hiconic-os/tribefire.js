@@ -91,9 +91,11 @@ public class EvaluatorBasedAccess implements IncrementalAccess {
 		return request.eval(evaluator).get();
 	}
 
+	// TODO is this needed? The set "request.setReference(...)" line was missing and nobody noticed 
 	@Override
 	public ReferencesResponse getReferences(ReferencesRequest referencesRequest) {
 		ReferencesRequest request = request(ReferencesRequest.T);
+		request.setReference(referencesRequest.getReference());
 		return request.eval(evaluator).get();
 	}
 
@@ -105,7 +107,7 @@ public class EvaluatorBasedAccess implements IncrementalAccess {
 
 	private <R extends PersistenceRequest> R request(EntityType<R> et) {
 		R result = et.create();
-		result.setServiceId(accessId);
+		result.setDomainId(accessId);
 
 		return result;
 	}

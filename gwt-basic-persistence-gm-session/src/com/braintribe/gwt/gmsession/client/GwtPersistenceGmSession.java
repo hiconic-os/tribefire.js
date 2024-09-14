@@ -94,7 +94,7 @@ import com.braintribe.model.query.PropertyQuery;
 import com.braintribe.model.query.PropertyQueryResult;
 import com.braintribe.model.query.SelectQuery;
 import com.braintribe.model.query.SelectQueryResult;
-import com.braintribe.model.service.api.DispatchableRequest;
+import com.braintribe.model.service.api.DomainRequest;
 import com.braintribe.model.service.api.ServiceRequest;
 import com.braintribe.processing.async.api.AsyncCallback;
 import com.braintribe.processing.async.api.JsPromise;
@@ -626,7 +626,7 @@ public class GwtPersistenceGmSession extends AbstractPersistenceGmSession implem
 	protected void sendEntityQuery(EntityQuery query, com.google.gwt.user.client.rpc.AsyncCallback<EntityQueryResult> callback) {
 		QueryEntities request = QueryEntities.T.create();
 		request.setQuery(query);
-		request.setServiceId(accessDescriptor.accessId());
+		request.setDomainId(accessDescriptor.accessId());
 
 		evalAsync(callback, request);
 	}
@@ -671,8 +671,8 @@ public class GwtPersistenceGmSession extends AbstractPersistenceGmSession implem
 		return sa;
 	}
 
-	private <T> void evalAsync(com.google.gwt.user.client.rpc.AsyncCallback<T> callback, DispatchableRequest request) {
-		request.setServiceId(accessDescriptor.accessId());
+	private <T> void evalAsync(com.google.gwt.user.client.rpc.AsyncCallback<T> callback, DomainRequest request) {
+		request.setDomainId(accessDescriptor.accessId());
 
 		Future<T> future = new Future<>();
 		future.load(callback);
