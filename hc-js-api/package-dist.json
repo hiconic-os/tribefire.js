@@ -1,5 +1,5 @@
 {
-  "name": "@dev.hiconic/tf.js_hc-jc-api",
+  "name": "@dev.hiconic/tf.js_hc-js-api",
   "version": "@VERSION",
   "description": "Convenience wrapper to facilitate imports of namespaces in hiconic.js.",
   "main": "dist/hc-js-api.js",

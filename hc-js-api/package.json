@@ -1,5 +1,5 @@
 {
-  "name": "hc-jc-api",
+  "name": "hc-js-api",
   "version": "1.0.0",
   "main": "src-compiled/test.js",
   "type": "module",
