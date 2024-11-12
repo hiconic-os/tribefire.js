@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "NodeNext",
+        "outDir": "src-compiled",
+        "declaration": true,
+        "moduleResolution": "NodeNext",
+        "checkJs": true,
+        "noImplicitOverride": true,
+    },
+    "include": ["src/*"]
+}

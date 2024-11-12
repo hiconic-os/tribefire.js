@@ -1,0 +1,19 @@
+{
+  "name": "hc-jc-api",
+  "version": "1.0.0",
+  "main": "src-compiled/test.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "dev.hiconic",
+  "license": "Apache-2.0",
+  "description": "",
+  "dependencies": {
+    "@dev.hiconic/tf.js_tf-js": "3.0.x"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}
