@@ -1,6 +1,9 @@
 import '@dev.hiconic/tf.js_tf-js';
 
-import { hc } from '@dev.hiconic/hc-js-base';
+import { T as _T, hc as _hc, T } from '@dev.hiconic/hc-js-base';
+
+export import T = _T;
+export import hc = _hc;
 
 // Namespaces
 export import attr = hc.attr;
