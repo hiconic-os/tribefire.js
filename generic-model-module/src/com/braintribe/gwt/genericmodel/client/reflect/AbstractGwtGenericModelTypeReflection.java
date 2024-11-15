@@ -45,9 +45,9 @@ public abstract class AbstractGwtGenericModelTypeReflection extends AbstractGene
 	}
 
 	private static native void ensureSymbols() /*-{
-		$wnd.$tf = $wnd.$tf || {};
-		$wnd.$tf.Symbol = $wnd.$tf.Symbol || {};
-		$wnd.$tf.Symbol.enumType = Symbol('$enumType');
+		$wnd.hc = $wnd.hc || {};
+		$wnd.hc.Symbol = $wnd.hc.Symbol || {};
+		$wnd.hc.Symbol.enumType = Symbol('$enumType');
 	}-*/;
 
 	@Override
@@ -77,7 +77,7 @@ public abstract class AbstractGwtGenericModelTypeReflection extends AbstractGene
 	}
 
 	private static native void defineEnumType(JavaScriptObject enumObject, EnumType<?> type) /*-{
-		enumObject[$wnd.$tf.Symbol.enumType] = type;
+		enumObject[$wnd.hc.Symbol.enumType] = type;
 	}-*/;
 
 	private static native void defineConstant(JavaScriptObject enumObject, String name, Enum<?> value) /*-{

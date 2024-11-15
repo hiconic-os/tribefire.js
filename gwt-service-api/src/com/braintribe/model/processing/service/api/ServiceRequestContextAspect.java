@@ -19,7 +19,7 @@ import com.braintribe.common.attribute.TypeSafeAttribute;
 
 import jsinterop.annotations.JsType;
 
-@JsType(namespace = ServiceApiConstants.NAMESPACE_SERVICE)
+@JsType(namespace = JsInteropServiceNamespace.service)
 @SuppressWarnings("unusable-by-js")
 public interface ServiceRequestContextAspect<T> extends TypeSafeAttribute<T> {
 	// Intentionally left blank

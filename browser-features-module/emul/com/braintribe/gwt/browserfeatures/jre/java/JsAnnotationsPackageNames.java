@@ -7,15 +7,17 @@
 
 package java;
 
+import jsinterop.context.JsInteropNamespaces;
+
 /**
  * @author peter.gazdik
  */
 public interface JsAnnotationsPackageNames {
 
-	static String GM_TYPES = "$T";
-	static String ASYNC = "$tf.session";
-	static String VIEW = "$tf.view";
-	static String JAVA = "$tf";
+	static String GM_TYPES = JsInteropNamespaces.type;
+	static String VIEW = JsInteropNamespaces.gm + ".view";
+	static String SESSION = JsInteropNamespaces.gm + ".session";
+	static String JAVA = JsInteropNamespaces.gm;
 	static String JAVA_IO = JAVA;
 	static String JAVA_LANG = JAVA;
 	static String JAVA_MATH = JAVA;

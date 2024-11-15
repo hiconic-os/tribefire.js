@@ -52,7 +52,7 @@ public class ModelPath extends AbstractSequentialList<ModelPathElement> {
 	/**
 	 * Namespace for ModelPath api for js interop declarations.
 	 */
-	public static final String MODEL_PATH_NAMESPACE = "$tf.modelpath";
+	public static final String MODEL_PATH_NAMESPACE = "hc.modelpath";
 	
 	private final ModelPathNode anchor;
 	private int size;

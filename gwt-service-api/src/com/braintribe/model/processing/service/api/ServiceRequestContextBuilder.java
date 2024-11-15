@@ -22,7 +22,7 @@ import com.braintribe.model.service.api.ServiceRequest;
 
 import jsinterop.annotations.JsType;
 
-@JsType(namespace = ServiceApiConstants.NAMESPACE_SERVICE)
+@JsType(namespace = JsInteropServiceNamespace.service)
 @SuppressWarnings("unusable-by-js")
 public interface ServiceRequestContextBuilder extends AttributeContextBuilder {
 

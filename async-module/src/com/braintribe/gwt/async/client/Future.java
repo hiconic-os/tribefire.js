@@ -49,11 +49,11 @@ import jsinterop.annotations.JsType;
  * @param <T>
  *            type parameter that defines the type of the awaited object
  */
-@JsType(namespace = "$tf.session")
+@JsType(namespace = JsInteropAsyncNamespace.async)
 @SuppressWarnings("unusable-by-js")
 public class Future<T> implements DualAsyncCallback<T>, Loader<T> {
 	
-	@JsType(namespace = "$tf.session")
+	@JsType(namespace = JsInteropAsyncNamespace.async)
 	public static enum State {
 		outstanding,
 		success,

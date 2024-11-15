@@ -22,7 +22,7 @@ import jsinterop.annotations.JsType;
 /**
  * @author peter.gazdik
  */
-@JsType(namespace = "$tf.session")
+@JsType(namespace = JsInteropAsyncNamespace.async)
 @SuppressWarnings("unusable-by-js")
 public interface DualAsyncCallback<T> extends AsyncCallback<T>, com.braintribe.processing.async.api.AsyncCallback<T> {
 	// EMPTY

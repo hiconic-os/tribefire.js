@@ -15,13 +15,13 @@
 // ============================================================================
 package com.braintribe.model.processing.service.impl;
 
-import com.braintribe.model.processing.service.api.ServiceApiConstants;
+import com.braintribe.model.processing.service.api.JsInteropServiceNamespace;
 import com.braintribe.model.processing.service.api.ServiceProcessor;
 import com.braintribe.model.service.api.ServiceRequest;
 
 import jsinterop.annotations.JsType;
 
-@JsType(namespace = ServiceApiConstants.NAMESPACE_SERVICE)
+@JsType(namespace = JsInteropServiceNamespace.service)
 @SuppressWarnings("unusable-by-js")
 public abstract class AbstractServiceProcessor<I extends ServiceRequest, O> implements ServiceProcessor<I, O> {
 	//NOP

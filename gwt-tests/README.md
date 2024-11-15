@@ -4,10 +4,10 @@
 ## Run
 
 ```
-hc-build run-ant compile
+hc-build ant compile
 ```
 
 
 ## See output
 
-In browser open `war/intex.html`
+In browser open `war/index.html`

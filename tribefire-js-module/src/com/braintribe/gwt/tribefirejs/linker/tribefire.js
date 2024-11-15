@@ -2,11 +2,13 @@
  *
  * Date: {tf-date}
  */
-export const $tf = globalThis.$tf = {};
-export const $T = globalThis.$T = {};
-$tf.version = function(){return "{tf-version}";}
+import {T, hc} from '@dev.hiconic/hc-js-base';
+
+hc.version = function(){return "{tf-version}";}
 console.time('start-hiconic-js');
-var $wnd = globalThis;
+var $wnd = Object.create(globalThis);
+$wnd.hc = hc;
+$wnd.T = T;
 // generated script start
 {tf-script}
 // generated script end

@@ -39,7 +39,7 @@ import jsinterop.annotations.JsType;
  * Provides contextual information about a request.
  * 
  */
-@JsType(namespace = ServiceApiConstants.NAMESPACE_SERVICE)
+@JsType(namespace = JsInteropServiceNamespace.service)
 @SuppressWarnings("unusable-by-js")
 public interface ServiceRequestContext extends Evaluator<ServiceRequest>, AttributeContext {
 

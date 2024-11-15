@@ -68,7 +68,7 @@ public class KeywordTest extends AbstractGmGwtTest {
 	}
 
 	private native KeywordPackageEntity tfjcNewKpe() /*-{
-		return $wnd.$T.com.braintribe.gwt.customization.client.tests.model.keyword.with_.non_dynamic.KeywordPackageEntity.create();
+		return $wnd.T.com.braintribe.gwt.customization.client.tests.model.keyword.with_.non_dynamic.KeywordPackageEntity.create();
 	}-*/;
 
 	private void testKeywordEntity(EntityType<?> type) {
@@ -140,7 +140,7 @@ public class KeywordTest extends AbstractGmGwtTest {
 		e.with_ = "with";
 		e.yield_ = "yield";
 		e.yield__ = "yield_";
-		e.keywordPackage = $wnd.$T.com.braintribe.gwt.customization.client.tests.model.keyword.with_.non_dynamic.KeywordPackageEntity.create();
+		e.keywordPackage = $wnd.T.com.braintribe.gwt.customization.client.tests.model.keyword.with_.non_dynamic.KeywordPackageEntity.create();
 	}-*/;
 
 	private void testKeywordEnum(EnumType<?> enumType) {

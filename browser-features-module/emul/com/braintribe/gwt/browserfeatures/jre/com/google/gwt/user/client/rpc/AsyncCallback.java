@@ -100,7 +100,7 @@ import jsinterop.annotations.JsType;
  *          <code>void</code> return type becomes a {@link Void} type
  *          argument, which is always <code>null</code>).
  */
-@JsType(namespace = JsAnnotationsPackageNames.ASYNC)
+@JsType(namespace = JsAnnotationsPackageNames.SESSION)
 public interface AsyncCallback<T> {
 
   /**

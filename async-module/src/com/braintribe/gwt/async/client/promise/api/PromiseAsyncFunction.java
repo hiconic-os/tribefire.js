@@ -15,11 +15,12 @@
 // ============================================================================
 package com.braintribe.gwt.async.client.promise.api;
 
+import com.braintribe.gwt.async.client.JsInteropAsyncNamespace;
 import com.braintribe.processing.async.api.AsyncCallback;
 
 import jsinterop.annotations.JsType;
 
-@JsType(namespace = "$tf.session")
+@JsType(namespace = JsInteropAsyncNamespace.async)
 public interface PromiseAsyncFunction<I,O> {
 	void apply(I value, AsyncCallback<O> callback) throws Exception;
 }

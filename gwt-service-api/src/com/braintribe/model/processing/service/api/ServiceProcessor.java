@@ -54,7 +54,7 @@ import jsinterop.annotations.JsType;
  * @param <R>
  *            The return type
  */
-@JsType(namespace = ServiceApiConstants.NAMESPACE_SERVICE)
+@JsType(namespace = JsInteropServiceNamespace.service)
 @SuppressWarnings("unusable-by-js")
 public interface ServiceProcessor<P extends ServiceRequest, R extends Object> {
 

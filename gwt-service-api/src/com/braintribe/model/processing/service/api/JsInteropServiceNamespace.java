@@ -15,6 +15,10 @@
 // ============================================================================
 package com.braintribe.model.processing.service.api;
 
-public interface ServiceApiConstants {
-	static String NAMESPACE_SERVICE = "$tf.service";
+import jsinterop.context.JsInteropNamespaces;
+
+public interface JsInteropServiceNamespace {
+
+	String service = JsInteropNamespaces.gm + ".service";
+
 }

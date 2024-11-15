@@ -22,7 +22,7 @@ import com.braintribe.model.service.api.ServiceRequest;
 import jsinterop.annotations.JsMethod;
 import jsinterop.annotations.JsType;
 
-@JsType(namespace = ServiceApiConstants.NAMESPACE_SERVICE)
+@JsType(namespace = JsInteropServiceNamespace.service)
 public interface ProcessorRegistry {
 	<I extends ServiceRequest> void bind(EntityType<I> type, ServiceProcessor<? super I, ?> processor);
 	@JsMethod(name = "bindByServiceId")

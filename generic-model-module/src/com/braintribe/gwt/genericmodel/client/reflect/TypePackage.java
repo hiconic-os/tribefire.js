@@ -27,7 +27,7 @@ import jsinterop.context.JsKeywords;
 @SuppressWarnings("unusable-by-js")
 public class TypePackage {
 	
-	public static final String GM_TYPE_NAMESPACE = "$T";
+	public static final String GM_TYPE_NAMESPACE = "T";
 
 	public static Map<String, JavaScriptObject> packagesByQualfiedName = newMap();
 	
@@ -35,10 +35,9 @@ public class TypePackage {
 	public static native TypePackage instance() /*-{
 		return this;
 	}-*/;
-	
+
 	public static native JavaScriptObject getRoot() /*-{
-	    var gt = globalThis.parent || globalThis;
-	    return gt.$T || (gt.$T = {}); 
+	    return $wnd.T; 
 	}-*/;
 
 	public static final void register(GenericModelType type, Object jsObjectToRegister) {

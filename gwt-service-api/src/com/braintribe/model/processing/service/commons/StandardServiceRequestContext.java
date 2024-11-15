@@ -24,7 +24,7 @@ import com.braintribe.common.attribute.AttributeContext;
 import com.braintribe.common.attribute.TypeSafeAttribute;
 import com.braintribe.model.generic.eval.EvalContext;
 import com.braintribe.model.generic.eval.Evaluator;
-import com.braintribe.model.processing.service.api.ServiceApiConstants;
+import com.braintribe.model.processing.service.api.JsInteropServiceNamespace;
 import com.braintribe.model.processing.service.api.ServiceRequestContext;
 import com.braintribe.model.processing.service.api.ServiceRequestContextAspect;
 import com.braintribe.model.processing.service.api.ServiceRequestContextBuilder;
@@ -46,7 +46,7 @@ import jsinterop.annotations.JsType;
  * @author dirk.scheffler
  */
 @SuppressWarnings("unusable-by-js")
-@JsType(namespace = ServiceApiConstants.NAMESPACE_SERVICE)
+@JsType(namespace = JsInteropServiceNamespace.service)
 public class StandardServiceRequestContext extends MapAttributeContext implements ServiceRequestContext {
 	
 	private ServiceRequestSummaryLogger summaryLogger;

@@ -182,10 +182,10 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 		entity.integerWrapper = 23;
 		entity.primitiveLong = BigInt(longVal);
 		entity.longWrapper = BigInt(longVal);
-		entity.primitiveFloat = new $wnd.$T.Double(123);
-		entity.floatWrapper = new $wnd.$T.Double(123);
-		entity.primitiveDouble = new $wnd.$T.Double(420);
-		entity.doubleWrapper = new $wnd.$T.Double(420);
+		entity.primitiveFloat = new $wnd.T.Double(123);
+		entity.floatWrapper = new $wnd.T.Double(123);
+		entity.primitiveDouble = new $wnd.T.Double(420);
+		entity.doubleWrapper = new $wnd.T.Double(420);
 		entity.string = "unnamed string";
 		entity.date = dateVal;
 
@@ -320,13 +320,13 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 		// Float
 		e.setId(1f);
 		assertIdIsJsNumber(e, "f");
-		setIdAsNumberInJs(e, "new $wnd.$T.Float(1)");
+		setIdAsNumberInJs(e, "new $wnd.T.Float(1)");
 		assertEqual(e.getId(), 1f, "id (Float)");
 
 		// Double
 		e.setId(1d);
 		assertIdIsJsNumber(e, "d");
-		setIdAsNumberInJs(e, "new $wnd.$T.Double(1)");
+		setIdAsNumberInJs(e, "new $wnd.T.Double(1)");
 		assertEqual(e.getId(), 1d, "id (Double)");
 
 		// Date
@@ -500,7 +500,7 @@ public class Props_CompileTimeEntity_Test extends AbstractGmGwtTest {
 	}-*/;
 
 	private native void setMapFloatDateInJs(PropsEntity e, String prop) /*-{
-		e[prop] = new Map([[new $wnd.$T.Float(11), new Date(12)]]);
+		e[prop] = new Map([[new $wnd.T.Float(11), new Date(12)]]);
 	}-*/;
 
 	private native void assertFirstKeyInJs(PropsEntity e, String prop, Object expected) /*-{

@@ -18,6 +18,7 @@ package com.braintribe.model.processing.session.api.managed;
 import static com.braintribe.utils.promise.JsPromiseCallback.promisify;
 import static java.util.Objects.requireNonNull;
 
+import com.braintribe.gwt.async.client.JsInteropAsyncNamespace;
 import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.reflection.EntityType;
 import com.braintribe.model.generic.session.exception.GmSessionException;
@@ -32,7 +33,7 @@ import jsinterop.annotations.JsIgnore;
 import jsinterop.annotations.JsMethod;
 import jsinterop.annotations.JsType;
 
-@JsType(namespace="$tf.session")
+@JsType(namespace= JsInteropAsyncNamespace.session)
 @SuppressWarnings("unusable-by-js")
 public interface SessionQueryBuilder {
 	
