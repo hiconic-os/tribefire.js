@@ -20,7 +20,7 @@ limitations under the License.
         <version>[3.0,3.1)</version>
     </parent>
     <artifactId>browser-features-module</artifactId>
-    <version>3.0.22</version>
+    <version>3.0.23</version>
     <properties>
         <gwt-compatible>true</gwt-compatible>
         <jsinterop>true</jsinterop>
