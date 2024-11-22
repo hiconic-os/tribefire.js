@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.braintribe.common.lcd.Pair;
-import com.braintribe.common.lcd.Tuple.Tuple3;
 import com.braintribe.gwt.browserfeatures.client.JsArray;
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Arrayish;
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Mapish;
@@ -512,7 +511,7 @@ public class GenericAccessorMethods {
 				return v;
 		
 			var t = typeof v;
-			 if (t == 'string' || v instanceof String)
+			if (t == 'string' || v instanceof String)
 			 	return v;
 			if (t == 'number')
 			 	return @Integer::valueOf(I)(v);
@@ -527,7 +526,7 @@ public class GenericAccessorMethods {
 			 	return @Integer::valueOf(I)(v);
 			}
 	
-			if (typeof v == 'bigint')
+			if (t == 'bigint')
 				return @Long::new(Ljava/lang/String;)(v.toString());
 			if (@C::isJsDate(*)(v))
 				return @C::jsToJDate(*)(v);
