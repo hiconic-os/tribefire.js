@@ -37,7 +37,7 @@ public class TypePackage {
 	}-*/;
 
 	public static native JavaScriptObject getRoot() /*-{
-	    return $wnd.T; 
+	    return $wnd.T || ($wnd.T = {});
 	}-*/;
 
 	public static final void register(GenericModelType type, Object jsObjectToRegister) {

@@ -42,7 +42,7 @@ public class SetishTest extends AbstractCollectionishTest {
 	private native void testMethods(Setish<String> sa, JavaScriptObject s) /*-{
 		if (eval("typeof Sa") != 'undefined') 
 			this.assertEqual(eval("[...Sa]"), ['A', 'B', 'C'], "spread to array");
-		if (eval("typeof A") != 'undefined') 
+		else if (eval("typeof A") != 'undefined') 
 			this.assertEqual(eval("[...A]"), ['A', 'B', 'C'], "spread to array");
 		else
 			this.logWarn("Cannot test 'spread to array' because given Setish has an unexpected name, i.e. other than 'Sa' or 'A'");

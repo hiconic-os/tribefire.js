@@ -120,11 +120,15 @@ com.braintribe.gwt.genericmodel.client.itw.GwtScriptEntityType<${entityDesc.enti
 ##
 		et = @${className}::INSTANCE;
 ##		
-#if(${entityDesc.isAbstract})
+##		NOTE - OPTIMIZATION POSSIBLE WITH MORE EFFOR:
+##      This alternative for nonAbstract type is shorter, but doesn't currently work for pretty draft. 
+##      It uses an indirection where createRaw is implemented with:
+##                         return this.createRaw_233();
+##      but our extractConstructor expects 
+##                         return new XYZ();
+##		constrF = @JsReflectionTools::extractConstructor(*)(et.@GwtScriptEntityType::createRaw());
+##
 		constrF = @JsReflectionTools::extractConstructor(*)(function(){@${enhancedName}::new()()});
-#else
-		constrF = @JsReflectionTools::extractConstructor(*)(et.@GwtEntityType::createRaw());
-#end
 		proto = @JsReflectionTools::prototypeOf(*)(constrF);
 
 #foreach($property in $properties)

@@ -24,8 +24,9 @@ public class GmTypesInteropEntryPoint implements EntryPoint {
 
 	@Override
 	public void onModuleLoad() {
-		makeCollectionishesIterable();
-		createDoubleTypes(TypePackage.getRoot());
+		JavaScriptObject root = TypePackage.getRoot();
+		makeCollectionishesIterable(root);
+		createDoubleTypes(root);
 	}
 
 	/**
@@ -33,10 +34,10 @@ public class GmTypesInteropEntryPoint implements EntryPoint {
 	 * @see Setish
 	 * @see Mapish
 	 */
-	private native void makeCollectionishesIterable() /*-{
-		$wnd.T.Array.prototype[Symbol.iterator] = $wnd.T.Array.prototype.values;
-		$wnd.T.Set.prototype[Symbol.iterator] = $wnd.T.Set.prototype.values;
-		$wnd.T.Map.prototype[Symbol.iterator] = $wnd.T.Map.prototype.entries;
+	private native void makeCollectionishesIterable(JavaScriptObject typeNs) /*-{
+		typeNs.Array.prototype[Symbol.iterator] = typeNs.Array.prototype.values;
+		typeNs.Set.prototype[Symbol.iterator] = typeNs.Set.prototype.values;
+		typeNs.Map.prototype[Symbol.iterator] = typeNs.Map.prototype.entries;
 	}-*/;
 
 	// The inner brackets around class definitions are mandatory!!!
