@@ -8,8 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.ArrayIface;
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Arrayish;
+import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.MapIface;
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Mapish;
+import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.SetIface;
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Setish;
 import com.braintribe.model.generic.GMF;
 import com.braintribe.model.generic.GmCoreApiInteropNamespaces;
@@ -24,7 +27,7 @@ import jsinterop.utils.Lambdas.JsUnaryFunction;
 public class JsCollectionTools {
 
 	@JsMethod(namespace = GmCoreApiInteropNamespaces.util)
-	public static <E> Arrayish<E> createArrayish(GenericModelType elementType) {
+	public static <E> ArrayIface<E> createArrayish(GenericModelType elementType) {
 		JsUnaryFunction<List<?>, ?> converter = (JsUnaryFunction<List<?>, ?>) jToJsListConverter(elementType.getTypeCode());
 
 		EnhancedList<E> jList = new EnhancedList<>(GMF.getTypeReflection().getListType(elementType));
@@ -33,7 +36,7 @@ public class JsCollectionTools {
 	}
 
 	@JsMethod(namespace = GmCoreApiInteropNamespaces.util)
-	public static <E> Setish<E> createSetish(GenericModelType elementType) {
+	public static <E> SetIface<E> createSetish(GenericModelType elementType) {
 		JsUnaryFunction<Set<?>, ?> converter = (JsUnaryFunction<Set<?>, ?>) jToJsSetConverter(elementType.getTypeCode());
 
 		EnhancedSet<E> jSet = new EnhancedSet<>(GMF.getTypeReflection().getSetType(elementType));
@@ -42,7 +45,7 @@ public class JsCollectionTools {
 	}
 
 	@JsMethod(namespace = GmCoreApiInteropNamespaces.util)
-	public static <K, V> Mapish<K, V> createMapish(GenericModelType keyType, GenericModelType valueType) {
+	public static <K, V> MapIface<K, V> createMapish(GenericModelType keyType, GenericModelType valueType) {
 		JsUnaryFunction<Map<?, ?>, ?> converter = (JsUnaryFunction<Map<?, ?>, ?>) jToJsMapConverter(keyType.getTypeCode(), valueType.getTypeCode());
 
 		EnhancedMap<K, V> jMap = new EnhancedMap<>(GMF.getTypeReflection().getMapType(keyType, valueType));
