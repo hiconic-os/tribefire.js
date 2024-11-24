@@ -1,5 +1,6 @@
 import '@dev.hiconic/tf.js_tf-js';
 import { T, hc } from '@dev.hiconic/hc-js-base';
+import * as types from '@dev.hiconic/hc-js-base';
 export { T, hc };
 export import attr = hc.attr;
 export import async = hc.async;
@@ -63,4 +64,47 @@ export declare namespace lang {
 export declare namespace io {
     export import InputStream = hc.InputStream;
     export import OutputStream = hc.OutputStream;
+}
+declare module "@dev.hiconic/hc-js-base" {
+    namespace hc.reflection {
+        interface BaseType {
+            S: "object";
+        }
+        interface BooleanType {
+            S: "boolean";
+        }
+        interface StringType {
+            S: "string";
+        }
+        interface IntegerType {
+            S: "integer";
+        }
+        interface LongType {
+            S: "long";
+        }
+        interface FloatType {
+            S: "float";
+        }
+        interface DoubleType {
+            S: "double";
+        }
+        interface DecimalType {
+            S: "decimal";
+        }
+        interface DateType {
+            S: "date";
+        }
+    }
+    type VAL_TYPE<T extends reflection.GenericModelType> = T extends reflection.EntityType<infer E> ? E : T extends reflection.EnumType<infer E> ? E : T extends reflection.BooleanType ? boolean : T extends reflection.StringType ? string : T extends reflection.IntegerType ? types.integer : T extends reflection.LongType ? types.long : T extends reflection.FloatType ? types.float : T extends reflection.DoubleType ? types.double : T extends reflection.DecimalType ? types.decimal : T extends reflection.DateType ? types.date : T extends reflection.BaseType ? any : never;
+    namespace T {
+        const Array: {
+            new <E extends reflection.GenericModelType = reflection.BaseType>(e?: E): T.Array<VAL_TYPE<E>>;
+        };
+        const Set: {
+            new <E extends reflection.GenericModelType = reflection.BaseType>(e?: E): T.Set<VAL_TYPE<E>>;
+        };
+        const Map: {
+            new <K extends reflection.GenericModelType = reflection.BaseType, V extends reflection.GenericModelType = reflection.BaseType>(k?: K, v?: V): T.Map<VAL_TYPE<K>, VAL_TYPE<V>>;
+        };
+    }
 }

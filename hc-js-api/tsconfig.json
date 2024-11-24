@@ -4,6 +4,7 @@
         "module": "NodeNext",
         "outDir": "src",
         "declaration": true,
+        "strict": true,
         "moduleResolution": "NodeNext",
         "checkJs": true,
         "noImplicitOverride": true,
