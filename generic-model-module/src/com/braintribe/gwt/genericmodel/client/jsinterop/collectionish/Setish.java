@@ -28,7 +28,7 @@ import jsinterop.annotations.custom.TsIgnore;
 import jsinterop.utils.Lambdas.JsUnaryFunction;
 
 @TsIgnore
-@JsType(name = "Set", namespace = TypePackage.GM_TYPE_NAMESPACE)
+@JsType(namespace = TypePackage.GM_TYPE_NAMESPACE)
 public class Setish<T> extends AbstractCollectionish<T> {
 
 	private final Set<Object> set;

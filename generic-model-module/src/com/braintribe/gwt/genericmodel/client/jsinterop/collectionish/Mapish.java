@@ -31,7 +31,7 @@ import jsinterop.annotations.custom.TsIgnore;
 import jsinterop.utils.Lambdas.JsUnaryFunction;
 
 @TsIgnore
-@JsType(name = "Map", namespace = TypePackage.GM_TYPE_NAMESPACE)
+@JsType(namespace = TypePackage.GM_TYPE_NAMESPACE)
 public class Mapish<K, V> extends AbstractCollectionish<V> {
 
 	private final Map<Object, Object> map;

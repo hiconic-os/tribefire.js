@@ -141,7 +141,6 @@ public class GenericAccessorMethods {
 		return buildJsConvertingAccessors(property, getterFunction, setterFunction, null, null, valueType);
 	}
 
-	
 	/**
 	 * Types can be null. It's only passed if the property might need a conversion, i.e. for collections/simple/object, but not entities/enums.
 	 */
@@ -248,7 +247,7 @@ public class GenericAccessorMethods {
 		return Pair.of(null, null);
 	}
 
-	private static JsUnaryFunction<?, Object> jToJsListConverter(TypeCode valueType) {
+	public static JsUnaryFunction<?, Object> jToJsListConverter(TypeCode valueType) {
 		JsUnaryFunction<Object, Object> javaToJs = nonCollection_JToJs_Converter(valueType);
 		JsUnaryFunction<Object, Object> jsToJava = nonCollection_JsToJ_Converter(valueType);
 
@@ -264,7 +263,7 @@ public class GenericAccessorMethods {
 		};
 	}
 
-	private static JsUnaryFunction<?, Object> jToJsSetConverter(TypeCode valueType) {
+	public static JsUnaryFunction<?, Object> jToJsSetConverter(TypeCode valueType) {
 		JsUnaryFunction<Object, Object> javaToJs = nonCollection_JToJs_Converter(valueType);
 		JsUnaryFunction<Object, Object> jsToJava = nonCollection_JsToJ_Converter(valueType);
 
@@ -280,7 +279,7 @@ public class GenericAccessorMethods {
 		};
 	}
 
-	private static JsUnaryFunction<?, Object> jToJsMapConverter(TypeCode keyType, TypeCode valueType) {
+	public static JsUnaryFunction<?, Object> jToJsMapConverter(TypeCode keyType, TypeCode valueType) {
 		JsUnaryFunction<Object, Object> keyJavaToJs = nonCollection_JToJs_Converter(keyType);
 		JsUnaryFunction<Object, Object> keyJsToJava = nonCollection_JsToJ_Converter(keyType);
 

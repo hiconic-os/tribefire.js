@@ -38,7 +38,7 @@ import jsinterop.utils.Lambdas.JsUnaryFunction;
  * {@link List} wrapper that fulfills (most of) the JS Array contract.
  */
 @TsIgnore
-@JsType(name = "Array", namespace = TypePackage.GM_TYPE_NAMESPACE)
+@JsType(namespace = TypePackage.GM_TYPE_NAMESPACE)
 public class Arrayish<T> extends AbstractCollectionish<T> {
 
 	private final List<Object> list;
