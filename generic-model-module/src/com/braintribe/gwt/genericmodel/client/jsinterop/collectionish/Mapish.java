@@ -21,12 +21,17 @@ import java.util.Map;
 import com.braintribe.gwt.browserfeatures.client.interop.JsIterableIterator;
 import com.braintribe.gwt.browserfeatures.client.interop.JsMap;
 import com.braintribe.gwt.genericmodel.client.itw.GenericAccessorMethods;
+import com.braintribe.gwt.genericmodel.client.reflect.TypePackage;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.i18n.client.Messages.Optional;
 
 import jsinterop.annotations.JsProperty;
+import jsinterop.annotations.JsType;
+import jsinterop.annotations.custom.TsIgnore;
 import jsinterop.utils.Lambdas.JsUnaryFunction;
 
+@TsIgnore
+@JsType(namespace = TypePackage.GM_TYPE_NAMESPACE)
 public class Mapish<K, V> extends AbstractCollectionish<V> implements MapIface<K, V> {
 
 	private final Map<Object, Object> map;

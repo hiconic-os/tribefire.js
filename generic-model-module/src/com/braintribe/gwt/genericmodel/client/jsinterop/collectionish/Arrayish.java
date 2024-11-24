@@ -23,17 +23,22 @@ import java.util.StringJoiner;
 
 import com.braintribe.gwt.browserfeatures.client.interop.JsConcatArray;
 import com.braintribe.gwt.browserfeatures.client.interop.JsIterableIterator;
+import com.braintribe.gwt.genericmodel.client.reflect.TypePackage;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.i18n.client.Messages.Optional;
 
 import jsinterop.annotations.JsFunction;
 import jsinterop.annotations.JsOptional;
 import jsinterop.annotations.JsProperty;
+import jsinterop.annotations.JsType;
+import jsinterop.annotations.custom.TsIgnore;
 import jsinterop.utils.Lambdas.JsUnaryFunction;
 
 /**
  * {@link List} wrapper that fulfills (most of) the JS Array contract.
  */
+@TsIgnore
+@JsType(namespace = TypePackage.GM_TYPE_NAMESPACE)
 public class Arrayish<T> extends AbstractCollectionish<T> implements ArrayIface<T> {
 
 	private final List<Object> list;

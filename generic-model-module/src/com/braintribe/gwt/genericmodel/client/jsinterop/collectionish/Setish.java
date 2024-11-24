@@ -18,12 +18,17 @@ import static com.braintribe.model.generic.reflection.EssentialCollectionTypes.T
 import java.util.Set;
 
 import com.braintribe.gwt.browserfeatures.client.interop.JsIterableIterator;
+import com.braintribe.gwt.genericmodel.client.reflect.TypePackage;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.i18n.client.Messages.Optional;
 
 import jsinterop.annotations.JsProperty;
+import jsinterop.annotations.JsType;
+import jsinterop.annotations.custom.TsIgnore;
 import jsinterop.utils.Lambdas.JsUnaryFunction;
 
+@TsIgnore
+@JsType(namespace = TypePackage.GM_TYPE_NAMESPACE)
 public class Setish<T> extends AbstractCollectionish<T> implements SetIface<T> {
 
 	private final Set<Object> set;
