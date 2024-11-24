@@ -35,9 +35,9 @@ public class GmTypesInteropEntryPoint implements EntryPoint {
 	 * @see Mapish
 	 */
 	private native void makeCollectionishesIterable(JavaScriptObject typeNs) /*-{
-		typeNs.Array.prototype[Symbol.iterator] = typeNs.Array.prototype.values;
-		typeNs.Set.prototype[Symbol.iterator] = typeNs.Set.prototype.values;
-		typeNs.Map.prototype[Symbol.iterator] = typeNs.Map.prototype.entries;
+		typeNs.Arrayish.prototype[Symbol.iterator] = typeNs.Arrayish.prototype.values;
+		typeNs.Setish.prototype[Symbol.iterator] = typeNs.Setish.prototype.values;
+		typeNs.Mapish.prototype[Symbol.iterator] = typeNs.Mapish.prototype.entries;
 	}-*/;
 
 	// The inner brackets around class definitions are mandatory!!!
