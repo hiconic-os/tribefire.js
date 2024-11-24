@@ -19,7 +19,6 @@ import com.braintribe.model.processing.session.impl.session.collection.EnhancedM
 import com.braintribe.model.processing.session.impl.session.collection.EnhancedSet;
 
 import jsinterop.annotations.JsMethod;
-import jsinterop.context.JsInteropNamespaces;
 import jsinterop.utils.Lambdas.JsUnaryFunction;
 
 public class JsCollectionTools {
