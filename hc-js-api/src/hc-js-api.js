@@ -56,6 +56,7 @@ export var io;
     io.InputStream = hc.InputStream;
     io.OutputStream = hc.OutputStream;
 })(io || (io = {}));
+// Implement constructor functions for collections
 T.Array = function createArray(e) { return hc.util.createArrayish(e); };
 T.Set = function createSet(e) { return hc.util.createSetish(e); };
 T.Map = function createMap(k, v) { return hc.util.createMapish(k, v); };

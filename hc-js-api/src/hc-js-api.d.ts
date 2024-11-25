@@ -1,6 +1,5 @@
 import '@dev.hiconic/tf.js_tf-js';
 import { T, hc } from '@dev.hiconic/hc-js-base';
-import * as types from '@dev.hiconic/hc-js-base';
 export { T, hc };
 export import attr = hc.attr;
 export import async = hc.async;
@@ -66,45 +65,53 @@ export declare namespace io {
     export import OutputStream = hc.OutputStream;
 }
 declare module "@dev.hiconic/hc-js-base" {
+    type GenericModelType = reflection.GenericModelType;
+    type BaseType = reflection.BaseType;
+    type EnumType<E extends hc.Enum<E>> = reflection.EnumType<E>;
+    type EntityType<E extends T.com.braintribe.model.generic.GenericEntity> = reflection.EntityType<E>;
+    type GenericEntity = T.com.braintribe.model.generic.GenericEntity;
+    type Enum = hc.Enum<any>;
+    type SimpleValue = boolean | string | integer | long | float | double | decimal | date;
+    type CollectionElement = SimpleValue | GenericEntity | Enum;
     namespace hc.reflection {
         interface BaseType {
-            S: "object";
+            z: "object";
         }
         interface BooleanType {
-            S: "boolean";
+            z: "boolean";
         }
         interface StringType {
-            S: "string";
+            z: "string";
         }
         interface IntegerType {
-            S: "integer";
+            z: "integer";
         }
         interface LongType {
-            S: "long";
+            z: "long";
         }
         interface FloatType {
-            S: "float";
+            z: "float";
         }
         interface DoubleType {
-            S: "double";
+            z: "double";
         }
         interface DecimalType {
-            S: "decimal";
+            z: "decimal";
         }
         interface DateType {
-            S: "date";
+            z: "date";
         }
     }
-    type VAL_TYPE<T extends reflection.GenericModelType> = T extends reflection.EntityType<infer E> ? E : T extends reflection.EnumType<infer E> ? E : T extends reflection.BooleanType ? boolean : T extends reflection.StringType ? string : T extends reflection.IntegerType ? types.integer : T extends reflection.LongType ? types.long : T extends reflection.FloatType ? types.float : T extends reflection.DoubleType ? types.double : T extends reflection.DecimalType ? types.decimal : T extends reflection.DateType ? types.date : T extends reflection.BaseType ? any : never;
+    type VAL_TYPE<T extends GenericModelType> = T extends reflection.EntityType<infer E> ? E : T extends reflection.EnumType<infer E> ? E : T extends reflection.BooleanType ? boolean : T extends reflection.StringType ? string : T extends reflection.IntegerType ? integer : T extends reflection.LongType ? long : T extends reflection.FloatType ? float : T extends reflection.DoubleType ? double : T extends reflection.DecimalType ? decimal : T extends reflection.DateType ? date : T extends reflection.BaseType ? CollectionElement : never;
     namespace T {
         const Array: {
-            new <E extends reflection.GenericModelType = reflection.BaseType>(e?: E): T.Array<VAL_TYPE<E>>;
+            new <E extends GenericModelType = BaseType>(e?: E): T.Array<VAL_TYPE<E>>;
         };
         const Set: {
-            new <E extends reflection.GenericModelType = reflection.BaseType>(e?: E): T.Set<VAL_TYPE<E>>;
+            new <E extends GenericModelType = BaseType>(e?: E): T.Set<VAL_TYPE<E>>;
         };
         const Map: {
-            new <K extends reflection.GenericModelType = reflection.BaseType, V extends reflection.GenericModelType = reflection.BaseType>(k?: K, v?: V): T.Map<VAL_TYPE<K>, VAL_TYPE<V>>;
+            new <K extends GenericModelType = BaseType, V extends GenericModelType = BaseType>(k?: K, v?: V): T.Map<VAL_TYPE<K>, VAL_TYPE<V>>;
         };
     }
 }
