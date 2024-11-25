@@ -11,6 +11,7 @@ $wnd.hc = hc;
 // generated script start
 {tf-script}
 // generated script end
+hc.initHcJs();
 console.timeEnd('hiconic-js-start');
 console.log("hiconic.js v.{tf-version}");
 }

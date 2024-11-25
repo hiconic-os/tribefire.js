@@ -34,9 +34,11 @@ import com.google.gwt.core.ext.linker.impl.SelectionScriptLinker;
 import com.google.gwt.dev.util.DefaultTextOutput;
 
 /**
- * A Linker for producing a single JavaScript file from a GWT module. The use of
- * this Linker requires that the module has exactly one distinct compilation
- * result.
+ * A Linker for producing a single JavaScript file from a GWT module. The use of this Linker requires that the module has exactly one distinct
+ * compilation result.
+ * <p>
+ * NOTE: This Linker doesn't call entry points for some reason (gwtOnLoad). Rather than dealing with that I'm adding a static method with a known name
+ * and mapping it to hc.initHcJs();
  */
 @LinkerOrder(Order.PRIMARY)
 @Shardable
