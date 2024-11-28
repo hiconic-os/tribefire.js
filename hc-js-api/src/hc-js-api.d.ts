@@ -1,4 +1,4 @@
-import '@dev.hiconic/tf.js_tf-js';
+import '@dev.hiconic/gm_root-model';
 import { T, hc } from '@dev.hiconic/hc-js-base';
 export { T, hc };
 export import attr = hc.attr;

@@ -11,7 +11,8 @@
   "license": "Apache-2.0",
   "description": "",
   "dependencies": {
-    "@dev.hiconic/tf.js_tf-js": "3.0.x"
+    "@dev.hiconic/tf.js_tf-js": "3.0.x",
+    "@dev.hiconic/runtime": "file:./node_modules/@dev.hiconic/tf.js_tf-js"
   },
   "devDependencies": {
     "typescript": "^5.5.4"

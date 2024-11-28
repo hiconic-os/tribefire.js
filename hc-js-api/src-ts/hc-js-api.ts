@@ -1,9 +1,6 @@
-import '@dev.hiconic/tf.js_tf-js'; // needed as this import is also written in the .d.ts and thus contents of T/hc are visible
-import { initHcJs } from '@dev.hiconic/tf.js_tf-js'; // this import won't be written in .d.ts
+import '@dev.hiconic/gm_root-model';
 
-import { T, hc, VAL_TYPE } from '@dev.hiconic/hc-js-base';
-
-initHcJs(T, hc);
+import { T, hc } from '@dev.hiconic/hc-js-base';
 
 export { T, hc };
 
