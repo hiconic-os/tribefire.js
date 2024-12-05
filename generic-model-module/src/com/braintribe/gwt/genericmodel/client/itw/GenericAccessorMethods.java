@@ -74,7 +74,7 @@ public class GenericAccessorMethods {
 	 * long/Long - the primitive value is the same object as Long:
 	 * <ul>
 	 * <li>when calling the primitive getter and setter, we do the boxing/unboxing.
-	 * <li>when use generic getter/setter, which throws an exception when we try to assign JS number.
+	 * <li>when use generic getter/setter, we throw an exception when we try to assign JS number.
 	 * </ul>
 	 */
 	public static Pair<JavaScriptObject, JavaScriptObject> buildGetterSetterAccessors(GwtScriptProperty property) {
