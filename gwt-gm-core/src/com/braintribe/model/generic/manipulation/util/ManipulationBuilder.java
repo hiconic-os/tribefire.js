@@ -15,15 +15,13 @@
 // ============================================================================
 package com.braintribe.model.generic.manipulation.util;
 
-import static com.braintribe.utils.lcd.CollectionTools2.asList;
-import static com.braintribe.utils.lcd.CollectionTools2.asMap;
-
+import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.braintribe.model.generic.GenericEntity;
+import com.braintribe.model.generic.collection.PlainMap;
 import com.braintribe.model.generic.manipulation.AbsentingManipulation;
 import com.braintribe.model.generic.manipulation.AddManipulation;
 import com.braintribe.model.generic.manipulation.ChangeValueManipulation;
@@ -42,6 +40,8 @@ import com.braintribe.model.generic.manipulation.Owner;
 import com.braintribe.model.generic.manipulation.RemoveManipulation;
 import com.braintribe.model.generic.manipulation.VoidManipulation;
 import com.braintribe.model.generic.pr.AbsenceInformation;
+import com.braintribe.model.generic.reflection.EssentialCollectionTypes;
+import com.braintribe.model.generic.reflection.ListType;
 import com.braintribe.model.generic.value.EntityReference;
 
 /**
@@ -70,7 +70,7 @@ public class ManipulationBuilder {
 	}
 
 	public static AddManipulation addManipulation(Object key, Object value, Owner owner) {
-		return addManipulation(asMap(key, value), owner);
+		return addManipulation(asPlainMap(key, value), owner);
 	}
 
 	public static AddManipulation add(Map<Object, Object> itemsToAdd, Owner owner) {
@@ -98,10 +98,7 @@ public class ManipulationBuilder {
 	}
 
 	public static RemoveManipulation removeManipulation(Object key, Object value, Owner owner) {
-		Map<Object, Object> itemsToRemove = new HashMap<Object, Object>();
-		itemsToRemove.put(key, value);
-
-		return removeManipulation(itemsToRemove, owner);
+		return removeManipulation(asPlainMap(key, value), owner);
 	}
 
 	public static RemoveManipulation remove(Map<Object, Object> itemsToRemove, Owner owner) {
@@ -143,9 +140,17 @@ public class ManipulationBuilder {
 	}
 
 	public static CompoundManipulation compound(Manipulation... manipulations) {
-		return compound(asList(manipulations));
+		return compound(asPlainList(manipulations));
 	}
-	
+
+	private static ListType compManListType = (ListType) CompoundManipulation.T.getProperty(CompoundManipulation.compoundManipulationList).getType();
+
+	private static List<Manipulation> asPlainList(Manipulation[] manipulations) {
+		List<Manipulation> l = (List<Manipulation>) (List<?>) compManListType.createPlain();
+		l.addAll(Arrays.asList(manipulations));
+		return l;
+	}
+
 	public static CompoundManipulation compound(List<? extends Manipulation> manipulations) {
 		CompoundManipulation result = compound();
 		result.setCompoundManipulationList((List<Manipulation>) manipulations);
@@ -199,8 +204,18 @@ public class ManipulationBuilder {
 		ManipulationComment result = ManipulationComment.T.createRaw();
 		result.setText(text);
 		result.setDate(date);
-		
+
 		return result;
+	}
+
+	public static Map<Object, Object> asPlainMap(Object key, Object value) {
+		PlainMap<Object, Object> m = newPlainMap();
+		m.put(key, value);
+		return m;
+	}
+
+	public static PlainMap<Object, Object> newPlainMap() {
+		return new PlainMap<>(EssentialCollectionTypes.TYPE_MAP);
 	}
 
 }
