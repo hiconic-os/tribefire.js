@@ -15,6 +15,8 @@
 // ============================================================================
 package com.braintribe.model.processing.session.api.managed;
 
+import static java.util.Objects.requireNonNull;
+
 import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.GmCoreApiInteropNamespaces;
 import com.braintribe.model.generic.manipulation.DeleteMode;
@@ -64,6 +66,15 @@ public interface ManagedGmSession extends NotifyingGmSession, HasResourceReadAcc
 	@Override
 	@JsMethod(name = "deleteEntityWithMode")
 	void deleteEntity(GenericEntity entity, DeleteMode deleteMode);
+
+	@Override
+	<T extends GenericEntity> T findEntityByGlobalId(String globalId);
+
+	@Override
+	default <T extends GenericEntity> T getEntityByGlobalId(String globalId) {
+		// GWT compiler can't handle EntityManager.super.getEntityByGlobalId(...)
+		return requireNonNull(findEntityByGlobalId(globalId), () -> "No entity found with globalId: " + globalId);
+	}
 
 	/**
 	 * Creates a {@link SessionQueryBuilder} that can be used to expressively build and execute all kinds of queries.
