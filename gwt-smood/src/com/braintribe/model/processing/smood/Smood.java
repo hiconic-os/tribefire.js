@@ -19,7 +19,6 @@ import static com.braintribe.model.generic.builder.vd.VdBuilder.referenceWithNew
 import static com.braintribe.model.generic.manipulation.ManipulationType.CHANGE_VALUE;
 import static com.braintribe.model.generic.manipulation.util.ManipulationBuilder.changeValue;
 import static com.braintribe.model.generic.manipulation.util.ManipulationBuilder.entityProperty;
-import static com.braintribe.model.generic.value.EntityReferenceType.preliminary;
 import static com.braintribe.model.processing.manipulation.basic.tools.ManipulationTools.asManipulationRequest;
 import static com.braintribe.model.processing.manipulation.basic.tools.ManipulationTools.createInverse;
 import static com.braintribe.utils.lcd.CollectionTools2.asSet;

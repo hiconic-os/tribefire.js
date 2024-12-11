@@ -76,10 +76,11 @@ public interface ManagedGmSession extends NotifyingGmSession, HasResourceReadAcc
 		return requireNonNull(findEntityByGlobalId(globalId), () -> "No entity found with globalId: " + globalId);
 	}
 
-	/**
-	 * Creates a {@link SessionQueryBuilder} that can be used to expressively build and execute all kinds of queries.
-	 */
+	/** Creates a {@link SessionQueryBuilder} that can be used to expressively build and execute all kinds of queries. */
 	SessionQueryBuilder query();
+
+	/** Returns the {@link EntityView} on the entities managed by this session. */
+	EntityView getEntityView();
 
 	/**
 	 * Returns the {@link ModelAccessory} that can be used to access meta information for the model.
