@@ -63,24 +63,11 @@ public interface ManagedGmSession extends NotifyingGmSession, HasResourceReadAcc
 	@Override
 	void deleteEntity(GenericEntity entity);
 
-	@Override
-	@JsMethod(name = "deleteEntityWithMode")
-	void deleteEntity(GenericEntity entity, DeleteMode deleteMode);
-
-	@Override
-	<T extends GenericEntity> T findEntityByGlobalId(String globalId);
-
-	@Override
-	default <T extends GenericEntity> T getEntityByGlobalId(String globalId) {
-		// GWT compiler can't handle EntityManager.super.getEntityByGlobalId(...)
-		return requireNonNull(findEntityByGlobalId(globalId), () -> "No entity found with globalId: " + globalId);
-	}
-
 	/** Creates a {@link SessionQueryBuilder} that can be used to expressively build and execute all kinds of queries. */
 	SessionQueryBuilder query();
 
-	/** Returns the {@link EntityView} on the entities managed by this session. */
-	EntityView getEntityView();
+	/** Returns the {@link EntitiesView} on the entities managed by this session. */
+	EntitiesView getEntitiesView();
 
 	/**
 	 * Returns the {@link ModelAccessory} that can be used to access meta information for the model.

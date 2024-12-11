@@ -18,13 +18,19 @@ package com.braintribe.model.processing.session.api.managed;
 import static java.util.Objects.requireNonNull;
 
 import com.braintribe.model.generic.GenericEntity;
+import com.braintribe.model.generic.GmCoreApiInteropNamespaces;
 import com.braintribe.model.generic.manipulation.DeleteMode;
 import com.braintribe.model.generic.reflection.EntityType;
 import com.braintribe.model.generic.reflection.Property;
+import com.braintribe.model.generic.session.GmSession;
+
+import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsType;
 
 /**
  * @author peter.gazdik
  */
+@JsType(namespace=GmCoreApiInteropNamespaces.session)
 public interface EntityManager {
 
 	/** Creates a raw instance of given type. Raw means the {@link Property#getInitializer() initial values} of properties are not set. */
@@ -38,6 +44,8 @@ public interface EntityManager {
 		return requireNonNull(findEntityByGlobalId(globalId), () -> "No entity found with globalId: " + globalId);
 	}
 
+	/** In hc.js uses a different name to avoid collision with {@link GmSession#deleteEntity(GenericEntity)} */
+	@JsMethod(name = "deleteEntityWithMode")
 	void deleteEntity(GenericEntity entity, DeleteMode deleteMode);
 
 }

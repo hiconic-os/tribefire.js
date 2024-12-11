@@ -17,7 +17,7 @@ import jsinterop.annotations.JsType;
  * A view on the cache (typically a Smood) of the {@link ManagedGmSession}.
  */
 @JsType(namespace = GmCoreApiInteropNamespaces.session)
-public interface EntityView {
+public interface EntitiesView {
 
 	/**
 	 * Returns an unmodifiable {@link Set} or all entities registered in the smood. This method returns a live view on the
