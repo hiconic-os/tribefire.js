@@ -19,7 +19,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@dev.hiconic/tf.js_tf-js": "3.0.x"
+    "@dev.hiconic/runtime": "3.0.x"
   },
   "author": "dev.hiconic",
   "license": "Apache-2.0"
