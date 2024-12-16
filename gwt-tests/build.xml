@@ -157,56 +157,9 @@ limitations under the License.
     </target>
 
     <target name="dist" depends="compile">
-        <bt:pom file="pom.xml" id="serverSupport.project"/>
-        <bt:dependencies useScope="runtime" filesetId="serverSupport.fileset" tagRule="serverdeps">
-            <pom refid="serverSupport.project"/>
-        </bt:dependencies>
-        <!-- Delete lib folder to make sure we don't use any old libs. -->
-        <delete dir="war/WEB-INF/lib"/>
-        <mkdir dir="war/WEB-INF/lib"/>
-
-        <copy toDir="war/WEB-INF/lib" flatten="true">
-          <fileset refid="serverSupport.fileset"/>
-        </copy>
-
-        <fileset dir="war/WEB-INF/lib" id="serverSupport.build.fileset"/>
-        <pathconvert property="serverSupport.build.path" refid="serverSupport.build.fileset"/>
-        <exec executable="java" failonerror="true">
-            <arg value="-Xmx1024M"/>
-            <arg value="-cp"/>
-            <arg value="${serverSupport.build.path}"/>
-            <arg value="com.braintribe.build.gwt.symbol.SymbolTransformer"/>
-            <arg value="${gwt-deploy}/BtClientCustomization"/>
-        </exec>
-        <property name="symbolMapsDist" value="war/WEB-INF/symbolMaps"/>
-        <mkdir dir="${symbolMapsDist}"/>
-        <copy file="${gwt-deploy}/BtClientCustomization/symbolMaps/mergedSymbols" todir="${symbolMapsDist}"/>
+        <echo message="Just call compile" />
     </target>
-
-    <target name="assemble" depends="compile">
-        <mkdir dir="${dist}/assembled"/>
-        <echo level="info">Generating ${dist}/assembled/${versionedName}.war</echo>
-        <jar jarfile="${dist}/assembled/${versionedName}.war">
-            <fileset dir="war">
-                <exclude name="**/.gitignore"/>
-                <exclude name="**/gwt-user.jar"/>
-                <exclude name="**/gwt-dev.jar"/>
-            </fileset>
-        </jar>
-        <copy file="${dist}/assembled/${versionedName}.war" tofile="${dist}/assembled/${maven.project.artifactId}.war"/>
-        <copy file="${dist}/assembled/${versionedName}.war" tofile="${dist}/assembled/${distributableName}.war"/>
-    </target>
-
-    <target name="install" depends="assemble">
-        <bt:install file="dist/assembled/${versionedName}.war">
-            <pom refid="maven.project"/>
-            <attach file="asset.man" type="asset:man"/>
-        </bt:install>
-    </target>
-
-    <target name="release">
-        <bt:release buildDir="."/>
-    </target>
+    
 
     <target name="clean">
         <delete dir="${build}"/>
