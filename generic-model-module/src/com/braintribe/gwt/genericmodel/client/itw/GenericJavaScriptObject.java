@@ -94,15 +94,8 @@ public class GenericJavaScriptObject extends JavaScriptObject {
 		}
 	}
 
-	public final void defineVirtualProperty(String propertyName, JavaScriptObject getter, JavaScriptObject setter) {
-		defineActualVirtualProperty(JsKeywords.javaIdentifierToJs(propertyName), getter, setter);
+	public final void defineVirtualGmProperty(String propertyName, JavaScriptObject getter, JavaScriptObject setter) {
+		JsReflectionTools.defineGmProperty(this, propertyName, getter, setter);
 	}
-
-	private final native void defineActualVirtualProperty(String propertyName, JavaScriptObject getter, JavaScriptObject setter) /*-{
-		Object.defineProperty(this, propertyName, {
-			get: getter,
-			set: setter
-		})
-	}-*/;
 
 }

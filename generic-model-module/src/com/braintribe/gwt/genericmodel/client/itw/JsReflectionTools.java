@@ -20,6 +20,7 @@ import com.google.gwt.core.client.GwtScriptOnly;
 import com.google.gwt.core.client.JavaScriptObject;
 
 import javaemul.internal.annotations.DoNotInline;
+import jsinterop.context.JsKeywords;
 
 /**
  * @author peter.gazdik
@@ -68,11 +69,19 @@ public class JsReflectionTools {
 	}-*/;
 
 	/** This is here to avoid inline implementation, because this will be obfuscated and thus shorter */
-	public static native void defineProperty(JavaScriptObject prototype, JavaScriptObject name, Pair<JavaScriptObject, JavaScriptObject> accessorPair) /*-{
-		Object.defineProperty(prototype, name, {
-			get: accessorPair.@com.braintribe.common.lcd.Pair::first,
-			set: accessorPair.@com.braintribe.common.lcd.Pair::second
-        });
+	public static void defineGmPropertyForAccessors(JavaScriptObject target, String propertyName, Pair<JavaScriptObject, JavaScriptObject> accessorPair) {
+		defineActualProperty(target, JsKeywords.javaIdentifierToJs(propertyName), accessorPair.first, accessorPair.second);
+	}
+
+	public static final void defineGmProperty(JavaScriptObject target, String propertyName, JavaScriptObject getter, JavaScriptObject setter) {
+		defineActualProperty(target, JsKeywords.javaIdentifierToJs(propertyName), getter, setter);
+	}
+
+	private static final native void defineActualProperty(JavaScriptObject target, String propertyName, JavaScriptObject getter, JavaScriptObject setter) /*-{
+		Object.defineProperty(target, propertyName, {
+			get: getter,
+			set: setter
+		})
 	}-*/;
 
 }

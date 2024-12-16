@@ -335,7 +335,7 @@ public class GwtScriptTypeSynthesis {
 					enhancedPrototype.setProperty(property.getFieldName(), property.getType().getDefaultValue());
 
 				Pair<JavaScriptObject, JavaScriptObject> functionsPair = buildVirtualPropertyAccessors(propertyBinding, property);
-				enhancedPrototype.defineVirtualProperty(property.getName(), functionsPair.first(), functionsPair.second());
+				enhancedPrototype.defineVirtualGmProperty(property.getName(), functionsPair.first(), functionsPair.second());
 				// GbPropertyConvenience.linkProperty(enhancedPrototype, new GbPropertyConvenience(null, entityType,
 				// property), property.getName());
 
@@ -383,7 +383,7 @@ public class GwtScriptTypeSynthesis {
 				Tuple3<TypeCode, TypeCode, TypeCode> typeCodes = resolveCollectionKeyValueTypeCodes(property);
 				
 				functionsPair = buildVirtualPropertyAccessors(pb, property, typeCodes);
-				enhancedPrototype.defineVirtualProperty(propertyName, functionsPair.first, functionsPair.second);
+				enhancedPrototype.defineVirtualGmProperty(propertyName, functionsPair.first, functionsPair.second);
 
 				functionsPair = buildJsConvertingPropertyAccessors(property, typeCodes);
 				setJsConvertingPropertyAccessors(property, functionsPair.first, functionsPair.second);

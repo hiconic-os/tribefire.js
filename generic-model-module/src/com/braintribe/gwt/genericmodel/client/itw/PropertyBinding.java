@@ -60,7 +60,7 @@ public class PropertyBinding {
 		    	}
 
 		        var tmp = @GenericAccessorMethods::buildJsConvertingAccessors(*)(property, classProto[getterName], classProto[prop], collectionType, keyType, valueType);
-				@JsReflectionTools::defineProperty(*)(classProto, @JsKeywords::javaIdentifierToJs(*)(property.@GwtScriptProperty::getName()()), tmp);
+				@JsReflectionTools::defineGmPropertyForAccessors(*)(classProto, property.@GwtScriptProperty::getName()(), tmp);
 
 		        if (isOverlay == 0) {
 			        var pb = @PropertyBinding::new()();
