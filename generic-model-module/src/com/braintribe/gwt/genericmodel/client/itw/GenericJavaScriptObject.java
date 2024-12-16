@@ -22,8 +22,6 @@ import java.util.function.Consumer;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-import jsinterop.context.JsKeywords;
-
 public class GenericJavaScriptObject extends JavaScriptObject {
 	protected GenericJavaScriptObject() {
 		
@@ -46,6 +44,10 @@ public class GenericJavaScriptObject extends JavaScriptObject {
 	}-*/;
 	
 	public final native void setProperty(String propertyName, Object value) /*-{
+		this[propertyName] = value;
+	}-*/;
+
+	public final native void setProperty(JavaScriptObject propertyName, Object value) /*-{
 		this[propertyName] = value;
 	}-*/;
 	

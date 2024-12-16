@@ -17,6 +17,7 @@ package com.braintribe.gwt.genericmodel.client.itw;
 
 import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.reflection.AbstractProperty;
+import com.google.gwt.core.client.JavaScriptObject;
 
 /**
  * @author peter.gazdik
@@ -25,13 +26,24 @@ public abstract class GwtScriptProperty extends AbstractProperty {
 
 	public GwtScriptProperty(String propertyName, boolean nullable, boolean confidential) {
 		super(propertyName, nullable, confidential);
+
+		setAccessors(getFieldSymbol(), RuntimeMethodNames.propertyGetDirectUnsafe(), RuntimeMethodNames.propertySetDirectUnsafe());
 	}
 
 	public PropertyBinding propertyBinding;
 
-	public String getFieldName() {
-		return ObfuscatedIdentifierSequence.specialChar + getName();
-	}
+	private static JavaScriptObject symbols = JavaScriptObject.createObject();
+
+	public native JavaScriptObject getFieldSymbol() /*-{
+		var symbols = @GwtScriptProperty::symbols;
+		var name = this.@AbstractProperty::propertyName;
+		var result = symbols[name];
+		if (!result) {
+			result = Symbol(name);
+			symbols[name] = result;
+		}
+		return result;
+	}-*/;
 
 	@Override
 	public native <T> T getJs(GenericEntity entity) /*-{
@@ -56,5 +68,10 @@ public abstract class GwtScriptProperty extends AbstractProperty {
 		throw new UnsupportedOperationException("Seems method 'setDirectUnsafe' was not implemented in runtime! Property: "
 				+ getDeclaringType().getTypeSignature() + "." + getName());
 	}
+
+	private native void setAccessors(JavaScriptObject symbol, String getDirectName, String setDirectName) /*-{
+		this[getDirectName] = (function(e){return e[symbol]});
+		this[setDirectName] = (function(e,v){e[symbol]=v}); 
+	}-*/;
 
 }

@@ -15,8 +15,6 @@
 // ============================================================================
 package com.braintribe.gwt.genericmodel.client.itw;
 
-import static com.braintribe.gwt.genericmodel.client.itw.ScriptOnlyItwTools.eval;
-
 import java.util.function.Supplier;
 
 import com.braintribe.model.generic.reflection.EntityType;
@@ -32,7 +30,6 @@ public class GwtCompileTimeProperty extends GwtScriptProperty {
 
 	public GwtCompileTimeProperty(String propertyName, boolean nullable, boolean confidential) {
 		super(propertyName, nullable, confidential);
-		setAccessors();
 	}
 
 	public void configure(GenericModelType type, EntityType<?> declaringType, Object initializer) {
@@ -59,14 +56,6 @@ public class GwtCompileTimeProperty extends GwtScriptProperty {
 		}
 
 		return initializer;
-	}
-
-	private void setAccessors() {
-		String getDirectSource = "(function(e){return e." + getFieldName() + ";})";
-		String setDirectSource = "(function(e,v){e." + getFieldName() + "=v;})";
-
-		ScriptOnlyItwTools.setProperty(this, RuntimeMethodNames.propertyGetDirectUnsafe(), eval(getDirectSource));
-		ScriptOnlyItwTools.setProperty(this, RuntimeMethodNames.propertySetDirectUnsafe(), eval(setDirectSource));
 	}
 
 }

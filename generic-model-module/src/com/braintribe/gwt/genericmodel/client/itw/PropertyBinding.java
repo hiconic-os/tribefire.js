@@ -48,7 +48,7 @@ public class PropertyBinding {
 		var tmp, handler, getterName;
 
 		if (inheritedFromSuperclass == 0 && !property.@GwtScriptProperty::isNullable()()) {
-			tmp = property.@GwtScriptProperty::getFieldName()();
+			tmp = property.@GwtScriptProperty::getFieldSymbol()();
 			classProto[tmp] = @DefaultLiterals::forType(*)(valueType);
 		}
 

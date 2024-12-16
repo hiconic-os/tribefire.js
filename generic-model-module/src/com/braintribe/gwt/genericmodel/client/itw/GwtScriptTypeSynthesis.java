@@ -15,7 +15,6 @@
 // ============================================================================
 package com.braintribe.gwt.genericmodel.client.itw;
 
-import static com.braintribe.gwt.genericmodel.client.itw.ScriptOnlyItwTools.eval;
 import static com.braintribe.utils.lcd.CollectionTools2.index;
 import static com.braintribe.utils.lcd.CollectionTools2.newLinkedMap;
 import static com.braintribe.utils.lcd.CollectionTools2.newList;
@@ -332,7 +331,7 @@ public class GwtScriptTypeSynthesis {
 
 				if (!property.isNullable())
 					/* This works cause if the property doesn't come from superclass, no matter if compiletime/runtime, we still implement it */
-					enhancedPrototype.setProperty(property.getFieldName(), property.getType().getDefaultValue());
+					enhancedPrototype.setProperty(property.getFieldSymbol(), property.getType().getDefaultValue());
 
 				Pair<JavaScriptObject, JavaScriptObject> functionsPair = buildVirtualPropertyAccessors(propertyBinding, property);
 				enhancedPrototype.defineVirtualGmProperty(property.getName(), functionsPair.first(), functionsPair.second());
@@ -369,7 +368,7 @@ public class GwtScriptTypeSynthesis {
 					throw new GmfException("Non simple prop marked as non-nullable!");
 
 				if (!gmProperty.getNullable())
-					enhancedPrototype.setProperty(property.getFieldName(), property.getType().getDefaultValue());
+					enhancedPrototype.setProperty(property.getFieldSymbol(), property.getType().getDefaultValue());
 
 				/* We don't have to set getter/setter for runtime properties because nobody calls them. So they are not needed on the enhanced
 				 * prototype (see above the code that handles super-properties) */
@@ -522,13 +521,6 @@ public class GwtScriptTypeSynthesis {
 
 			result.setPropertyType(type);
 			result.setInitializer(initializer);
-
-			String jsPropertyName = result.getFieldName();
-			String getDirectSource = "(function(e){return e." + jsPropertyName + ";})";
-			String setDirectSource = "(function(e,v){e." + jsPropertyName + "=v;})";
-
-			ScriptOnlyItwTools.setProperty(result, RuntimeMethodNames.propertyGetDirectUnsafe(), eval(getDirectSource));
-			ScriptOnlyItwTools.setProperty(result, RuntimeMethodNames.propertySetDirectUnsafe(), eval(setDirectSource));
 
 			return result;
 		}
