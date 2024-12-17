@@ -48,12 +48,12 @@ export var lang;
     lang.Throwable = hc.Throwable;
     lang.UnaryOperator = hc.UnaryOperator;
     lang.Void = hc.Void;
-})(lang || (lang = {}));
+})(lang = lang || (lang = {}));
 export var io;
 (function (io) {
     io.InputStream = hc.InputStream;
     io.OutputStream = hc.OutputStream;
-})(io || (io = {}));
+})(io = io || (io = {}));
 // Implement constructor functions for collections
 T.Array = function createArray(e) { return hc.util.createArrayish(e); };
 T.Set = function createSet(e) { return hc.util.createSetish(e); };

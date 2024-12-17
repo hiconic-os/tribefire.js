@@ -69,10 +69,6 @@ declare module "@dev.hiconic/hc-js-base" {
     type BaseType = reflection.BaseType;
     type EnumType<E extends hc.Enum<E>> = reflection.EnumType<E>;
     type EntityType<E extends T.com.braintribe.model.generic.GenericEntity> = reflection.EntityType<E>;
-    type GenericEntity = T.com.braintribe.model.generic.GenericEntity;
-    type Enum = hc.Enum<any>;
-    type SimpleValue = boolean | string | integer | long | float | double | decimal | date;
-    type CollectionElement = SimpleValue | GenericEntity | Enum;
     namespace hc.reflection {
         interface BaseType {
             z: "object";
