@@ -77,7 +77,7 @@ public abstract class AbstractGwtTest {
 	}-*/;
 
 	@JsMethod
-	private native boolean areEqual(JavaScriptObject a, JavaScriptObject b) /*-{
+	private native boolean areEqual(Object a, Object b) /*-{
 		if (a == b)
 			return true;
 		if (!Array.isArray(a))
@@ -90,6 +90,29 @@ public abstract class AbstractGwtTest {
 			if (!this.areEqual(a[i], b[i]))
 				return false;
 		return true;
+	}-*/;
+
+	protected <T> void assertArraysEquals(T[] arr1, T[] arr2, String desc) {
+		if (arr1.length != arr2.length) {
+			logError("Arrays have different lengths: " + desc + " First: " + arr1 + ", Second: " + arr2);
+			return;
+		}
+
+		boolean hasError = false;
+		for (int i = 0; i < arr1.length; i++)
+			if (!areEqual(arr1[i], arr2[i])) {
+				logError("Difference at index " + i + " - " + desc);
+				hasError = true;
+			}
+
+		if (!hasError)
+			log("    " + desc + " [OK]");
+
+	}
+
+	@JsMethod
+	private native boolean areJsEqual(Object a, Object b) /*-{
+		return this.areEqual(a, b);
 	}-*/;
 
 	@JsMethod(name = "typeOf")

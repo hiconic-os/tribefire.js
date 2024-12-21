@@ -22,6 +22,7 @@ import com.braintribe.gwt.customization.client.tests.InstanceOfTest;
 import com.braintribe.gwt.customization.client.tests.KeywordTest;
 import com.braintribe.gwt.customization.client.tests.MethodsMultiInheritanceTest;
 import com.braintribe.gwt.customization.client.tests.PartialModelTest;
+import com.braintribe.gwt.customization.client.tests.PropsReflectedOnEntity_Test;
 import com.braintribe.gwt.customization.client.tests.Props_CompileTimeEntity_Test;
 import com.braintribe.gwt.customization.client.tests.Props_RuntimeEntity_Test;
 import com.braintribe.gwt.customization.client.tests.SingleCharEnumTest;
@@ -45,6 +46,7 @@ public class GwtTestsEntryPoint implements EntryPoint {
 	public void onModuleLoad() {
 		new Props_CompileTimeEntity_Test().run();
 		new Props_RuntimeEntity_Test().run();
+		new PropsReflectedOnEntity_Test().run();
 		new BasicItwTest().run();
 		new MapishTest().run();
 		new SetishTest().run();

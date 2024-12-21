@@ -15,6 +15,10 @@
 // ============================================================================
 package com.braintribe.model.generic.reflection;
 
+import static java.util.stream.Collectors.toList;
+
+import java.util.List;
+
 import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.annotation.GmSystemInterface;
 import com.braintribe.model.generic.eval.EvalContext;
@@ -26,6 +30,7 @@ import com.braintribe.model.generic.value.ValueDescriptor;
 import com.braintribe.processing.async.api.JsPromise;
 
 import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsProperty;
 
 /**
  * @author peter.gazdik
@@ -35,6 +40,8 @@ import jsinterop.annotations.JsMethod;
 public abstract class GmtsEntityStub extends GmtsBaseEntityStub implements EvaluableEntity {
 
 	private volatile long runtimeId;
+	private Property[] propertyNames;
+	private String[] properties;
 
 	public GmtsEntityStub() {
 		//
@@ -76,6 +83,32 @@ public abstract class GmtsEntityStub extends GmtsBaseEntityStub implements Evalu
 	@Override
 	public <T extends GenericEntity> EntityType<T> entityType() {
 		return (EntityType<T>) type();
+	}
+
+	@JsProperty(name = "Properties")
+	public native Property[] propertiesJs() /*-{
+		if (this.@GmtsEntityStub::properties == null)
+			this.@GmtsEntityStub::properties = Object.freeze(this.@GmtsEntityStub::getProperties()());
+		return this.@GmtsEntityStub::properties
+	}-*/;
+
+	private Property[] getProperties() {
+		List<Property> ps = entityType().getProperties();
+		return ps.toArray(new Property[ps.size()]);
+	}
+
+	@JsProperty(name = "PropertyNames")
+	public native Property[] propertyNamesJs() /*-{
+		if (this.@GmtsEntityStub::propertyNames == null)
+			this.@GmtsEntityStub::propertyNames = Object.freeze(this.@GmtsEntityStub::getPropertyNames()());
+		return this.@GmtsEntityStub::propertyNames;
+	}-*/;
+
+	private String[] getPropertyNames() {
+		List<String> ps = entityType().getProperties().stream() //
+				.map(Property::getName) //
+				.collect(toList());
+		return ps.toArray(new String[ps.size()]);
 	}
 
 	@Override
