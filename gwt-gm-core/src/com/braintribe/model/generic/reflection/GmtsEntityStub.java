@@ -30,7 +30,6 @@ import com.braintribe.model.generic.value.ValueDescriptor;
 import com.braintribe.processing.async.api.JsPromise;
 
 import jsinterop.annotations.JsMethod;
-import jsinterop.annotations.JsProperty;
 
 /**
  * @author peter.gazdik
@@ -85,7 +84,7 @@ public abstract class GmtsEntityStub extends GmtsBaseEntityStub implements Evalu
 		return (EntityType<T>) type();
 	}
 
-	@JsProperty(name = "Properties")
+	@JsMethod(name = "Properties")
 	public native Property[] propertiesJs() /*-{
 		if (this.@GmtsEntityStub::properties == null)
 			this.@GmtsEntityStub::properties = Object.freeze(this.@GmtsEntityStub::getProperties()());
@@ -97,7 +96,7 @@ public abstract class GmtsEntityStub extends GmtsBaseEntityStub implements Evalu
 		return ps.toArray(new Property[ps.size()]);
 	}
 
-	@JsProperty(name = "PropertyNames")
+	@JsMethod(name = "PropertyNames")
 	public native Property[] propertyNamesJs() /*-{
 		if (this.@GmtsEntityStub::propertyNames == null)
 			this.@GmtsEntityStub::propertyNames = Object.freeze(this.@GmtsEntityStub::getPropertyNames()());

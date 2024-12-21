@@ -43,7 +43,7 @@ public class PropsReflectedOnEntity_Test extends AbstractGmGwtTest {
 	}
 
 	private native String[] getPropNamesJs(GenericEntity e) /*-{
-		return e.PropertyNames;
+		return e.PropertyNames();
 	}-*/;
 
 	private String[] getPropNamesJava(GenericEntity e) {
@@ -54,7 +54,7 @@ public class PropsReflectedOnEntity_Test extends AbstractGmGwtTest {
 	}
 
 	private native Property[] getPropsJs(GenericEntity e) /*-{
-		return e.Properties;
+		return e.Properties();
 	}-*/;
 
 	private Property[] getsJava(GenericEntity e) {
