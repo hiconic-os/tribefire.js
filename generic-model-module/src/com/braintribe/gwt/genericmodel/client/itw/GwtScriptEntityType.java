@@ -23,12 +23,14 @@ import com.braintribe.gwt.genericmodel.client.reflect.GwtEntityType;
 import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.enhance.EnhancedEntity;
 import com.braintribe.model.generic.reflection.EntityType;
+import com.braintribe.model.generic.reflection.JsInteropEntityType;
 import com.braintribe.model.generic.reflection.TransientProperty;
+import com.google.gwt.core.client.JavaScriptObject;
 
 /**
  * An extension for {@link EntityType} useful for implementation of {@link EnhancedEntity} in GWT.
  */
-public class GwtScriptEntityType<T extends GenericEntity> extends GwtEntityType<T> {
+public class GwtScriptEntityType<T extends GenericEntity> extends GwtEntityType<T> implements JsInteropEntityType {
 
 	private EntityTypeBinding entityTypeBinding;
 	private static int scriptTypeIds = -1;
@@ -58,7 +60,12 @@ public class GwtScriptEntityType<T extends GenericEntity> extends GwtEntityType<
 		etb.entityType = this;
 		etb.enhancedProto = proto;
 	}
-	
+
+	@Override
+	public JavaScriptObject getPrototype() {
+		return entityTypeBinding.enhancedProto;
+	}
+
 	public List<GwtScriptEntityType<?>> getGwtScriptSuperTypes() {
 		return (List<GwtScriptEntityType<?>>) (List<?>) super.getSuperTypes();
 	}
