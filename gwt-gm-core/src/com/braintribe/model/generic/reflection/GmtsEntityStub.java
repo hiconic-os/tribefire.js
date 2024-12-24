@@ -84,32 +84,6 @@ public abstract class GmtsEntityStub extends GmtsBaseEntityStub implements Evalu
 		return (EntityType<T>) type();
 	}
 
-	@JsMethod(name = "Properties")
-	public native Property[] propertiesJs() /*-{
-		if (this.@GmtsEntityStub::properties == null)
-			this.@GmtsEntityStub::properties = Object.freeze(this.@GmtsEntityStub::getProperties()());
-		return this.@GmtsEntityStub::properties
-	}-*/;
-
-	private Property[] getProperties() {
-		List<Property> ps = entityType().getProperties();
-		return ps.toArray(new Property[ps.size()]);
-	}
-
-	@JsMethod(name = "PropertyNames")
-	public native Property[] propertyNamesJs() /*-{
-		if (this.@GmtsEntityStub::propertyNames == null)
-			this.@GmtsEntityStub::propertyNames = Object.freeze(this.@GmtsEntityStub::getPropertyNames()());
-		return this.@GmtsEntityStub::propertyNames;
-	}-*/;
-
-	private String[] getPropertyNames() {
-		List<String> ps = entityType().getProperties().stream() //
-				.map(Property::getName) //
-				.collect(toList());
-		return ps.toArray(new String[ps.size()]);
-	}
-
 	@Override
 	public <T extends EntityReference> T reference() {
 		return (T) this.entityType().createReference(this, this.getId());
@@ -171,6 +145,42 @@ public abstract class GmtsEntityStub extends GmtsBaseEntityStub implements Evalu
 	public GenericEntity deproxy() {
 		return this;
 	}
+
+	// <GWT ONLY>
+
+	// we call the public methods starting with Uppercase so they do not conflict with potential default methods on entities
+
+	@JsMethod(name = "Properties")
+	public native Property[] PropertiesJs() /*-{
+		if (this.@GmtsEntityStub::properties == null)
+			this.@GmtsEntityStub::properties = Object.freeze(this.@GmtsEntityStub::getProperties()());
+		return this.@GmtsEntityStub::properties
+	}-*/;
+
+	private Property[] getProperties() {
+		List<Property> ps = entityType().getProperties();
+		return ps.toArray(new Property[ps.size()]);
+	}
+
+	@JsMethod(name = "PropertyNames")
+	public native Property[] PropertyNamesJs() /*-{
+		if (this.@GmtsEntityStub::propertyNames == null)
+			this.@GmtsEntityStub::propertyNames = Object.freeze(this.@GmtsEntityStub::getPropertyNames()());
+		return this.@GmtsEntityStub::propertyNames;
+	}-*/;
+
+	private String[] getPropertyNames() {
+		List<String> ps = entityType().getProperties().stream() //
+				.map(Property::getName) //
+				.collect(toList());
+		return ps.toArray(new String[ps.size()]);
+	}
+
+	@JsMethod(name = "TypeSignature")
+	public String TypeSignature() {
+		return entityType().getTypeSignature();
+	}
+
 }
 
 /** This exists just to have bytecode for this method signature (alongside one returning JsEvalContext). Relevant when debugging in JVM. */
