@@ -13,6 +13,7 @@
 // ============================================================================
 package com.braintribe.model.generic.reflection;
 
+import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.GmCoreApiInteropNamespaces;
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -20,7 +21,8 @@ import jsinterop.annotations.JsProperty;
 import jsinterop.annotations.JsType;
 
 @JsType(name = "EntityType", namespace = GmCoreApiInteropNamespaces.reflection)
-public interface JsInteropEntityType {
+@SuppressWarnings("unused")
+public interface JsInteropEntityType<T extends GenericEntity> {
 
 	@JsProperty(name = "prototype")
 	JavaScriptObject getPrototype();
