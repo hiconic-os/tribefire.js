@@ -30,7 +30,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 /**
  * An extension for {@link EntityType} useful for implementation of {@link EnhancedEntity} in GWT.
  */
-public class GwtScriptEntityType<T extends GenericEntity> extends GwtEntityType<T> implements JsInteropEntityType {
+public class GwtScriptEntityType<T extends GenericEntity> extends GwtEntityType<T> implements JsInteropEntityType<T> {
 
 	private EntityTypeBinding entityTypeBinding;
 	private static int scriptTypeIds = -1;

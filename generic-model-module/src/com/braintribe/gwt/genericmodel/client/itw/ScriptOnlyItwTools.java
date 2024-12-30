@@ -91,10 +91,6 @@ public class ScriptOnlyItwTools {
 		return object.@java.lang.Object::castableTypeMap;
 	}-*/;
 
-	public static native void setPrototype(Object object, GenericJavaScriptObject prototype) /*-{
-		object.prototype = prototype;
-	}-*/;
-	
 	public static native GenericJavaScriptObject getPrototype(Object object) /*-{
 		return object.prototype;
 	}-*/;

@@ -25,34 +25,28 @@ public class JsConstructorFunction extends GenericJavaScriptObject {
 
 	}
 
-	public final static JsConstructorFunction create(Class<?> clazz, JavaScriptObject  superPrototype) {
+	public final static JsConstructorFunction create(Class<?> javaClass, JavaScriptObject superPrototype) {
 		CastableTypeMap superTypeMap = ScriptOnlyItwTools.getCastableTypeMap(superPrototype);
-		CastableTypeMap derivedTypeMap = (CastableTypeMap) ScriptOnlyItwTools.portableObjectCreate(superTypeMap);
+		CastableTypeMap castableTypeMap = (CastableTypeMap) ScriptOnlyItwTools.portableObjectCreate(superTypeMap);
 
-		// TODO replace superConstructor with GwtEnhancedEntityStub constructor
-		return createConstructor(superConstructor, clazz, derivedTypeMap);
+		JsConstructorFunction result = createRawConstructor(superConstructor);
+
+		GenericJavaScriptObject prototype = ScriptOnlyItwTools.portableObjectCreate(superPrototype);
+
+		ScriptOnlyItwTools.setClass(prototype, javaClass);
+		ScriptOnlyItwTools.setCastableTypeMap(prototype, castableTypeMap); // TODO we might want to check if this is even needed
+
+		result.setPrototype(prototype);
+
+		return result;
 	}
 
-	private static JsConstructorFunction superConstructor = enhancedEntityStubConstructor(); 
+	private static JsConstructorFunction superConstructor = enhancedEntityStubConstructor();
 
 	/** Uses {@link GwtEnhancedEntityStub} */
 	private static native JsConstructorFunction enhancedEntityStubConstructor() /*-{
 		return @JsReflectionTools::extractConstructor(*)(@GwtEnhancedEntityStub::new());
 	}-*/;
-
-	private static JsConstructorFunction createConstructor(JsConstructorFunction superConstructor, Class<?> javaClass,
-			CastableTypeMap castableTypeMap) {
-		JsConstructorFunction result = createRawConstructor(superConstructor);
-
-		GenericJavaScriptObject prototype = ScriptOnlyItwTools.portableObjectCreate(superConstructor.getPrototype());
-
-		ScriptOnlyItwTools.setClass(prototype, javaClass);
-		ScriptOnlyItwTools.setCastableTypeMap(prototype, castableTypeMap); // TODO we might want to check if this is even needed
-
-		ScriptOnlyItwTools.setPrototype(result, prototype);
-
-		return result;
-	}
 
 	// @formatter:off
 	private static native JsConstructorFunction createRawConstructor(JsConstructorFunction superConstructor) /*-{
@@ -64,11 +58,15 @@ public class JsConstructorFunction extends GenericJavaScriptObject {
 	protected final native <T> T newInstance() /*-{
 		return new this;
 	}-*/;
-	// @formatter:on
 
-	public final GenericJavaScriptObject getPrototype() {
-		return ScriptOnlyItwTools.getPrototype(this);
-	}
+	public final native GenericJavaScriptObject getPrototype() /*-{
+		return this.prototype;
+	}-*/;
+
+	private native void setPrototype(GenericJavaScriptObject prototype) /*-{
+		this.prototype = prototype;
+	}-*/;
+	// @formatter:on
 
 	public final CastableTypeMap getCastableTypeMap() {
 		return ScriptOnlyItwTools.getCastableTypeMap(getPrototype());

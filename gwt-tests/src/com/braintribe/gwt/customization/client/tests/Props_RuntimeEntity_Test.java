@@ -16,6 +16,7 @@ package com.braintribe.gwt.customization.client.tests;
 import java.util.Date;
 
 import com.braintribe.gwt.customization.client.tests.model.simple.PropsEntity;
+import com.braintribe.gwt.customization.client.tests.model.simple.PropsEntitySub;
 import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.GmfException;
 import com.braintribe.model.generic.reflection.EntityType;
@@ -32,10 +33,18 @@ public class Props_RuntimeEntity_Test extends AbstractGmGwtTest {
 
 	@Override
 	protected void tryRun() throws GmfException {
-		GmMetaModel model = generateModel("test.gwt:simple-props-model", PropsEntity.T);
+		GmMetaModel model = generateModel("test.gwt:simple-props-model", PropsEntity.T, PropsEntitySub.T);
 		makeSignaturesDynamic(model);
 		ensureModelTypes(model);
-		EntityType<?> dynamicEt = getDynamicCounterpart(PropsEntity.T);
+
+		runTestFor(PropsEntity.T);
+		runTestFor(PropsEntitySub.T);
+	}
+
+	private void runTestFor(EntityType<?> et) {
+		log("  Testing: " + et.getShortName());
+
+		EntityType<?> dynamicEt = getDynamicCounterpart(et);
 
 		GenericEntity e = dynamicEt.create();
 		fillNativeJs(e);
