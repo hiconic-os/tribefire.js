@@ -15,8 +15,6 @@
 // ============================================================================
 package com.braintribe.model.generic.reflection;
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.List;
 
 import com.braintribe.model.generic.GenericEntity;
