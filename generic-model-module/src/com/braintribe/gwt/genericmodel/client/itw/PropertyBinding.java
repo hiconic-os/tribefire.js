@@ -47,9 +47,12 @@ public class PropertyBinding {
 			int inheritedFromSuperclass, int isOverlay, TypeCode collectionType, TypeCode keyType, TypeCode valueType) /*-{
 		var tmp, handler, getterName;
 
-		if (inheritedFromSuperclass == 0 && !property.@GwtScriptProperty::isNullable()()) {
+		if (inheritedFromSuperclass == 0) {
 			tmp = property.@GwtScriptProperty::getFieldSymbol()();
-			classProto[tmp] = @DefaultLiterals::forType(*)(valueType);
+			if (property.@GwtScriptProperty::isNullable()())
+				classProto[tmp] = null;
+			else
+				classProto[tmp] = @DefaultLiterals::forType(*)(valueType);
 		}
 
 		handler = {

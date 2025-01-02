@@ -31,7 +31,6 @@ public class PropertyDesc {
 	public JClassType declaringType; // Type where we want to declare our property, i.e. might be an overlay
 	public EntityDesc declaringTypeDesc;
 	public boolean isOverlay; // true iff declaringTypeDesc != ownerTypeDesc
-	public String defaultLiteral;
 	public boolean isPrimitive;
 	public boolean isConfidential;
 	public String initializerString;
@@ -99,10 +98,6 @@ public class PropertyDesc {
 
 	private String boolToString(boolean b) {
 		return b ? "true" : "false";
-	}
-
-	public String getDefaultLiteral() {
-		return defaultLiteral;
 	}
 
 	public JType getDeclaringType() {

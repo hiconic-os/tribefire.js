@@ -506,7 +506,6 @@ public class GenericModelTypeReflectionGenerator extends Generator {
 					propertyDesc.jType = originalReturnType;
 					propertyDesc.ownerTypeDesc = entityDesc;
 					propertyDesc.isPrimitive = originalReturnType.isPrimitive() != null;
-					propertyDesc.defaultLiteral = propertyDesc.isPrimitive ? getDefaultLiteral((JPrimitiveType) originalReturnType) : null;
 
 					Pair<PropertyDesc, String> initEntry = extractInitializerString(entityIface, propertyDesc, propertyName, getter);
 					PropertyDesc confidentialDesc = isConfidential(entityIface, propertyDesc, propertyName, getter);
@@ -616,24 +615,6 @@ public class GenericModelTypeReflectionGenerator extends Generator {
 		private boolean isSetter(JMethod method) {
 			String name = method.getName();
 			return name.startsWith("set") && name.length() > 3 && method.getParameters().length == 1;
-		}
-
-		private String getDefaultLiteral(JPrimitiveType type) {
-			switch (type) {
-				case BOOLEAN:
-					return "Boolean.FALSE";
-				case DOUBLE:
-					return "0d";
-				case FLOAT:
-					return "0f";
-				case INT:
-					return "0";
-				case LONG:
-					return "0l";
-				default:
-					throw new RuntimeException("Unsupported primitive type: " + type);
-
-			}
 		}
 
 		// ##################################################################

@@ -55,57 +55,59 @@ public class InitializerTest extends AbstractGmGwtTest {
 	private void testInitialized(String typeSignature) {
 		EntityType<?> et = typeReflection.getEntityType(typeSignature);
 
-		testInitialized(et, "plain", et.createPlain());
 		testInitialized(et, "enhanced", et.create());
 	}
 
 	private void testInitialized(EntityType<?> et, String type, GenericEntity entity) {
-		logTestingEntity(et, type);
+		logTestingEntity(et);
 
-		assertProperty(et, type, entity, "intValue", 99);
-		assertProperty(et, type, entity, "longValue", 11L);
-		assertProperty(et, type, entity, "floatValue", 123f);
-		assertProperty(et, type, entity, "doubleValue", -123D);
-		assertProperty(et, type, entity, "bigFloatValue", 1.0e30f);
-		assertProperty(et, type, entity, "bigDoubleValue", -1.0e30d);
-		assertProperty(et, type, entity, "decimalValue", new BigDecimal("99889988.00"));
-		assertProperty(et, type, entity, "booleanValue", true);
-		assertProperty(et, type, entity, "enumValue", Color.green);
-		assertProperty(et, type, entity, "enumShort", Color.green);
-		assertProperty(et, type, entity, "uninitializedDateValue", null);
-		assertProperty(et, type, entity, "uninitializedBooleanValue", false);
-		assertProperty(et, type, entity, "uninitializedLongValue", 0L);
+		assertProperty(et, entity, "intValue", 99);
+		assertProperty(et, entity, "longValue", 11L);
+		assertProperty(et, entity, "floatValue", 123f);
+		assertProperty(et, entity, "doubleValue", -123D);
+		assertProperty(et, entity, "bigFloatValue", 1.0e30f);
+		assertProperty(et, entity, "bigDoubleValue", -1.0e30d);
+		assertProperty(et, entity, "decimalValue", new BigDecimal("99889988.00"));
+		assertProperty(et, entity, "booleanValue", true);
+		assertProperty(et, entity, "enumValue", Color.green);
+		assertProperty(et, entity, "enumShort", Color.green);
+		assertProperty(et, entity, "uninitializedDateValue", null);
+		assertProperty(et, entity, "uninitializedBooleanValue", false);
+		assertProperty(et, entity, "uninitializedLongValue", 0L);
 		assertDateNow(et, type, entity, "dateValue");
 	}
 
 	private void testInitializedSub(String typeSignature) {
 		EntityType<GenericEntity> et = typeReflection.getEntityType(typeSignature);
 
-		testInitializedSub(et, "plain", et.createPlain());
-		testInitializedSub(et, "enhanced", et.create());
+		GenericEntity entity = et.create();
+
+		logTestingEntity(et);
+
+		assertProperty(et, entity, "intValue", 88); // overridden
+		assertProperty(et, entity, "longValue", 0L); // overridden with 0 as nothing was stated, but this is
+														// default
+		assertProperty(et, entity, "newLongValue", 0L); // new property which is primitive
+		assertProperty(et, entity, "floatValue", 123f); // overridden with null as nothing was stated, but this is
+														// default
+		assertProperty(et, entity, "booleanValue", true);
+		assertProperty(et, entity, "dateValue", null); // inherited
 	}
 
-	private void testInitializedSub(EntityType<?> et, String type, GenericEntity entity) {
-		logTestingEntity(et, type);
-
-		assertProperty(et, type, entity, "intValue", 88); // overridden
-		assertProperty(et, type, entity, "longValue", 0L); // overridden with 0 as nothing was stated, but this is
-															// default
-		assertProperty(et, type, entity, "newLongValue", 0L); // new property which is primitive
-		assertProperty(et, type, entity, "floatValue", 123f); // overridden with null as nothing was stated, but this is
-																// default
-		assertProperty(et, type, entity, "booleanValue", true);
-		assertProperty(et, type, entity, "dateValue", null); // inherited
-	}
-
-	private void assertProperty(EntityType<?> et, String type, GenericEntity entity, String propertyName, Object expected) {
+	private void assertProperty(EntityType<?> et, GenericEntity entity, String propertyName, Object expected) {
 		Object actual = et.getProperty(propertyName).get(entity);
 
-		if (CommonTools.equalsOrBothNull(expected, actual))
+		if (equalsOrBothNull(expected, actual))
 			log("    property '" + propertyName + "' [OK]");
 		else
-			logError("Property: [" + type + "] " + et.getTypeSignature() + "." + propertyName + " has wrong value. Expected: " + expected
-					+ ", actual: " + actual);
+			logError("Property: " + et.getTypeSignature() + "." + propertyName + " has wrong value. Expected: " + expected + ", actual: " + actual);
+	}
+
+	protected boolean equalsOrBothNull(Object expected, Object actual) {
+		if (expected == null)
+			return isReallyNull(actual);
+		else
+			return expected.equals(actual);
 	}
 
 	private void assertDateNow(EntityType<?> et, String type, GenericEntity entity, String propertyName) {
@@ -124,8 +126,8 @@ public class InitializerTest extends AbstractGmGwtTest {
 		}
 	}
 
-	private void logTestingEntity(EntityType<?> et, String type) {
-		log("Testing '" + et.getTypeSignature() + "'[" + type + "]");
+	private void logTestingEntity(EntityType<?> et) {
+		log("Testing '" + et.getTypeSignature());
 	}
 
 }

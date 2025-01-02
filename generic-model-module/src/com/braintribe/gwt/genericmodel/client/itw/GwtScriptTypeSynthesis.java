@@ -329,14 +329,10 @@ public class GwtScriptTypeSynthesis {
 
 				PropertyBinding propertyBinding = property.propertyBinding;
 
-				if (!property.isNullable())
-					/* This works cause if the property doesn't come from superclass, no matter if compiletime/runtime, we still implement it */
-					enhancedPrototype.setProperty(property.getFieldSymbol(), property.getType().getDefaultValue());
+				setDefaultValueOnPrototype(property);
 
 				Pair<JavaScriptObject, JavaScriptObject> functionsPair = buildVirtualPropertyAccessors(propertyBinding, property);
 				enhancedPrototype.defineVirtualGmProperty(property.getName(), functionsPair.first(), functionsPair.second());
-				// GbPropertyConvenience.linkProperty(enhancedPrototype, new GbPropertyConvenience(null, entityType,
-				// property), property.getName());
 
 				if (propertyBinding.runtime)
 					/* We don't have to do anything, we already have the property in our list of properties in EntityType and that one already knows
@@ -364,11 +360,10 @@ public class GwtScriptTypeSynthesis {
 
 				// TODO once it's hopefully clear this never happens
 				// old code was setting a primitive flag also checking if type is simple, makes no sense...
-				if (!gmProperty.getNullable() && !(gmProperty.getType() instanceof GmSimpleType)) 
+				if (!gmProperty.getNullable() && !(gmProperty.getType() instanceof GmSimpleType))
 					throw new GmfException("Non simple prop marked as non-nullable!");
 
-				if (!gmProperty.getNullable())
-					enhancedPrototype.setProperty(property.getFieldSymbol(), property.getType().getDefaultValue());
+				setDefaultValueOnPrototype(property);
 
 				/* We don't have to set getter/setter for runtime properties because nobody calls them. So they are not needed on the enhanced
 				 * prototype (see above the code that handles super-properties) */
@@ -380,7 +375,7 @@ public class GwtScriptTypeSynthesis {
 				pb.setterFunction = functionsPair.second;
 
 				Tuple3<TypeCode, TypeCode, TypeCode> typeCodes = resolveCollectionKeyValueTypeCodes(property);
-				
+
 				functionsPair = buildVirtualPropertyAccessors(pb, property, typeCodes);
 				enhancedPrototype.defineVirtualGmProperty(propertyName, functionsPair.first, functionsPair.second);
 
@@ -407,6 +402,12 @@ public class GwtScriptTypeSynthesis {
 
 			entityType.setProperties(properties.toArray(new Property[properties.size()]));
 			entityType.setInitializers(toArrayOrNull(initializers));
+		}
+
+		// Either null (for non-nullable properties) or the default value for given primitive type (e.g. false for boolean)
+		private void setDefaultValueOnPrototype(GwtScriptProperty property) {
+			Object defaultValue = property.isNullable() ? null : property.getType().getDefaultValue();
+			enhancedPrototype.setProperty(property.getFieldSymbol(), defaultValue);
 		}
 
 		private native void setJsConvertingPropertyAccessors(GwtRuntimeProperty property, JavaScriptObject get, JavaScriptObject set) /*-{

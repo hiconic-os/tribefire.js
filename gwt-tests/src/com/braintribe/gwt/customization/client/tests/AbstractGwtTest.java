@@ -45,6 +45,10 @@ public abstract class AbstractGwtTest {
 	// ## . . . . . . Util methods . . . . . . ##
 	// ##########################################
 
+	protected native boolean isReallyNull(Object o) /*-{
+		return o === null;
+	}-*/;
+
 	protected static <T> T cast(Object o) {
 		return (T) o;
 	}

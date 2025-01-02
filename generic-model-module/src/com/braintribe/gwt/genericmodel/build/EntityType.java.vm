@@ -1,7 +1,6 @@
 package ${package};
 #if ($scriptMode)
 
-import com.braintribe.gwt.genericmodel.client.itw.DefaultLiterals;
 import com.braintribe.gwt.genericmodel.client.itw.EntityTypeBinding;
 import com.braintribe.gwt.genericmodel.client.itw.PropertyBinding;
 import com.braintribe.gwt.genericmodel.client.itw.GenericAccessorMethods;
