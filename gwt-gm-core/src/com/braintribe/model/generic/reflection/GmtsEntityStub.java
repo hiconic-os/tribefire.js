@@ -169,12 +169,10 @@ public abstract class GmtsEntityStub extends GmtsBaseEntityStub implements Evalu
 		return this.@GmtsEntityStub::propertyNames;
 	}-*/;
 
-	private String[] getPropertyNames() {
-		List<String> ps = entityType().getProperties().stream() //
-				.map(Property::getName) //
-				.collect(toList());
-		return ps.toArray(new String[ps.size()]);
-	}
+	private native String[] getPropertyNames() /*-{
+		var props = this.@GmtsEntityStub::PropertiesJs()();
+		return props.map(function(p){return p.getName()});
+	}-*/;
 
 	@JsMethod(name = "TypeSignature")
 	public String TypeSignature() {
