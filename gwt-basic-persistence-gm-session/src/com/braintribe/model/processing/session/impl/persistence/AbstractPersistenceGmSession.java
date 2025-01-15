@@ -992,6 +992,11 @@ public abstract class AbstractPersistenceGmSession extends AbstractManagedGmSess
 		}
 		
 		@Override
+		public ManipulationListenerRegistry prioritized() {
+			return AbstractPersistenceGmSession.super.listeners().prioritized();
+		}
+		
+		@Override
 		public void add(ManipulationListener listener) {
 			AbstractPersistenceGmSession.super.listeners().asCore(isCore).add(listener);
 		}
