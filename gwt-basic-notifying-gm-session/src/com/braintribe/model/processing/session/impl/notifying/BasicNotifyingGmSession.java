@@ -66,7 +66,7 @@ public class BasicNotifyingGmSession extends AbstractGmSession implements Notify
 
 	protected List<ManipulationListenerEntry> manipulationListeners = newList();
 	protected List<ManipulationListenerEntry> manipulationListenersModified = null;
-
+	
 	private final PropertyAccessInterceptorsBuilderImpl propertyAccessInterceptorRegistry = new PropertyAccessInterceptorsBuilderImpl();
 	private final GenericManipulationListenerRegistryImpl genericManipulationListenerRegistry = new GenericManipulationListenerRegistryImpl();
 
@@ -106,6 +106,13 @@ public class BasicNotifyingGmSession extends AbstractGmSession implements Notify
 
 		try {
 			noticingCount++;
+
+			// prioritized first
+			for (ManipulationListenerEntry listenerEntry : manipulationListeners) {
+				if (listenerEntry.prioritized)
+					notifyListener(manipulation, listenerEntry.listener, listenerEntry.isCore);
+			}
+			
 			LocalEntityProperty entityProperty = null;
 			GenericEntity entity = null;
 
@@ -124,8 +131,10 @@ public class BasicNotifyingGmSession extends AbstractGmSession implements Notify
 			ManipulationListener listener = entityManipulationListeners.get(entity);
 			notifyListener(manipulation, listener, false);
 
-			for (ManipulationListenerEntry listenerEntry : manipulationListeners)
-				notifyListener(manipulation, listenerEntry.listener, listenerEntry.isCore);
+			for (ManipulationListenerEntry listenerEntry : manipulationListeners) {
+				if (!listenerEntry.prioritized)
+					notifyListener(manipulation, listenerEntry.listener, listenerEntry.isCore);
+			}
 
 			if (manipulation.manipulationType() == ManipulationType.COMPOUND) {
 				CompoundManipulation compoundManipulation = (CompoundManipulation) manipulation;
@@ -208,6 +217,7 @@ public class BasicNotifyingGmSession extends AbstractGmSession implements Notify
 	private static class ManipulationListenerEntry {
 		public ManipulationListener listener;
 		public boolean isCore;
+		public boolean prioritized;
 	}
 
 	@SuppressWarnings("unusable-by-js")
@@ -257,10 +267,17 @@ public class BasicNotifyingGmSession extends AbstractGmSession implements Notify
 	private class GenericManipulationListenerRegistryImpl implements GenericManipulationListenerRegistry {
 
 		protected boolean isCore;
+		protected boolean prioritized;
 
 		@Override
 		public ManipulationListenerRegistry asCore(boolean isCore) {
 			this.isCore = isCore;
+			return this;
+		}
+		
+		@Override
+		public ManipulationListenerRegistry prioritized() {
+			this.prioritized = true;
 			return this;
 		}
 
@@ -268,6 +285,7 @@ public class BasicNotifyingGmSession extends AbstractGmSession implements Notify
 			ManipulationListenerEntry result = new ManipulationListenerEntry();
 			result.listener = listener;
 			result.isCore = isCore;
+			result.prioritized = prioritized;
 			return result;
 		}
 

@@ -32,6 +32,8 @@ public interface GenericManipulationListenerRegistry extends ManipulationListene
 	 */
 	ManipulationListenerRegistry asCore(boolean isCore);
 	
+	ManipulationListenerRegistry prioritized();
+	
 	EntityManipulationListenerRegistry entity(GenericEntity entity); 
 	
 	@JsMethod(name="entityProperty")
