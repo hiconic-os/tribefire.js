@@ -26,6 +26,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.braintribe.gwt.browserfeatures.client.Console;
+import com.braintribe.gwt.genericmodel.client.codec.api.DefaultDecodingContext;
+import com.braintribe.gwt.genericmodel.client.codec.api.GmDecodingContext;
 import com.braintribe.gwt.genericmodel.client.codec.jse.JseCodec;
 import com.braintribe.gwt.gmrpc.api.client.user.ResourceSupport;
 import com.braintribe.gwt.gmrpc.web.client.GwtGmWebRpcEvaluator;
@@ -257,6 +259,12 @@ public class StaticTools {
 	@JsMethod(namespace = GmCoreApiInteropNamespaces.util)
 	public static String newUuid() {
 		return GMF.platform().newUuid();
+	}
+
+	@JsMethod(namespace = GmCoreApiInteropNamespaces.util)
+	public static <T> JsPromise<T> decodeJse(String jseValue) {
+		GmDecodingContext context = new DefaultDecodingContext();
+		return new JseCodec().<T> decodeAsync(jseValue, context).toJsPromise();
 	}
 
 	@JsMethod(namespace = GmCoreApiInteropNamespaces.util)
