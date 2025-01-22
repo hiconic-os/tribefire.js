@@ -1,0 +1,17 @@
+name: Build service-processsing
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        type: boolean
+        default: true
+
+jobs:
+  run:
+    uses: hiconic-os/hiconic.ci.workflows/.github/workflows/npm-build.yaml@main
+    secrets:
+      NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+    with:
+      publish: ${{ inputs.publish }}
+      working-directory: "hc-js-service-processing"

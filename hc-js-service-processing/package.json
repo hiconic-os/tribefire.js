@@ -1,0 +1,51 @@
+{
+  "name": "@dev.hiconic/service-processing",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest --run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Apache-2.0",
+  "description": "",
+  "source": "src/evaluator.ts",
+  "main": "dist/evaluator.js",
+  "types": "dist/evaluator.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/evaluator.d.ts",
+      "default": "./dist/evaluator.js"
+    },
+    "./ws-endpoint": {
+      "types": "./dist/web-socket-endpoint.d.ts",
+      "default": "./dist/web-socket-endpoint.js"
+    }
+  },
+  "dependencies": {
+    "@dev.hiconic/gm_essential-reason-model": "2.0.x",
+    "@dev.hiconic/gm_service-api-model": "2.0.x",
+    "@dev.hiconic/tf.js_hc-js-api": "3.0.x"
+  },
+  "dependencies-dev": {
+    "@dev.hiconic/runtime-dev": "3.0.x",
+    "@dev.hiconic/runtime": "./node_modules/@dev.hiconic/runtime-dev"
+  },
+  "devDependencies": {
+    "@dev.hiconic/gm_test-model": "2.0.x",
+    "mock-socket": "^9.3.1",
+    "typescript": "^5.5.4",
+    "vitest": "^2.1.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hiconic-os/tribefire.js.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
