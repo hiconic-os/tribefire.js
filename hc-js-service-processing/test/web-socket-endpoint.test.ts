@@ -26,7 +26,7 @@ describe('Reconnecting Web Socket tests', () => {
         endpoint = new WebSocketServiceEndpoint(evaluator, SERVER_URL, "testClientId");
 
         console.log("Connecting Client");
-        const channelId = await endpoint.openWebSocketWithChannleId();
+        const channelId = await endpoint.openWebSocketWithChannelId();
         expect(channelId).toBe(TEST_CHANNEL_ID);
 
         endpoint.webSocket()!.onmessage = (event) => {
@@ -56,10 +56,10 @@ describe('Reconnecting Web Socket tests', () => {
         console.log("Waiting for channelId to be established.");
 
         // if no channelId is set yet, we wait for the message to be handled
-        if (!endpoint.channelId1())
+        if (!endpoint.channelId())
             await wsAwaiter.awaitClientMessage();
 
-        expect(endpoint.channelId1()).toEqual(TEST_CHANNEL_ID);
+        expect(endpoint.channelId()).toEqual(TEST_CHANNEL_ID);
     })
 })
 

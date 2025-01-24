@@ -28,7 +28,7 @@ export class WebSocketServiceEndpoint {
         return this.#webSocket;
     }
 
-    channelId1(): string | undefined {
+    channelId(): string | undefined {
         return this.#channelId;
     }
 
@@ -40,7 +40,7 @@ export class WebSocketServiceEndpoint {
     }
 
     // returns the first channelId
-    async openWebSocketWithChannleId(): Promise<string> {
+    async openWebSocketWithChannelId(): Promise<string> {
         const wsUrl = this.wsUrl();
         console.log("WS URL: " + wsUrl);
 
@@ -82,7 +82,7 @@ export class WebSocketServiceEndpoint {
             console.info("Established WebSocket connection with channelId: " + this.#channelId);
 
             this.#webSocket!.onmessage = messageEvent => this.handleWsMessage(messageEvent)
-                
+
             resolve(this.#channelId!);
             this.#optionalProps?.onChannelIdAssigned?.(this.#channelId!);
 
