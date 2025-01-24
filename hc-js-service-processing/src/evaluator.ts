@@ -1,12 +1,19 @@
 import { async, attr, eval_, hc, reason, reflection, service, util } from "@dev.hiconic/tf.js_hc-js-api";
-import { DispatchableRequest, ServiceRequest } from "@dev.hiconic/gm_service-api-model";
+import { DispatchableRequest, Neutral, ServiceRequest } from "@dev.hiconic/gm_service-api-model";
 import { Reason } from "@dev.hiconic/gm_gm-core-api";
 import { UnsupportedOperation } from "@dev.hiconic/gm_essential-reason-model";
 
 
-import Maybe = reason.Maybe;
-import EntityType = reflection.EntityType;
+export import Maybe = reason.Maybe;
+export import EntityType = reflection.EntityType;
+export import JsEvalContext = eval_.JsEvalContext;
+export import Evaluator = eval_.Evaluator;
+export import AttributeContext = attr.AttributeContext;
+export import AttributeContexts = attr.AttributeContexts;
+export import TypeSafeAttribute = attr.TypeSafeAttribute;
+export import TypeSafeAttributeEntry = attr.TypeSafeAttributeEntry;
 
+export { Neutral, ServiceRequest };
 
 export type ServiceProcessorFunction<SR extends ServiceRequest, R> =
     (context: service.ServiceRequestContext, request: SR) => Promise<Maybe<R>>;
@@ -39,7 +46,7 @@ export class LocalEvaluator extends eval_.EmptyEvaluator<ServiceRequest> impleme
     readonly #processors = util.newDenotationMap<ServiceRequest, ServiceProcessor<ServiceRequest, any>>();
     readonly #dispatchingRegistries = new Map<string, DispatchingRegistry>();
 
-    eval<T>(request: ServiceRequest): eval_.JsEvalContext<T> {
+    eval<T>(request: ServiceRequest): JsEvalContext<T> {
         return new LocalEvalContext(this, request);
     }
 
@@ -161,7 +168,7 @@ class DispatchingRegistry {
 }
 
 // Just some boilerplate, wihout this TSC complains about overrides for methods from JsEvalContext
-interface LocalEvalContextHelper<T> extends eval_.EmptyEvalContext<T>, eval_.JsEvalContext<T> { }
+interface LocalEvalContextHelper<T> extends eval_.EmptyEvalContext<T>, JsEvalContext<T> { }
 class LocalEvalContextHelper<T> { }
 
 class LocalEvalContext<T> extends LocalEvalContextHelper<T> {
@@ -215,9 +222,9 @@ class LocalEvalContext<T> extends LocalEvalContextHelper<T> {
         return context;
     }
 
-    private parentAttributeContext(): attr.AttributeContext {
+    private parentAttributeContext(): AttributeContext {
         const pac = eval_.ParentAttributeContextAspect.$.find(this);
-        return pac.isPresent() ? pac.get() as attr.AttributeContext : attr.AttributeContexts.peek();
+        return pac.isPresent() ? pac.get() as AttributeContext : AttributeContexts.peek();
     }
 
     override getReasonedSynchronous(): Maybe<T> {
@@ -228,31 +235,31 @@ class LocalEvalContext<T> extends LocalEvalContextHelper<T> {
         throw new Error("Synchronous evaluation is not supported!");
     }
 
-    override setAttribute<A extends attr.TypeSafeAttribute<V>, V>(attribute: hc.Class<A>, value: V): void {
+    override setAttribute<A extends TypeSafeAttribute<V>, V>(attribute: hc.Class<A>, value: V): void {
         this.#mapAttrContext.setAttribute(attribute, value);
     }
 
-    override findAttribute<A extends attr.TypeSafeAttribute<V>, V>(attribute: hc.Class<A>): hc.Optional<V> {
+    override findAttribute<A extends TypeSafeAttribute<V>, V>(attribute: hc.Class<A>): hc.Optional<V> {
         return this.#mapAttrContext.findAttribute(attribute);
     }
 
-    override getAttribute<A extends attr.TypeSafeAttribute<V>, V>(attribute: hc.Class<A>): V {
+    override getAttribute<A extends TypeSafeAttribute<V>, V>(attribute: hc.Class<A>): V {
         return this.#mapAttrContext.getAttribute(attribute);
     }
 
-    override findOrDefault<A extends attr.TypeSafeAttribute<V>, V>(attribute: hc.Class<A>, defaultValue: V): V {
+    override findOrDefault<A extends TypeSafeAttribute<V>, V>(attribute: hc.Class<A>, defaultValue: V): V {
         return this.#mapAttrContext.findOrDefault(attribute, defaultValue);
     }
 
-    override findOrNull<A extends attr.TypeSafeAttribute<V>, V>(attribute: hc.Class<A>): V {
+    override findOrNull<A extends TypeSafeAttribute<V>, V>(attribute: hc.Class<A>): V {
         return this.#mapAttrContext.findOrNull(attribute);
     }
 
-    override findOrSupply<A extends attr.TypeSafeAttribute<V>, V>(attribute: hc.Class<A>, defaultValueSupplier: hc.Supplier<V>): V {
+    override findOrSupply<A extends TypeSafeAttribute<V>, V>(attribute: hc.Class<A>, defaultValueSupplier: hc.Supplier<V>): V {
         return this.#mapAttrContext.findOrSupply(attribute, defaultValueSupplier);
     }
 
-    override streamAttributes(): hc.Stream<attr.TypeSafeAttributeEntry> {
+    override streamAttributes(): hc.Stream<TypeSafeAttributeEntry> {
         return this.#mapAttrContext.streamAttributes();
     }
 
