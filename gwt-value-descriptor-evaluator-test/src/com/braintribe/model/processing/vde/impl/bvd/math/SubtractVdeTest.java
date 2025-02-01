@@ -64,7 +64,7 @@ public class SubtractVdeTest extends AbstractArithmeticVdeTest {
 
 		Subtract math = $.subtract();
 		List<Object> operands = new ArrayList<Object>();
-		operands.add(new Integer(3));
+		operands.add(3);
 		math.setOperands(operands);
 
 		testSingleOperand(math);
@@ -75,9 +75,9 @@ public class SubtractVdeTest extends AbstractArithmeticVdeTest {
 
 		Subtract math = $.subtract();
 		List<Object> operands = new ArrayList<Object>();
-		operands.add(new Integer(10));
-		operands.add(new Integer(1));
-		operands.add(new Integer(4));
+		operands.add(10);
+		operands.add(1);
+		operands.add(4);
 		math.setOperands(operands);
 
 		Object result = evaluate(math);
@@ -464,13 +464,13 @@ public class SubtractVdeTest extends AbstractArithmeticVdeTest {
 		List<List<Object>> result = new ArrayList<List<Object>>();
 
 		List<Object> list = new ArrayList<Object>();
-		list.add(new Long(9));
-		list.add(new Long(4));
+		list.add(9L);
+		list.add(4L);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Long(9));
-		list.add(new Integer(4));
+		list.add(9L);
+		list.add(4);
 		result.add(list);
 
 		return result;
@@ -480,18 +480,18 @@ public class SubtractVdeTest extends AbstractArithmeticVdeTest {
 		List<List<Object>> result = new ArrayList<List<Object>>();
 
 		List<Object> list = new ArrayList<Object>();
-		list.add(new Float(9));
-		list.add(new Float(4));
+		list.add(9F);
+		list.add(4F);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Float(9));
-		list.add(new Integer(4));
+		list.add(9F);
+		list.add(4);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Float(9));
-		list.add(new Long(4));
+		list.add(9F);
+		list.add(4L);
 		result.add(list);
 
 		return result;
@@ -501,23 +501,23 @@ public class SubtractVdeTest extends AbstractArithmeticVdeTest {
 		List<List<Object>> result = new ArrayList<List<Object>>();
 
 		List<Object> list = new ArrayList<Object>();
-		list.add(new Double(9));
-		list.add(new Double(4));
+		list.add(9D);
+		list.add(4D);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Double(9));
-		list.add(new Integer(4));
+		list.add(9D);
+		list.add(4);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Double(9));
-		list.add(new Long(4));
+		list.add(9D);
+		list.add(4L);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Double(9));
-		list.add(new Float(4));
+		list.add(9D);
+		list.add(4F);
 		result.add(list);
 
 		return result;
@@ -533,22 +533,22 @@ public class SubtractVdeTest extends AbstractArithmeticVdeTest {
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(9));
-		list.add(new Integer(4));
+		list.add(4);
 		result.add(list);
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(9));
-		list.add(new Long(4));
+		list.add(4L);
 		result.add(list);
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(9));
-		list.add(new Float(4));
+		list.add(4F);
 		result.add(list);
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(9));
-		list.add(new Double(4));
+		list.add(4D);
 		result.add(list);
 
 		return result;

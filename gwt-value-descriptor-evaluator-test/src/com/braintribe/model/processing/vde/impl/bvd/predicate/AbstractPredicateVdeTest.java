@@ -24,7 +24,7 @@ public abstract class AbstractPredicateVdeTest extends VdeTest {
 	private void validateResult(Object result, boolean expectedValue) {
 		assertThat(result).isNotNull();
 		assertThat(result).isInstanceOf(Boolean.class);
-		assertThat(result).isEqualTo(new Boolean(expectedValue));
+		assertThat(result).isEqualTo(Boolean.valueOf(expectedValue));
 	}
 
 	protected void validatePositiveResult(Object result) {

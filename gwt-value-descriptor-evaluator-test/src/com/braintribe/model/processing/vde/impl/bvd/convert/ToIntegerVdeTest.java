@@ -42,7 +42,7 @@ public class ToIntegerVdeTest extends VdeTest {
 		Object result = evaluate(convert);
 		assertThat(result).isNotNull();
 		assertThat(result).isInstanceOf(Integer.class);
-		assertThat(result).isEqualTo(new Integer(4));
+		assertThat(result).isEqualTo(4);
 	}
 
 	@Test(expected = VdeRuntimeException.class)
@@ -64,14 +64,14 @@ public class ToIntegerVdeTest extends VdeTest {
 		Object result = evaluate(convert);
 		assertThat(result).isNotNull();
 		assertThat(result).isInstanceOf(Integer.class);
-		assertThat(result).isEqualTo(new Integer(1));
+		assertThat(result).isEqualTo(1);
 
 		convert.setOperand(false);
 
 		result = evaluate(convert);
 		assertThat(result).isNotNull();
 		assertThat(result).isInstanceOf(Integer.class);
-		assertThat(result).isEqualTo(new Integer(0));
+		assertThat(result).isEqualTo(0);
 	}
 
 	@Test
@@ -83,7 +83,7 @@ public class ToIntegerVdeTest extends VdeTest {
 		Object result = evaluate(convert);
 		assertThat(result).isNotNull();
 		assertThat(result).isInstanceOf(Integer.class);
-		assertThat(result).isEqualTo(new Integer(0));
+		assertThat(result).isEqualTo(0);
 
 	}
 

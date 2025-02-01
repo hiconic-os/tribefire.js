@@ -64,7 +64,7 @@ public class AddVdeTest extends AbstractArithmeticVdeTest {
 
 		Add math = $.add();
 		List<Object> operands = new ArrayList<Object>();
-		operands.add(new Integer(3));
+		operands.add(3);
 		math.setOperands(operands);
 
 		testSingleOperand(math);
@@ -75,9 +75,9 @@ public class AddVdeTest extends AbstractArithmeticVdeTest {
 
 		Add math = $.add();
 		List<Object> operands = new ArrayList<Object>();
-		operands.add(new Integer(2));
-		operands.add(new Integer(1));
-		operands.add(new Integer(2));
+		operands.add(2);
+		operands.add(1);
+		operands.add(2);
 		math.setOperands(operands);
 
 		Object result = evaluate(math);
@@ -462,13 +462,13 @@ public class AddVdeTest extends AbstractArithmeticVdeTest {
 		List<List<Object>> result = new ArrayList<List<Object>>();
 
 		List<Object> list = new ArrayList<Object>();
-		list.add(new Long(2));
-		list.add(new Long(3));
+		list.add(2L);
+		list.add(3L);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Long(2));
-		list.add(new Integer(3));
+		list.add(2L);
+		list.add(3);
 		result.add(list);
 
 		return result;
@@ -478,18 +478,18 @@ public class AddVdeTest extends AbstractArithmeticVdeTest {
 		List<List<Object>> result = new ArrayList<List<Object>>();
 
 		List<Object> list = new ArrayList<Object>();
-		list.add(new Float(2));
-		list.add(new Float(3));
+		list.add(2F);
+		list.add(3F);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Float(2));
-		list.add(new Integer(3));
+		list.add(2F);
+		list.add(3);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Float(2));
-		list.add(new Long(3));
+		list.add(2F);
+		list.add(3L);
 		result.add(list);
 
 		return result;
@@ -499,23 +499,23 @@ public class AddVdeTest extends AbstractArithmeticVdeTest {
 		List<List<Object>> result = new ArrayList<List<Object>>();
 
 		List<Object> list = new ArrayList<Object>();
-		list.add(new Double(2));
-		list.add(new Double(3));
+		list.add(2D);
+		list.add(3D);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Double(2));
-		list.add(new Integer(3));
+		list.add(2D);
+		list.add(3);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Double(2));
-		list.add(new Long(3));
+		list.add(2D);
+		list.add(3L);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Double(2));
-		list.add(new Float(3));
+		list.add(2D);
+		list.add(3F);
 		result.add(list);
 
 		return result;
@@ -531,22 +531,22 @@ public class AddVdeTest extends AbstractArithmeticVdeTest {
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(2));
-		list.add(new Integer(3));
+		list.add(3);
 		result.add(list);
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(2));
-		list.add(new Long(3));
+		list.add(3L);
 		result.add(list);
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(2));
-		list.add(new Float(3));
+		list.add(3F);
 		result.add(list);
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(2));
-		list.add(new Double(3));
+		list.add(3D);
 		result.add(list);
 
 		return result;

@@ -59,7 +59,7 @@ public class DivideVdeTest extends AbstractArithmeticVdeTest {
 
 		Divide math = $.divide();
 		List<Object> operands = new ArrayList<Object>();
-		operands.add(new Integer(3));
+		operands.add(3);
 		math.setOperands(operands);
 
 		testSingleOperand(math);
@@ -70,8 +70,8 @@ public class DivideVdeTest extends AbstractArithmeticVdeTest {
 
 		Divide math = $.divide();
 		List<Object> operands = new ArrayList<Object>();
-		operands.add(new Integer(50));
-		operands.add(new Integer(10));
+		operands.add(50);
+		operands.add(10);
 		math.setOperands(operands);
 
 		Object result = evaluate(math);
@@ -212,7 +212,7 @@ public class DivideVdeTest extends AbstractArithmeticVdeTest {
 		span.setValue(3);
 
 		List<Object> operands = new ArrayList<Object>(); // this order is not allowed
-		operands.add(new Integer(2));
+		operands.add(2);
 		operands.add(span);
 		math.setOperands(operands);
 
@@ -221,10 +221,10 @@ public class DivideVdeTest extends AbstractArithmeticVdeTest {
 
 	private Object[] getTimeSpanMultipliers() {
 		Object[] result = new Object[5];
-		result[0] = new Integer(2);
-		result[1] = new Long(2);
-		result[2] = new Float(2);
-		result[3] = new Double(2);
+		result[0] = 2;
+		result[1] = 2L;
+		result[2] = 2F;
+		result[3] = 2D;
 		result[4] = new BigDecimal(2);
 		return result;
 	}
@@ -300,13 +300,13 @@ public class DivideVdeTest extends AbstractArithmeticVdeTest {
 		List<List<Object>> result = new ArrayList<List<Object>>();
 
 		List<Object> list = new ArrayList<Object>();
-		list.add(new Long(50));
-		list.add(new Long(10));
+		list.add(50L);
+		list.add(10L);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Long(50));
-		list.add(new Integer(10));
+		list.add(50L);
+		list.add(10);
 		result.add(list);
 
 		return result;
@@ -316,18 +316,18 @@ public class DivideVdeTest extends AbstractArithmeticVdeTest {
 		List<List<Object>> result = new ArrayList<List<Object>>();
 
 		List<Object> list = new ArrayList<Object>();
-		list.add(new Float(50));
-		list.add(new Float(10));
+		list.add(50F);
+		list.add(10F);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Float(50));
-		list.add(new Integer(10));
+		list.add(50F);
+		list.add(10);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Float(50));
-		list.add(new Long(10));
+		list.add(50F);
+		list.add(10L);
 		result.add(list);
 
 		return result;
@@ -337,23 +337,23 @@ public class DivideVdeTest extends AbstractArithmeticVdeTest {
 		List<List<Object>> result = new ArrayList<List<Object>>();
 
 		List<Object> list = new ArrayList<Object>();
-		list.add(new Double(50));
-		list.add(new Double(10));
+		list.add(50D);
+		list.add(10D);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Double(50));
-		list.add(new Integer(10));
+		list.add(50D);
+		list.add(10);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Double(50));
-		list.add(new Long(10));
+		list.add(50D);
+		list.add(10L);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Double(50));
-		list.add(new Float(10));
+		list.add(50D);
+		list.add(10F);
 		result.add(list);
 
 		return result;
@@ -369,22 +369,22 @@ public class DivideVdeTest extends AbstractArithmeticVdeTest {
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(50));
-		list.add(new Integer(10));
+		list.add(10);
 		result.add(list);
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(50));
-		list.add(new Long(10));
+		list.add(10L);
 		result.add(list);
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(50));
-		list.add(new Float(10));
+		list.add(10F);
 		result.add(list);
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(50));
-		list.add(new Double(10));
+		list.add(10D);
 		result.add(list);
 
 		return result;

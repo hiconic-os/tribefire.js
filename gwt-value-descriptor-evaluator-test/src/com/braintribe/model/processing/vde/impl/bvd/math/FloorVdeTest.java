@@ -69,23 +69,23 @@ public class FloorVdeTest extends AbstractApproximateVdeTest {
 
 		Floor approximate = $.floor();
 
-		approximate.setValue(new Integer(3));
-		approximate.setPrecision(new Integer(1));
+		approximate.setValue(3);
+		approximate.setPrecision(1);
 
 		Object result = evaluate(approximate);
-		validateIntegerResult(result, new Integer(3));
+		validateIntegerResult(result, 3);
 
-		approximate.setValue(new Integer(-3));
-		approximate.setPrecision(new Integer(1));
-
-		result = evaluate(approximate);
-		validateIntegerResult(result, new Integer(-3));
-
-		approximate.setValue(new Integer(0));
-		approximate.setPrecision(new Integer(1));
+		approximate.setValue(-3);
+		approximate.setPrecision(1);
 
 		result = evaluate(approximate);
-		validateIntegerResult(result, new Integer(0));
+		validateIntegerResult(result, -3);
+
+		approximate.setValue(0);
+		approximate.setPrecision(1);
+
+		result = evaluate(approximate);
+		validateIntegerResult(result, 0);
 	}
 
 	@Test
@@ -95,8 +95,8 @@ public class FloorVdeTest extends AbstractApproximateVdeTest {
 		List<Object> precisionList = getLongPrecisionOperandsFloor();
 
 		// positive
-		approximate.setValue(new Long(5));
-		Long expectedValue = new Long(4);
+		approximate.setValue(5L);
+		Long expectedValue = 4L;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -105,8 +105,8 @@ public class FloorVdeTest extends AbstractApproximateVdeTest {
 		}
 
 		// negative
-		approximate.setValue(new Long(-5));
-		expectedValue = new Long(-6);
+		approximate.setValue(-5L);
+		expectedValue = -6L;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -115,8 +115,8 @@ public class FloorVdeTest extends AbstractApproximateVdeTest {
 		}
 
 		// zero
-		approximate.setValue(new Long(0));
-		expectedValue = new Long(0);
+		approximate.setValue(0L);
+		expectedValue = 0L;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -133,8 +133,8 @@ public class FloorVdeTest extends AbstractApproximateVdeTest {
 		List<Object> precisionList = getFloatPrecisionOperandsFloor();
 
 		// positive
-		approximate.setValue(new Float(5.3));
-		Float expectedValue = new Float(4);
+		approximate.setValue(5.3F);
+		Float expectedValue = 4F;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -143,8 +143,8 @@ public class FloorVdeTest extends AbstractApproximateVdeTest {
 		}
 
 		// negative
-		approximate.setValue(new Float(-5.3));
-		expectedValue = new Float(-6);
+		approximate.setValue(-5.3F);
+		expectedValue = -6F;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -153,8 +153,8 @@ public class FloorVdeTest extends AbstractApproximateVdeTest {
 		}
 
 		// zero
-		approximate.setValue(new Float(0));
-		expectedValue = new Float(0);
+		approximate.setValue(0F);
+		expectedValue = 0F;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -171,8 +171,8 @@ public class FloorVdeTest extends AbstractApproximateVdeTest {
 		List<Object> precisionList = getDoublePrecisionOperandsFloor();
 
 		// positive
-		approximate.setValue(new Double(5.3));
-		Double expectedValue = new Double(4);
+		approximate.setValue(5.3D);
+		Double expectedValue = 4D;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -181,8 +181,8 @@ public class FloorVdeTest extends AbstractApproximateVdeTest {
 		}
 
 		// negative
-		approximate.setValue(new Double(-5.3));
-		expectedValue = new Double(-6);
+		approximate.setValue(-5.3D);
+		expectedValue = -6D;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -191,8 +191,8 @@ public class FloorVdeTest extends AbstractApproximateVdeTest {
 		}
 
 		// zero
-		approximate.setValue(new Double(0));
-		expectedValue = new Double(0);
+		approximate.setValue(0D);
+		expectedValue = 0D;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -462,8 +462,8 @@ public class FloorVdeTest extends AbstractApproximateVdeTest {
 	@Test(expected = VdeRuntimeException.class)
 	public void testNegativePrecisionFloorFail() throws Exception {
 		Floor approximate = $.floor();
-		approximate.setValue(new Double(2.3));
-		approximate.setPrecision(new Double(-2.3));
+		approximate.setValue(2.3D);
+		approximate.setPrecision(-2.3D);
 
 		evaluate(approximate);
 	}
@@ -472,7 +472,7 @@ public class FloorVdeTest extends AbstractApproximateVdeTest {
 	public void testNegativePrecisionDecimalFloorFail() throws Exception {
 		Floor approximate = $.floor();
 		approximate.setValue(new BigDecimal(2.3));
-		approximate.setPrecision(new Double(-2.3));
+		approximate.setPrecision(-2.3D);
 
 		evaluate(approximate);
 	}
@@ -562,35 +562,35 @@ public class FloorVdeTest extends AbstractApproximateVdeTest {
 
 	private List<Object> getLongPrecisionOperandsFloor() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getFloatPrecisionOperandsFloor() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Float(2.0));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2.0F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getDoublePrecisionOperandsFloor() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Double(2.0));
-		result.add(new Float(2.0));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2.0D);
+		result.add(2.0F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getDecimalPrecisionOperandsFloor() {
 		List<Object> result = new ArrayList<Object>();
 		result.add(new BigDecimal(2.0));
-		result.add(new Double(2.0));
-		result.add(new Float(2.0));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2.0D);
+		result.add(2.0F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 	

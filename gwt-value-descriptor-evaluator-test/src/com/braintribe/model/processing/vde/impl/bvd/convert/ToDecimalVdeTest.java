@@ -76,7 +76,7 @@ public class ToDecimalVdeTest extends VdeTest {
 
 		ToDecimal convert = $.toDecimal();
 		convert.setOperand("4");
-		convert.setFormat(new Integer(3)); // wrong format type
+		convert.setFormat(3); // wrong format type
 
 		Object result = evaluate(convert);
 		assertThat(result).isNotNull();

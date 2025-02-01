@@ -50,7 +50,7 @@ public class DecimalCastVdeTest extends VdeTest {
 
 	@Test(expected = VdeRuntimeException.class)
 	public void testBooleanToDecimalCastFail() throws Exception {
-		Boolean x = new Boolean(true);
+		Boolean x = Boolean.TRUE;
 
 		DecimalCast cast = $.decimalCast();
 		cast.setOperand(x);

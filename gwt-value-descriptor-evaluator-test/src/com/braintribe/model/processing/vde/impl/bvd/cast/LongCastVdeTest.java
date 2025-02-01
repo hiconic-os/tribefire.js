@@ -47,7 +47,7 @@ public class LongCastVdeTest extends VdeTest {
 
 	@Test(expected = VdeRuntimeException.class)
 	public void testBooleanToLongCastFail() throws Exception {
-		Boolean x = new Boolean(true);
+		Boolean x = Boolean.TRUE;
 
 		LongCast cast = $.longCast();
 		cast.setOperand(x);

@@ -66,7 +66,7 @@ public class ToStringVdeTest extends VdeTest {
 		ToString convert = $.ToString();
 		Date date = Calendar.getInstance().getTime();
 		convert.setOperand(date);
-		convert.setFormat(new Integer(4)); // wrong format type
+		convert.setFormat(4); // wrong format type
 
 		evaluate(convert);
 	}
@@ -97,7 +97,7 @@ public class ToStringVdeTest extends VdeTest {
 	public void testNumberOperandNullFormatToDateConvert() throws Exception {
 
 		ToString convert = $.ToString();
-		convert.setOperand(new Integer(3));
+		convert.setOperand(3);
 
 		Object result = evaluate(convert);
 		validateStringResult(result);
@@ -111,7 +111,7 @@ public class ToStringVdeTest extends VdeTest {
 	@Test(expected = VdeRuntimeException.class)
 	public void testNumberOperandRandomFormatToDateConvert() throws Exception {
 		ToString convert = $.ToString();
-		convert.setOperand(new Integer(3));
+		convert.setOperand(3);
 		convert.setFormat(new Date());
 
 		evaluate(convert);
@@ -123,7 +123,7 @@ public class ToStringVdeTest extends VdeTest {
 
 		ToString convert = $.ToString();
 		String format = "###.##";
-		convert.setOperand(new Integer(3));
+		convert.setOperand(3);
 		convert.setFormat(format);
 
 		Object result = evaluate(convert);
@@ -134,7 +134,7 @@ public class ToStringVdeTest extends VdeTest {
 		result = evaluate(convert);
 		validateStringResult(result, "2");
 
-		convert.setOperand(new Double(2.423));
+		convert.setOperand(2.423D);
 
 		result = evaluate(convert);
 		validateStringResult(result, "2.42");

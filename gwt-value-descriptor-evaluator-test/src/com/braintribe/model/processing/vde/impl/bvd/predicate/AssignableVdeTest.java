@@ -43,7 +43,7 @@ public class AssignableVdeTest extends AbstractPredicateVdeTest {
 
 		Assignable predicate = $.assignable();
 		String value1 = "hello";
-		Integer value2 = new Integer(1);
+		Integer value2 = 1;
 
 		predicate.setLeftOperand(value1);
 		predicate.setRightOperand(value2);

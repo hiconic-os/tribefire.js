@@ -69,23 +69,23 @@ public class RoundVdeTest extends AbstractApproximateVdeTest {
 
 		Round approximate = $.round();
 
-		approximate.setValue(new Integer(3));
-		approximate.setPrecision(new Integer(1));
+		approximate.setValue(3);
+		approximate.setPrecision(1);
 
 		Object result = evaluate(approximate);
-		validateIntegerResult(result, new Integer(3));
+		validateIntegerResult(result, 3);
 
-		approximate.setValue(new Integer(-3));
-		approximate.setPrecision(new Integer(1));
-
-		result = evaluate(approximate);
-		validateIntegerResult(result, new Integer(-3));
-
-		approximate.setValue(new Integer(0));
-		approximate.setPrecision(new Integer(1));
+		approximate.setValue(-3);
+		approximate.setPrecision(1);
 
 		result = evaluate(approximate);
-		validateIntegerResult(result, new Integer(0));
+		validateIntegerResult(result, -3);
+
+		approximate.setValue(0);
+		approximate.setPrecision(1);
+
+		result = evaluate(approximate);
+		validateIntegerResult(result, 0);
 	}
 
 	@Test
@@ -95,8 +95,8 @@ public class RoundVdeTest extends AbstractApproximateVdeTest {
 		List<Object> precisionList = getLongPrecisionOperandsRound();
 
 		// positive
-		approximate.setValue(new Long(5));
-		Long expectedValue = new Long(6);
+		approximate.setValue(5L);
+		Long expectedValue = 6L;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -105,8 +105,8 @@ public class RoundVdeTest extends AbstractApproximateVdeTest {
 		}
 
 		// negative
-		approximate.setValue(new Long(-5));
-		expectedValue = new Long(-4);
+		approximate.setValue(-5L);
+		expectedValue = -4L;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -115,8 +115,8 @@ public class RoundVdeTest extends AbstractApproximateVdeTest {
 		}
 
 		// zero
-		approximate.setValue(new Long(0));
-		expectedValue = new Long(0);
+		approximate.setValue(0L);
+		expectedValue = 0L;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -133,8 +133,8 @@ public class RoundVdeTest extends AbstractApproximateVdeTest {
 		List<Object> precisionList = getFloatPrecisionOperandsRound();
 
 		// positive
-		approximate.setValue(new Float(5.3));
-		Float expectedValue = new Float(6);
+		approximate.setValue(5.3F);
+		Float expectedValue = 6F;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -143,8 +143,8 @@ public class RoundVdeTest extends AbstractApproximateVdeTest {
 		}
 
 		// negative
-		approximate.setValue(new Float(-5.3));
-		expectedValue = new Float(-6);
+		approximate.setValue(-5.3F);
+		expectedValue = -6F;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -153,8 +153,8 @@ public class RoundVdeTest extends AbstractApproximateVdeTest {
 		}
 
 		// zero
-		approximate.setValue(new Float(0));
-		expectedValue = new Float(0);
+		approximate.setValue(0F);
+		expectedValue = 0F;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -171,8 +171,8 @@ public class RoundVdeTest extends AbstractApproximateVdeTest {
 		List<Object> precisionList = getDoublePrecisionOperandsRound();
 
 		// positive
-		approximate.setValue(new Double(5.3));
-		Double expectedValue = new Double(6);
+		approximate.setValue(5.3D);
+		Double expectedValue = 6D;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -181,8 +181,8 @@ public class RoundVdeTest extends AbstractApproximateVdeTest {
 		}
 
 		// negative
-		approximate.setValue(new Double(-5.3));
-		expectedValue = new Double(-6);
+		approximate.setValue(-5.3D);
+		expectedValue = -6D;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -191,8 +191,8 @@ public class RoundVdeTest extends AbstractApproximateVdeTest {
 		}
 
 		// zero
-		approximate.setValue(new Double(0));
-		expectedValue = new Double(0);
+		approximate.setValue(0D);
+		expectedValue = 0D;
 		for (Object precision : precisionList) {
 			approximate.setPrecision(precision);
 
@@ -246,7 +246,7 @@ public class RoundVdeTest extends AbstractApproximateVdeTest {
 		Round approximate = $.round();
 		approximate.setValue(new BigDecimal(5.3));
 		BigDecimal expectedValue = new BigDecimal(5.6, new MathContext(2, RoundingMode.HALF_UP));
-		approximate.setPrecision(new Double(0.8));
+		approximate.setPrecision(0.8D);
 
 		Object result = evaluate(approximate);
 		validateDecimalResult(result, expectedValue);
@@ -257,7 +257,7 @@ public class RoundVdeTest extends AbstractApproximateVdeTest {
 		Round approximate = $.round();
 		approximate.setValue(new BigDecimal(1));
 		BigDecimal expectedValue = new BigDecimal(0.9, new MathContext(2, RoundingMode.HALF_UP)).stripTrailingZeros();
-		approximate.setPrecision(new Double(0.3));
+		approximate.setPrecision(0.3D);
 
 		Object result = evaluate(approximate);
 		validateDecimalResult(result, expectedValue);
@@ -532,35 +532,35 @@ public class RoundVdeTest extends AbstractApproximateVdeTest {
 
 	private List<Object> getLongPrecisionOperandsRound() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getFloatPrecisionOperandsRound() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Float(2.0));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2.0F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getDoublePrecisionOperandsRound() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Double(2.0));
-		result.add(new Float(2.0));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2.0D);
+		result.add(2.0F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getDecimalPrecisionOperandsRound() {
 		List<Object> result = new ArrayList<Object>();
 		result.add(new BigDecimal(2.0));
-		result.add(new Double(2.0));
-		result.add(new Float(2.0));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2.0D);
+		result.add(2.0F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 

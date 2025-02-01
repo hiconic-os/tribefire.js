@@ -110,13 +110,13 @@ public class NotEqualVdeTest extends AbstractPredicateVdeTest {
 	public void testBooleanNotEqual() throws Exception {
 
 		NotEqual predicate = $.notEqual();
-		predicate.setLeftOperand(new Boolean(true));
-		predicate.setRightOperand(new Boolean(true));
+		predicate.setLeftOperand(Boolean.TRUE);
+		predicate.setRightOperand(Boolean.TRUE);
 
 		Object result = evaluate(predicate);
 		validateNegativeResult(result);
 
-		predicate.setRightOperand(new Boolean(false));
+		predicate.setRightOperand(Boolean.FALSE);
 
 		result = evaluate(predicate);
 		validatePositiveResult(result);
@@ -127,13 +127,13 @@ public class NotEqualVdeTest extends AbstractPredicateVdeTest {
 	public void testIntegerNotEqual() throws Exception {
 
 		NotEqual predicate = $.notEqual();
-		predicate.setLeftOperand(new Integer(2));
-		predicate.setRightOperand(new Integer(2));
+		predicate.setLeftOperand(2);
+		predicate.setRightOperand(2);
 
 		Object result = evaluate(predicate);
 		validateNegativeResult(result);
 
-		predicate.setRightOperand(new Integer(4));
+		predicate.setRightOperand(4);
 
 		result = evaluate(predicate);
 		validatePositiveResult(result);
@@ -145,7 +145,7 @@ public class NotEqualVdeTest extends AbstractPredicateVdeTest {
 
 		NotEqual predicate = $.notEqual();
 
-		predicate.setLeftOperand(new Long(2));
+		predicate.setLeftOperand(2L);
 		List<Object> operandsList = getLongOperandsNotEqual();
 		for (Object object : operandsList) {
 			predicate.setRightOperand(object);
@@ -154,7 +154,7 @@ public class NotEqualVdeTest extends AbstractPredicateVdeTest {
 		}
 
 		// commutative
-		predicate.setRightOperand(new Long(3));
+		predicate.setRightOperand(3L);
 		for (Object object : operandsList) {
 			predicate.setLeftOperand(object);
 			Object result = evaluate(predicate);
@@ -167,7 +167,7 @@ public class NotEqualVdeTest extends AbstractPredicateVdeTest {
 
 		NotEqual predicate = $.notEqual();
 
-		predicate.setLeftOperand(new Float(2));
+		predicate.setLeftOperand(2F);
 		List<Object> operandsList = getFloatOperandsNotEqual();
 		for (Object object : operandsList) {
 			predicate.setRightOperand(object);
@@ -176,7 +176,7 @@ public class NotEqualVdeTest extends AbstractPredicateVdeTest {
 		}
 
 		// commutative
-		predicate.setRightOperand(new Float(3));
+		predicate.setRightOperand(3F);
 		for (Object object : operandsList) {
 			predicate.setLeftOperand(object);
 			Object result = evaluate(predicate);
@@ -189,7 +189,7 @@ public class NotEqualVdeTest extends AbstractPredicateVdeTest {
 
 		NotEqual predicate = $.notEqual();
 
-		predicate.setLeftOperand(new Double(2));
+		predicate.setLeftOperand(2D);
 		List<Object> operandsList = getDoubleOperandsNotEqual();
 		for (Object object : operandsList) {
 			predicate.setRightOperand(object);
@@ -198,7 +198,7 @@ public class NotEqualVdeTest extends AbstractPredicateVdeTest {
 		}
 
 		// commutative
-		predicate.setRightOperand(new Double(3));
+		predicate.setRightOperand(3D);
 		for (Object object : operandsList) {
 			predicate.setLeftOperand(object);
 			Object result = evaluate(predicate);
@@ -231,34 +231,34 @@ public class NotEqualVdeTest extends AbstractPredicateVdeTest {
 	private List<Object> getDecimalOperandsNotEqual() {
 		List<Object> result = new ArrayList<Object>();
 		result.add(new BigDecimal(2));
-		result.add(new Double(2));
-		result.add(new Float(2));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2D);
+		result.add(2F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getDoubleOperandsNotEqual() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Double(2));
-		result.add(new Float(2));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2D);
+		result.add(2F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getFloatOperandsNotEqual() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Float(2));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getLongOperandsNotEqual() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 

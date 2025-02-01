@@ -47,7 +47,7 @@ public class IntegerCastVdeTest extends VdeTest {
 
 	@Test(expected = VdeRuntimeException.class)
 	public void testBooleanToIntegerCastFail() throws Exception {
-		Boolean x = new Boolean(true);
+		Boolean x = Boolean.TRUE;
 
 		IntegerCast cast = $.integerCast();
 		cast.setOperand(x);

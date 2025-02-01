@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import com.braintribe.gm.model.svd.EvaluateRequest;
 import com.braintribe.model.processing.service.api.ServiceRequestContext;
-import com.braintribe.model.processing.service.common.ConfigurableDispatchingServiceProcessor;
+import com.braintribe.model.processing.service.impl.ConfigurableDispatchingServiceProcessor;
 import com.braintribe.model.processing.service.impl.ConfigurableServiceRequestEvaluator;
 import com.braintribe.model.processing.vde.evaluator.api.aspects.RequestEvaluatorAspect;
 import com.braintribe.model.processing.vde.impl.service.model.VdeTestRequest;
@@ -36,7 +36,7 @@ public class EvaluateRequestVdeTest extends VdeTest {
 	private static ConfigurableServiceRequestEvaluator evaluator = new ConfigurableServiceRequestEvaluator();
 
 	static {
-		dispatcher.register(VdeTestRequest.T, EvaluateRequestVdeTest::eval);
+		dispatcher.bind(VdeTestRequest.T, EvaluateRequestVdeTest::eval);
 
 		evaluator.setServiceProcessor(dispatcher);
 	}

@@ -47,7 +47,7 @@ public class FloatCastVdeTest extends VdeTest {
 
 	@Test(expected = VdeRuntimeException.class)
 	public void testBooleanToFloatCastFail() throws Exception {
-		Boolean x = new Boolean(true);
+		Boolean x = Boolean.TRUE;
 
 		FloatCast cast = $.floatCast();
 		cast.setOperand(x);

@@ -125,13 +125,13 @@ public class LessVdeTest extends AbstractPredicateVdeTest {
 	public void testIntegerLess() throws Exception {
 
 		Less predicate = $.less();
-		predicate.setLeftOperand(new Integer(3));
-		predicate.setRightOperand(new Integer(2));
+		predicate.setLeftOperand(3);
+		predicate.setRightOperand(2);
 
 		Object result = evaluate(predicate);
 		validateNegativeResult(result);
 
-		predicate.setRightOperand(new Integer(4));
+		predicate.setRightOperand(4);
 
 		result = evaluate(predicate);
 		validatePositiveResult(result);
@@ -143,7 +143,7 @@ public class LessVdeTest extends AbstractPredicateVdeTest {
 
 		Less predicate = $.less();
 
-		predicate.setLeftOperand(new Long(3));
+		predicate.setLeftOperand(3L);
 		List<Object> operandsList = getLongOperandsLess();
 		for (Object object : operandsList) {
 			predicate.setRightOperand(object);
@@ -152,7 +152,7 @@ public class LessVdeTest extends AbstractPredicateVdeTest {
 		}
 
 		// commutative
-		predicate.setRightOperand(new Long(4));
+		predicate.setRightOperand(4L);
 		for (Object object : operandsList) {
 			predicate.setLeftOperand(object);
 			Object result = evaluate(predicate);
@@ -165,7 +165,7 @@ public class LessVdeTest extends AbstractPredicateVdeTest {
 
 		Less predicate = $.less();
 
-		predicate.setLeftOperand(new Float(3));
+		predicate.setLeftOperand(3F);
 		List<Object> operandsList = getFloatOperandsLess();
 		for (Object object : operandsList) {
 			predicate.setRightOperand(object);
@@ -174,7 +174,7 @@ public class LessVdeTest extends AbstractPredicateVdeTest {
 		}
 
 		// commutative
-		predicate.setRightOperand(new Float(4));
+		predicate.setRightOperand(4F);
 		for (Object object : operandsList) {
 			predicate.setLeftOperand(object);
 			Object result = evaluate(predicate);
@@ -187,7 +187,7 @@ public class LessVdeTest extends AbstractPredicateVdeTest {
 
 		Less predicate = $.less();
 
-		predicate.setLeftOperand(new Double(3));
+		predicate.setLeftOperand(3D);
 		List<Object> operandsList = getDoubleOperandsLess();
 		for (Object object : operandsList) {
 			predicate.setRightOperand(object);
@@ -196,7 +196,7 @@ public class LessVdeTest extends AbstractPredicateVdeTest {
 		}
 
 		// commutative
-		predicate.setRightOperand(new Double(4));
+		predicate.setRightOperand(4D);
 		for (Object object : operandsList) {
 			predicate.setLeftOperand(object);
 			Object result = evaluate(predicate);
@@ -229,34 +229,34 @@ public class LessVdeTest extends AbstractPredicateVdeTest {
 	private List<Object> getDecimalOperandsLess() {
 		List<Object> result = new ArrayList<Object>();
 		result.add(new BigDecimal(2));
-		result.add(new Double(2));
-		result.add(new Float(2));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2D);
+		result.add(2F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getDoubleOperandsLess() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Double(2));
-		result.add(new Float(2));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2D);
+		result.add(2F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getFloatOperandsLess() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Float(2));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getLongOperandsLess() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 

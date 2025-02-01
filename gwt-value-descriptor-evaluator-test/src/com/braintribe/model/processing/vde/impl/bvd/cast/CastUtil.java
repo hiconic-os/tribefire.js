@@ -22,10 +22,10 @@ public class CastUtil {
 	public static Object[] getAllPossibleNumberTypesArray() {
 
 		Object[] result = new Object[5];
-		result[0] = new Integer(5);
-		result[1] = new Long(5);
-		result[2] = new Float(5);
-		result[3] = new Double(5);
+		result[0] = 5;
+		result[1] = 5L;
+		result[2] = 5F;
+		result[3] = 5D;
 		result[4] = new BigDecimal(5);
 		return result;
 	}

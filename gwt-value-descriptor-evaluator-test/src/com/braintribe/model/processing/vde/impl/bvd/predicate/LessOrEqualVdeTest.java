@@ -135,17 +135,17 @@ public class LessOrEqualVdeTest extends AbstractPredicateVdeTest {
 	public void testIntegerLessOrEqual() throws Exception {
 
 		LessOrEqual predicate = $.lessOrEqual();
-		predicate.setLeftOperand(new Integer(3));
-		predicate.setRightOperand(new Integer(2));
+		predicate.setLeftOperand(3);
+		predicate.setRightOperand(2);
 
 		Object result = evaluate(predicate);
 		validateNegativeResult(result);
 
-		predicate.setRightOperand(new Integer(3));
+		predicate.setRightOperand(3);
 		result = evaluate(predicate);
 		validatePositiveResult(result);
 
-		predicate.setRightOperand(new Integer(4));
+		predicate.setRightOperand(4);
 		result = evaluate(predicate);
 		validatePositiveResult(result);
 
@@ -156,7 +156,7 @@ public class LessOrEqualVdeTest extends AbstractPredicateVdeTest {
 
 		LessOrEqual predicate = $.lessOrEqual();
 
-		predicate.setLeftOperand(new Long(3));
+		predicate.setLeftOperand(3L);
 		List<Object> operandsList = getLongOperandsLessOrEqual();
 		for (Object object : operandsList) {
 			predicate.setRightOperand(object);
@@ -165,7 +165,7 @@ public class LessOrEqualVdeTest extends AbstractPredicateVdeTest {
 		}
 
 		// commutative
-		predicate.setRightOperand(new Long(4));
+		predicate.setRightOperand(4L);
 		for (Object object : operandsList) {
 			predicate.setLeftOperand(object);
 			Object result = evaluate(predicate);
@@ -173,7 +173,7 @@ public class LessOrEqualVdeTest extends AbstractPredicateVdeTest {
 		}
 
 		// equal
-		predicate.setRightOperand(new Long(2));
+		predicate.setRightOperand(2L);
 		for (Object object : operandsList) {
 			predicate.setLeftOperand(object);
 			Object result = evaluate(predicate);
@@ -186,7 +186,7 @@ public class LessOrEqualVdeTest extends AbstractPredicateVdeTest {
 
 		LessOrEqual predicate = $.lessOrEqual();
 
-		predicate.setLeftOperand(new Float(3));
+		predicate.setLeftOperand(3F);
 		List<Object> operandsList = getFloatOperandsLessOrEqual();
 		for (Object object : operandsList) {
 			predicate.setRightOperand(object);
@@ -195,7 +195,7 @@ public class LessOrEqualVdeTest extends AbstractPredicateVdeTest {
 		}
 
 		// commutative
-		predicate.setRightOperand(new Float(4));
+		predicate.setRightOperand(4F);
 		for (Object object : operandsList) {
 			predicate.setLeftOperand(object);
 			Object result = evaluate(predicate);
@@ -203,7 +203,7 @@ public class LessOrEqualVdeTest extends AbstractPredicateVdeTest {
 		}
 
 		// equal
-		predicate.setRightOperand(new Float(2));
+		predicate.setRightOperand(2F);
 		for (Object object : operandsList) {
 			predicate.setLeftOperand(object);
 			Object result = evaluate(predicate);
@@ -216,7 +216,7 @@ public class LessOrEqualVdeTest extends AbstractPredicateVdeTest {
 
 		LessOrEqual predicate = $.lessOrEqual();
 
-		predicate.setLeftOperand(new Double(3));
+		predicate.setLeftOperand(3D);
 		List<Object> operandsList = getDoubleOperandsLessOrEqual();
 		for (Object object : operandsList) {
 			predicate.setRightOperand(object);
@@ -225,7 +225,7 @@ public class LessOrEqualVdeTest extends AbstractPredicateVdeTest {
 		}
 
 		// commutative
-		predicate.setRightOperand(new Double(4));
+		predicate.setRightOperand(4D);
 		for (Object object : operandsList) {
 			predicate.setLeftOperand(object);
 			Object result = evaluate(predicate);
@@ -233,7 +233,7 @@ public class LessOrEqualVdeTest extends AbstractPredicateVdeTest {
 		}
 
 		// equal
-		predicate.setRightOperand(new Double(2));
+		predicate.setRightOperand(2D);
 		for (Object object : operandsList) {
 			predicate.setLeftOperand(object);
 			Object result = evaluate(predicate);
@@ -274,34 +274,34 @@ public class LessOrEqualVdeTest extends AbstractPredicateVdeTest {
 	private List<Object> getDecimalOperandsLessOrEqual() {
 		List<Object> result = new ArrayList<Object>();
 		result.add(new BigDecimal(2));
-		result.add(new Double(2));
-		result.add(new Float(2));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2D);
+		result.add(2F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getDoubleOperandsLessOrEqual() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Double(2));
-		result.add(new Float(2));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2D);
+		result.add(2F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getFloatOperandsLessOrEqual() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Float(2));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getLongOperandsLessOrEqual() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 

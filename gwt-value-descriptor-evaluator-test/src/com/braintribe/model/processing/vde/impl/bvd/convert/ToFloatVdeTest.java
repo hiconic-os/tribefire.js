@@ -41,7 +41,7 @@ public class ToFloatVdeTest extends VdeTest {
 		Object result = evaluate(convert);
 		assertThat(result).isNotNull();
 		assertThat(result).isInstanceOf(Float.class);
-		assertThat(result).isEqualTo(new Float(4));
+		assertThat(result).isEqualTo(4F);
 	}
 
 	@Test(expected = VdeRuntimeException.class)
@@ -63,14 +63,14 @@ public class ToFloatVdeTest extends VdeTest {
 		Object result = evaluate(convert);
 		assertThat(result).isNotNull();
 		assertThat(result).isInstanceOf(Float.class);
-		assertThat(result).isEqualTo(new Float(1));
+		assertThat(result).isEqualTo(1F);
 
 		convert.setOperand(false);
 
 		result = evaluate(convert);
 		assertThat(result).isNotNull();
 		assertThat(result).isInstanceOf(Float.class);
-		assertThat(result).isEqualTo(new Float(0));
+		assertThat(result).isEqualTo(0F);
 	}
 
 	@Test(expected = VdeRuntimeException.class)

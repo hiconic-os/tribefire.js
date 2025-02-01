@@ -76,7 +76,7 @@ public class ToBooleanVdeTest extends VdeTest {
 	public void testRandomOperandNullFomratToBooleanConvertOperandFail() throws Exception {
 		ToBoolean convert = $.toBoolean();
 
-		convert.setOperand(new Integer(30)); // only string allowed
+		convert.setOperand(30); // only string allowed
 		evaluate(convert);
 	}
 }

@@ -59,7 +59,7 @@ public class MultiplyVdeTest extends AbstractArithmeticVdeTest {
 
 		Multiply math = $.multiply();
 		List<Object> operands = new ArrayList<Object>();
-		operands.add(new Integer(3));
+		operands.add(3);
 		math.setOperands(operands);
 
 		testSingleOperand(math);
@@ -70,8 +70,8 @@ public class MultiplyVdeTest extends AbstractArithmeticVdeTest {
 
 		Multiply math = $.multiply();
 		List<Object> operands = new ArrayList<Object>();
-		operands.add(new Integer(1));
-		operands.add(new Integer(5));
+		operands.add(1);
+		operands.add(5);
 		math.setOperands(operands);
 
 		Object result = evaluate(math);
@@ -217,10 +217,10 @@ public class MultiplyVdeTest extends AbstractArithmeticVdeTest {
 
 	private Object[] getTimeSpanMultipliers() {
 		Object[] result = new Object[5];
-		result[0] = new Integer(2);
-		result[1] = new Long(2);
-		result[2] = new Float(2);
-		result[3] = new Double(2);
+		result[0] = 2;
+		result[1] = 2L;
+		result[2] = 2F;
+		result[3] = 2D;
 		result[4] = new BigDecimal(2);
 		return result;
 	}
@@ -296,13 +296,13 @@ public class MultiplyVdeTest extends AbstractArithmeticVdeTest {
 		List<List<Object>> result = new ArrayList<List<Object>>();
 
 		List<Object> list = new ArrayList<Object>();
-		list.add(new Long(1));
-		list.add(new Long(5));
+		list.add(1L);
+		list.add(5L);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Long(5));
-		list.add(new Integer(1));
+		list.add(5L);
+		list.add(1);
 		result.add(list);
 
 		return result;
@@ -312,18 +312,18 @@ public class MultiplyVdeTest extends AbstractArithmeticVdeTest {
 		List<List<Object>> result = new ArrayList<List<Object>>();
 
 		List<Object> list = new ArrayList<Object>();
-		list.add(new Float(5));
-		list.add(new Float(1));
+		list.add(5F);
+		list.add(1F);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Float(1));
-		list.add(new Integer(5));
+		list.add(1F);
+		list.add(5);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Float(5));
-		list.add(new Long(1));
+		list.add(5F);
+		list.add(1L);
 		result.add(list);
 
 		return result;
@@ -333,23 +333,23 @@ public class MultiplyVdeTest extends AbstractArithmeticVdeTest {
 		List<List<Object>> result = new ArrayList<List<Object>>();
 
 		List<Object> list = new ArrayList<Object>();
-		list.add(new Double(5));
-		list.add(new Double(1));
+		list.add(5D);
+		list.add(1D);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Double(1));
-		list.add(new Integer(5));
+		list.add(1D);
+		list.add(5);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Double(5));
-		list.add(new Long(1));
+		list.add(5D);
+		list.add(1L);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Double(5));
-		list.add(new Float(1));
+		list.add(5D);
+		list.add(1F);
 		result.add(list);
 
 		return result;
@@ -365,22 +365,22 @@ public class MultiplyVdeTest extends AbstractArithmeticVdeTest {
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(1));
-		list.add(new Integer(5));
+		list.add(5);
 		result.add(list);
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(5));
-		list.add(new Long(1));
+		list.add(1L);
 		result.add(list);
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(1));
-		list.add(new Float(5));
+		list.add(5F);
 		result.add(list);
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(1));
-		list.add(new Double(5));
+		list.add(5D);
 		result.add(list);
 
 		return result;

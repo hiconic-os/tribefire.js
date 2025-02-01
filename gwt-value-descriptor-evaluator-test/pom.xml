@@ -63,10 +63,5 @@ limitations under the License.
             <artifactId>gwt-gm-core4-jvm</artifactId>
             <version>${V.tribefire.js}</version>
         </dependency>
-        <dependency>
-            <groupId>tribefire.js</groupId>
-            <artifactId>gwt-service-api-commons</artifactId>
-            <version>${V.tribefire.js}</version>
-        </dependency>
     </dependencies>
 </project>

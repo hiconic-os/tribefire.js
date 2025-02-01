@@ -55,7 +55,7 @@ public class MinVdeTest extends AbstractArithmeticVdeTest {
 
 		Min math = $.min();
 		List<Object> operands = new ArrayList<Object>();
-		operands.add(new Integer(3));
+		operands.add(3);
 		math.setOperands(operands);
 
 		testSingleOperand(math);
@@ -66,13 +66,13 @@ public class MinVdeTest extends AbstractArithmeticVdeTest {
 
 		Min math = $.min();
 		List<Object> operands = new ArrayList<Object>();
-		operands.add(new Integer(2));
-		operands.add(new Integer(3));
-		operands.add(new Integer(1));
+		operands.add(2);
+		operands.add(3);
+		operands.add(1);
 		math.setOperands(operands);
 
 		Object result = evaluate(math);
-		validateIntegerResult(result, new Integer(1));
+		validateIntegerResult(result, 1);
 	}
 
 	@Test
@@ -85,7 +85,7 @@ public class MinVdeTest extends AbstractArithmeticVdeTest {
 
 			math.setOperands(operandList);
 			Object result = evaluate(math);
-			validateLongResult(result, new Long(2));
+			validateLongResult(result, 2L);
 		}
 
 		operandsMin = getLongOperandsMin();
@@ -95,7 +95,7 @@ public class MinVdeTest extends AbstractArithmeticVdeTest {
 
 			math.setOperands(operandList);
 			Object result = evaluate(math);
-			validateLongResult(result, new Long(2));
+			validateLongResult(result, 2L);
 		}
 	}
 
@@ -108,7 +108,7 @@ public class MinVdeTest extends AbstractArithmeticVdeTest {
 		for (List<Object> operandList : operandsMin) {
 			math.setOperands(operandList);
 			Object result = evaluate(math);
-			validateFloatResult(result, new Float(2));
+			validateFloatResult(result, 2F);
 		}
 
 		operandsMin = getFloatOperandsMin();
@@ -118,7 +118,7 @@ public class MinVdeTest extends AbstractArithmeticVdeTest {
 
 			math.setOperands(operandList);
 			Object result = evaluate(math);
-			validateFloatResult(result, new Float(2));
+			validateFloatResult(result, 2F);
 		}
 	}
 
@@ -131,7 +131,7 @@ public class MinVdeTest extends AbstractArithmeticVdeTest {
 		for (List<Object> operandList : operandsMin) {
 			math.setOperands(operandList);
 			Object result = evaluate(math);
-			validateDoubleResult(result, new Double(2));
+			validateDoubleResult(result, 2D);
 		}
 
 		operandsMin = getDoubleOperandsMin();
@@ -141,7 +141,7 @@ public class MinVdeTest extends AbstractArithmeticVdeTest {
 
 			math.setOperands(operandList);
 			Object result = evaluate(math);
-			validateDoubleResult(result, new Double(2));
+			validateDoubleResult(result, 2D);
 		}
 	}
 
@@ -171,15 +171,15 @@ public class MinVdeTest extends AbstractArithmeticVdeTest {
 		List<List<Object>> result = new ArrayList<List<Object>>();
 
 		List<Object> list = new ArrayList<Object>();
-		list.add(new Long(2));
-		list.add(new Long(3));
-		list.add(new Long(4));
+		list.add(2L);
+		list.add(3L);
+		list.add(4L);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Long(2));
-		list.add(new Integer(3));
-		list.add(new Long(4));
+		list.add(2L);
+		list.add(3);
+		list.add(4L);
 		result.add(list);
 
 		return result;
@@ -189,21 +189,21 @@ public class MinVdeTest extends AbstractArithmeticVdeTest {
 		List<List<Object>> result = new ArrayList<List<Object>>();
 
 		List<Object> list = new ArrayList<Object>();
-		list.add(new Float(2));
-		list.add(new Float(3));
-		list.add(new Float(4));
+		list.add(2F);
+		list.add(3F);
+		list.add(4F);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Float(2));
-		list.add(new Integer(3));
-		list.add(new Float(4));
+		list.add(2F);
+		list.add(3);
+		list.add(4F);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Float(2));
-		list.add(new Long(3));
-		list.add(new Float(4));
+		list.add(2F);
+		list.add(3L);
+		list.add(4F);
 		result.add(list);
 
 		return result;
@@ -213,27 +213,27 @@ public class MinVdeTest extends AbstractArithmeticVdeTest {
 		List<List<Object>> result = new ArrayList<List<Object>>();
 
 		List<Object> list = new ArrayList<Object>();
-		list.add(new Double(2));
-		list.add(new Double(3));
-		list.add(new Double(4));
+		list.add(2D);
+		list.add(3D);
+		list.add(4D);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Double(2));
-		list.add(new Integer(3));
-		list.add(new Double(4));
+		list.add(2D);
+		list.add(3);
+		list.add(4D);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Double(2));
-		list.add(new Long(3));
-		list.add(new Double(4));
+		list.add(2D);
+		list.add(3L);
+		list.add(4D);
 		result.add(list);
 
 		list = new ArrayList<Object>();
-		list.add(new Double(2));
-		list.add(new Float(3));
-		list.add(new Double(4));
+		list.add(2D);
+		list.add(3F);
+		list.add(4D);
 		result.add(list);
 
 		return result;
@@ -250,25 +250,25 @@ public class MinVdeTest extends AbstractArithmeticVdeTest {
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(2));
-		list.add(new Integer(3));
+		list.add(3);
 		list.add(new BigDecimal(4));
 		result.add(list);
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(2));
-		list.add(new Long(3));
+		list.add(3L);
 		list.add(new BigDecimal(4));
 		result.add(list);
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(2));
-		list.add(new Float(3));
+		list.add(3F);
 		list.add(new BigDecimal(4));
 		result.add(list);
 
 		list = new ArrayList<Object>();
 		list.add(new BigDecimal(2));
-		list.add(new Double(3));
+		list.add(3D);
 		list.add(new BigDecimal(4));
 		result.add(list);
 

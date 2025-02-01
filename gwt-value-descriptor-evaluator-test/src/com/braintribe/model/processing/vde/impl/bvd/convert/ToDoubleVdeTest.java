@@ -41,7 +41,7 @@ public class ToDoubleVdeTest extends VdeTest {
 		Object result = evaluate(convert);
 		assertThat(result).isNotNull();
 		assertThat(result).isInstanceOf(Double.class);
-		assertThat(result).isEqualTo(new Double(4));
+		assertThat(result).isEqualTo(4D);
 	}
 
 	@Test(expected = VdeRuntimeException.class)
@@ -63,14 +63,14 @@ public class ToDoubleVdeTest extends VdeTest {
 		Object result = evaluate(convert);
 		assertThat(result).isNotNull();
 		assertThat(result).isInstanceOf(Double.class);
-		assertThat(result).isEqualTo(new Double(1));
+		assertThat(result).isEqualTo(1D);
 
 		convert.setOperand(false);
 
 		result = evaluate(convert);
 		assertThat(result).isNotNull();
 		assertThat(result).isInstanceOf(Double.class);
-		assertThat(result).isEqualTo(new Double(0));
+		assertThat(result).isEqualTo(0D);
 	}
 
 	@Test(expected = VdeRuntimeException.class)

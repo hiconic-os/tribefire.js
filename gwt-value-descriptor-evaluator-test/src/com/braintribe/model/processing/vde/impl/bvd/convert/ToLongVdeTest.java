@@ -42,7 +42,7 @@ public class ToLongVdeTest extends VdeTest {
 		Object result = evaluate(convert);
 		assertThat(result).isNotNull();
 		assertThat(result).isInstanceOf(Long.class);
-		assertThat(result).isEqualTo(new Long(4));
+		assertThat(result).isEqualTo(4L);
 	}
 
 	@Test(expected = VdeRuntimeException.class)
@@ -64,14 +64,14 @@ public class ToLongVdeTest extends VdeTest {
 		Object result = evaluate(convert);
 		assertThat(result).isNotNull();
 		assertThat(result).isInstanceOf(Long.class);
-		assertThat(result).isEqualTo(new Long(1));
+		assertThat(result).isEqualTo(1L);
 
 		convert.setOperand(false);
 
 		result = evaluate(convert);
 		assertThat(result).isNotNull();
 		assertThat(result).isInstanceOf(Long.class);
-		assertThat(result).isEqualTo(new Long(0));
+		assertThat(result).isEqualTo(0L);
 	}
 
 	@Test

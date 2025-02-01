@@ -155,13 +155,13 @@ public class GreaterVdeTest extends AbstractPredicateVdeTest {
 	public void testIntegerGreater() throws Exception {
 
 		Greater predicate = $.greater();
-		predicate.setLeftOperand(new Integer(3));
-		predicate.setRightOperand(new Integer(2));
+		predicate.setLeftOperand(3);
+		predicate.setRightOperand(2);
 
 		Object result = evaluate(predicate);
 		validatePositiveResult(result);
 
-		predicate.setRightOperand(new Integer(4));
+		predicate.setRightOperand(4);
 
 		result = evaluate(predicate);
 		validateNegativeResult(result);
@@ -173,7 +173,7 @@ public class GreaterVdeTest extends AbstractPredicateVdeTest {
 
 		Greater predicate = $.greater();
 
-		predicate.setLeftOperand(new Long(3));
+		predicate.setLeftOperand(3L);
 		List<Object> operandsList = getLongOperandsGreater();
 		for (Object object : operandsList) {
 			predicate.setRightOperand(object);
@@ -182,7 +182,7 @@ public class GreaterVdeTest extends AbstractPredicateVdeTest {
 		}
 
 		// commutative
-		predicate.setRightOperand(new Long(4));
+		predicate.setRightOperand(4L);
 		for (Object object : operandsList) {
 			predicate.setLeftOperand(object);
 			Object result = evaluate(predicate);
@@ -195,7 +195,7 @@ public class GreaterVdeTest extends AbstractPredicateVdeTest {
 
 		Greater predicate = $.greater();
 
-		predicate.setLeftOperand(new Float(3));
+		predicate.setLeftOperand(3F);
 		List<Object> operandsList = getFloatOperandsGreater();
 		for (Object object : operandsList) {
 			predicate.setRightOperand(object);
@@ -204,7 +204,7 @@ public class GreaterVdeTest extends AbstractPredicateVdeTest {
 		}
 
 		// commutative
-		predicate.setRightOperand(new Float(4));
+		predicate.setRightOperand(4F);
 		for (Object object : operandsList) {
 			predicate.setLeftOperand(object);
 			Object result = evaluate(predicate);
@@ -217,7 +217,7 @@ public class GreaterVdeTest extends AbstractPredicateVdeTest {
 
 		Greater predicate = $.greater();
 
-		predicate.setLeftOperand(new Double(3));
+		predicate.setLeftOperand(3D);
 		List<Object> operandsList = getDoubleOperandsGreater();
 		for (Object object : operandsList) {
 			predicate.setRightOperand(object);
@@ -226,7 +226,7 @@ public class GreaterVdeTest extends AbstractPredicateVdeTest {
 		}
 
 		// commutative
-		predicate.setRightOperand(new Double(4));
+		predicate.setRightOperand(4D);
 		for (Object object : operandsList) {
 			predicate.setLeftOperand(object);
 			Object result = evaluate(predicate);
@@ -259,34 +259,34 @@ public class GreaterVdeTest extends AbstractPredicateVdeTest {
 	private List<Object> getDecimalOperandsGreater() {
 		List<Object> result = new ArrayList<Object>();
 		result.add(new BigDecimal(2));
-		result.add(new Double(2));
-		result.add(new Float(2));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2D);
+		result.add(2F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getDoubleOperandsGreater() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Double(2));
-		result.add(new Float(2));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2D);
+		result.add(2F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getFloatOperandsGreater() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Float(2));
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2F);
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 
 	private List<Object> getLongOperandsGreater() {
 		List<Object> result = new ArrayList<Object>();
-		result.add(new Long(2));
-		result.add(new Integer(2));
+		result.add(2L);
+		result.add(2);
 		return result;
 	}
 

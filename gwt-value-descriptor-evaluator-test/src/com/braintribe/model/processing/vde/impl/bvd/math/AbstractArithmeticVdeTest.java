@@ -32,7 +32,7 @@ public abstract class AbstractArithmeticVdeTest extends VdeTest {
 	}
 
 	protected void validateIntegerResult(Object result) {
-		validateIntegerResult(result, new Integer(5));
+		validateIntegerResult(result, 5);
 	}
 
 	protected void validateLongResult(Object result, Long expected) {
@@ -42,7 +42,7 @@ public abstract class AbstractArithmeticVdeTest extends VdeTest {
 	}
 
 	protected void validateLongResult(Object result) {
-		validateLongResult(result, new Long(5));
+		validateLongResult(result, 5L);
 	}
 
 	protected void validateFloatResult(Object result, Float expected) {
@@ -51,7 +51,7 @@ public abstract class AbstractArithmeticVdeTest extends VdeTest {
 		assertThat(result).isEqualTo(expected);
 	}
 	protected void validateFloatResult(Object result) {
-		validateFloatResult(result, new Float(5));
+		validateFloatResult(result, 5F);
 	}
 
 	protected void validateDoubleResult(Object result, Double expected) {
@@ -61,7 +61,7 @@ public abstract class AbstractArithmeticVdeTest extends VdeTest {
 	}
 
 	protected void validateDoubleResult(Object result) {
-		validateDoubleResult(result, new Double(5));
+		validateDoubleResult(result, 5D);
 	}
 
 	protected void validateDecimalResult(Object result, BigDecimal expected) {

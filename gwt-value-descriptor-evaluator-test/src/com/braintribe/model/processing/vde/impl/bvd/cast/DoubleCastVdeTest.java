@@ -47,7 +47,7 @@ public class DoubleCastVdeTest extends VdeTest {
 
 	@Test(expected = VdeRuntimeException.class)
 	public void testBooleanToDoubleCastFail() throws Exception {
-		Boolean x = new Boolean(true);
+		Boolean x = Boolean.TRUE;
 
 		DoubleCast cast = $.doubleCast();
 		cast.setOperand(x);

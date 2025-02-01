@@ -60,7 +60,7 @@ public class ToDateVdeTest extends VdeTest {
 
 		ToDate convert = $.toDate();
 		convert.setOperand("2001-07-04T12:08:56.235-0700");
-		convert.setFormat(new Integer(3)); // wrong format
+		convert.setFormat(3); // wrong format
 
 		evaluate(convert);
 	}
