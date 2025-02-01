@@ -20,7 +20,7 @@ limitations under the License.
         <version>[3.0,3.1)</version>
     </parent>
     <artifactId>tf-js</artifactId>
-    <version>3.0.161</version>
+    <version>3.0.162</version>
     <packaging>war</packaging>
     <properties>
         <gwt-compatible>true</gwt-compatible>
