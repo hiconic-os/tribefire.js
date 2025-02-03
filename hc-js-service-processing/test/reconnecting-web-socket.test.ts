@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { Server } from 'mock-socket';
 import { ReconnectingWebSocket } from '../src/reconnecting-web-socket.js';
-import { WebSocketAwaiter } from './util/web-socket-utils.js';
+import { WebSocketAwaiters } from './util/web-socket-utils.js';
 
 
 describe('Reconnecting Web Socket tests', () => {
@@ -13,7 +13,7 @@ describe('Reconnecting Web Socket tests', () => {
 
     let events: string[]
 
-    const wsAwaiter = new WebSocketAwaiter();
+    const wsAwaiter = new WebSocketAwaiters();
 
     beforeEach(() => {
         events = [] as string[]
@@ -25,19 +25,19 @@ describe('Reconnecting Web Socket tests', () => {
 
         console.log("Setting Up Event Handlers");
         client.onopen = () => {
-            wsAwaiter.resolve4Open!()
+            wsAwaiter.openAwaiter.resolve()
             onClientEvent("open");
         }
         client.onmessage = (event) => {
-            wsAwaiter.resolve4Message!()
+            wsAwaiter.messageAwaiter.resolve()
             onClientEvent(event.data);
         }
         client.onclose = () => {
-            wsAwaiter.resolve4Close!()
+            wsAwaiter.closeAwaiter.resolve()
             onClientEvent("close");
         }
         client.onerror = () => {
-            wsAwaiter.resolve4Error!()
+            wsAwaiter.errorAwaiter.resolve()
             onClientEvent("error");
         }
 
@@ -56,49 +56,50 @@ describe('Reconnecting Web Socket tests', () => {
 
         // if we don't wait here, the next test's will client will immediately be notified with onclose
         console.log("Waiting for client to close.");
-        await wsAwaiter.awaitClientClose();
+        await wsAwaiter.closeAwaiter.await();
         console.log("Client closed.");
     })
 
 
     it('receives an echo from the server', async () => {
-        await wsAwaiter.awaitClientOpen();
+        await wsAwaiter.openAwaiter.await();
         client.send("Hello");
 
-        await wsAwaiter.awaitClientMessage();
+        await wsAwaiter.messageAwaiter.await();
         expect(events).toEqual(["open", "Echo: Hello"]);
     })
 
     it('receives an echo from the server (again)', async () => {
-        await wsAwaiter.awaitClientOpen();
+        await wsAwaiter.openAwaiter.await();
         client.send("Hello");
 
-        await wsAwaiter.awaitClientMessage();
+        await wsAwaiter.messageAwaiter.await();
         expect(events).toEqual(["open", "Echo: Hello"]);
     })
 
     it('reconnects when server closes connection', async () => {
-        await wsAwaiter.awaitClientOpen();
+        await wsAwaiter.openAwaiter.await();
         client.send("close");
 
-        await wsAwaiter.awaitClientClose();
+        await wsAwaiter.closeAwaiter.await();
         expect(events).toEqual(["open", "close"]);
 
-        await wsAwaiter.awaitClientOpen();
+        await wsAwaiter.openAwaiter.await();
         expect(events).toEqual(["open", "close", "open"]);
     })
 
     it('reconnects when client connection has an error', async () => {
-        await wsAwaiter.awaitClientOpen();
+        await wsAwaiter.openAwaiter.await();
         client.webSocket().onerror!(new Event("Intentional Test Error"));
+        client.webSocket().close()
 
         console.log("[Test] Waiting for client error.");
-        await wsAwaiter.awaitClientError();
+        await wsAwaiter.errorAwaiter.await();
         expect(events).toEqual(["open", "error"]);
 
         console.log("[Test] Waiting for client to reopen.");
-        await wsAwaiter.awaitClientOpen();
-        expect(events).toEqual(["open", "error", "open"]);
+        await wsAwaiter.openAwaiter.await();
+        expect(events).toEqual(["open", "error", "close", "open"]);
     })
 
 })

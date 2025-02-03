@@ -23,7 +23,6 @@ export class ReconnectingWebSocket {
     #reconnectParams: WsReconnectionParams;
 
     #failedBefore = false;
-    #closingOnError = false;
     #wasIntentionallyClosed = false;
     #timeout: number;
 
@@ -42,8 +41,13 @@ export class ReconnectingWebSocket {
      *  
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebSocket/close_event) */
     onclose: ((ev: CloseEvent) => any) | null = null;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebSocket/error_event) */
+
+    /** onerror event of the underlying WebSocket 
+     * Not that this is called not just the fist time, but also after every reconnection.
+     * 
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebSocket/error_event) */
     onerror: ((ev: Event) => any) | null = null;
+
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebSocket/message_event) */
     onmessage: ((ev: MessageEvent) => any) | null = null;
 
@@ -86,19 +90,11 @@ export class ReconnectingWebSocket {
         this.#webSocket.onerror = error => {
             this.logDebug('Error:', error);
             this.onerror?.(error);
-
-            if (!this.#closingOnError) {
-                this.#webSocket.close();
-                this.#closingOnError = true;
-            }
         }
+
         this.#webSocket.onclose = closeEvent => {
-            if (this.#closingOnError) {
-                this.#closingOnError = false;
-            } else {
-                this.logDebug(`WebSocket connection to: ${this.#url} was closed. Reason: `, closeEvent.reason);
-                this.onclose?.(closeEvent);
-            }
+            this.logDebug(`WebSocket connection to: ${this.#url} was closed. Reason: `, closeEvent.reason);
+            this.onclose?.(closeEvent);
 
             // if this was closed by calling the close() method,we are obviously not gonna try to reconnect.
             if (this.#wasIntentionallyClosed)
