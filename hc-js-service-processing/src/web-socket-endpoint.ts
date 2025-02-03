@@ -5,7 +5,6 @@ import { ReconnectingWebSocket, WsReconnectionParams } from "./reconnecting-web-
 export type WsServiceEndpointProps = WsReconnectionParams & {
     sessionId?: string;
 
-    /** This is called immediately after the P */
     onChannelIdAssigned?: (channelId: string) => void;
 }
 
@@ -103,7 +102,6 @@ export class WebSocketServiceEndpoint {
             }
         }
 
-
         this.#webSocket.onmessage = channelIdFromFirstMessageResolvingHandler
 
         return promise;
@@ -127,8 +125,8 @@ export class WebSocketServiceEndpoint {
             const maybeResult = await (entity as ServiceRequest).EvalAndGetReasoned(this.#evaluator);
             if (!maybeResult.isSatisfied())
                 console.error(
-                    "[ERROR] Processing PushNotification failed because: " +
-                    maybeResult.whyUnsatisfied().text + ". Request:", entity);
+                    "[ERROR] Processing PushNotification failed because: ",
+                    maybeResult.whyUnsatisfied().Stringify(), ". Request:", entity);
         } else {
             console.log("[WARNING] Received push notification that is not a ServiceRequest: " + entity);
         }

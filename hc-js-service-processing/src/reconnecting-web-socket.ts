@@ -31,24 +31,28 @@ export class ReconnectingWebSocket {
 
     // Events on the underlying WebSocket
 
-    /** onopen event of the underlying WebSocket.
-     * Not that this is called not just the fist time, but also after every reconnection.
+    /**
+     * onopen event of the underlying WebSocket (i.e. called after every reconnection).
      *  
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebSocket/open_event)*/
     onopen: ((ev: Event) => any) | null = null;
-    /** onclose event of the underlying WebSocket.
-     * Not that this is called not just the fist time, but also after every reconnection.
+
+    /**
+     * onclose event of the underlying WebSocket (i.e. called after every reconnection).
      *  
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebSocket/close_event) */
     onclose: ((ev: CloseEvent) => any) | null = null;
 
-    /** onerror event of the underlying WebSocket 
-     * Not that this is called not just the fist time, but also after every reconnection.
+    /** 
+     * onerror event of the underlying WebSocket, with a potential to be called after every reconnection.
      * 
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebSocket/error_event) */
     onerror: ((ev: Event) => any) | null = null;
 
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebSocket/message_event) */
+    /** 
+     * onmessage event of the underlying WebSocket.
+     * 
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebSocket/message_event) */
     onmessage: ((ev: MessageEvent) => any) | null = null;
 
     constructor(url: string, reconnectParams: WsReconnectionParams = {}) {
@@ -117,6 +121,6 @@ export class ReconnectingWebSocket {
 
     private logDebug(...message: any[]) {
         if (this.#reconnectParams.debug)
-            console.log("[Reconnecting WebSocket] ", ...message);
+            console.log("[ReconnectingWebSocket] ", ...message);
     }
 }
