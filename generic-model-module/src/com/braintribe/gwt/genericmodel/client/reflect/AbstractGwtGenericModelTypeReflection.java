@@ -41,13 +41,12 @@ import jsinterop.context.JsKeywords;
 public abstract class AbstractGwtGenericModelTypeReflection extends AbstractGenericModelTypeReflection {
 
 	static {
-		ensureSymbols();
+		ensureSymbols(TypePackage.getHcNsRoot());
 	}
 
-	private static native void ensureSymbols() /*-{
-		$wnd.hc = $wnd.hc || {};
-		$wnd.hc.Symbol = $wnd.hc.Symbol || {};
-		$wnd.hc.Symbol.enumType = Symbol('$enumType');
+	private static native void ensureSymbols(JavaScriptObject hcNs) /*-{
+		hcNs.Symbol = hcNs.Symbol || {};
+		hcNs.Symbol.enumType = Symbol('$enumType');
 	}-*/;
 
 	@Override
@@ -77,7 +76,7 @@ public abstract class AbstractGwtGenericModelTypeReflection extends AbstractGene
 	}
 
 	private static native void defineEnumType(JavaScriptObject enumObject, EnumType<?> type) /*-{
-		enumObject[$wnd.hc.Symbol.enumType] = type;
+		enumObject[$hcjs.hc.Symbol.enumType] = type;
 	}-*/;
 
 	private static native void defineConstant(JavaScriptObject enumObject, String name, Enum<?> value) /*-{

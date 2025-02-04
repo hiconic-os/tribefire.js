@@ -37,7 +37,7 @@ public class HcJsInitializer {
 
 	// Just in case, this is an alternative without eval:
 
-	// $wnd.Double = function Double(value) {
+	// $hcjs.T.Double = function Double(value) {
 	// Object.defineProperty(this, 'value', {
 	// value: value.valueOf(),
 	// writable: false,
@@ -46,12 +46,12 @@ public class HcJsInitializer {
 	// };
 	//
 	// // Set up inheritance
-	// $wnd.Double.prototype = Object.create(Number.prototype);
-	// $wnd.Double.prototype.constructor = $wnd.Double;
-	// $wnd.Double.prototype.valueOf = function() {
+	// $hcjs.T.Double.prototype = Object.create(Number.prototype);
+	// $hcjs.T.Double.prototype.constructor = $hcjs.T.Double;
+	// $hcjs.T.Double.prototype.valueOf = function() {
 	// return this.value;
 	// };
-	// $wnd.Double.prototype.toString = function() {
+	// $hcjs.T.Double.prototype.toString = function() {
 	// return this.value.toString();
 	// };
 

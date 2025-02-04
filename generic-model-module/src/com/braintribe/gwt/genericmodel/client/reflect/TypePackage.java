@@ -26,42 +26,64 @@ import jsinterop.context.JsKeywords;
 
 @SuppressWarnings("unusable-by-js")
 public class TypePackage {
-	
+
 	public static final String GM_TYPE_NAMESPACE = "T";
 
 	public static Map<String, JavaScriptObject> packagesByQualfiedName = newMap();
-	
+
 	// WHY IS THIS HERE???
 	public static native TypePackage instance() /*-{
 		return this;
 	}-*/;
 
-	public static native JavaScriptObject getRoot() /*-{
-	    return $wnd.T || ($wnd.T = {});
+	public static JavaScriptObject getRoot() {
+		return getRoot(getHcjsNs());
+	}
+
+	public static JavaScriptObject getHcNsRoot() {
+		return getHcNsRoot(getHcjsNs());
+	}
+
+	private static native JavaScriptObject getHcjsNs() /*-{
+		if (typeof $hcjs == 'undefined') {
+			// fallback for tests / non-NPM module builds
+			globalThis.$hcjs = {};
+			globalThis.$hcjs.T = $wnd.T || ($wnd.T = {});
+			globalThis.$hcjs.hc = $wnd.hc || ($wnd.hc = {});
+		}
+
+		return $hcjs;
+	}-*/;
+
+	public static native JavaScriptObject getRoot(JavaScriptObject hcjsNs) /*-{
+	    return hcjsNs.T || (hcjsNs.T = {});
+	}-*/;
+
+	public static native JavaScriptObject getHcNsRoot(JavaScriptObject hcjsNs) /*-{
+	    return hcjsNs.hc || (hcjsNs.hc = {});
 	}-*/;
 
 	public static final void register(GenericModelType type, Object jsObjectToRegister) {
 		String typesig = type.getTypeSignature();
-		
+
 		int index = typesig.lastIndexOf('.');
-		
+
 		String simpleName = null;
 		String packagePath = null;
-		
+
 		if (index != -1) {
 			simpleName = typesig.substring(index + 1);
 			packagePath = typesig.substring(0, index);
-		}
-		else {
+		} else {
 			simpleName = typesig;
 		}
-		
+
 		JavaScriptObject typePackage = acquireJsObjectForPackagePath(packagePath);
-		
+
 		TypePackage.set(typePackage, simpleName, jsObjectToRegister);
-		
+
 	}
-	
+
 	public static JavaScriptObject acquireJsObjectForPackagePath(String packagePath) {
 		JavaScriptObject typePackage = packagePath == null ? getRoot() : packagesByQualfiedName.get(packagePath);
 
@@ -85,8 +107,8 @@ public class TypePackage {
 	public static final native JavaScriptObject getPackage(JavaScriptObject parent, String name) /*-{
 		return parent[name];
 	}-*/;
-	
+
 	public static final native void set(JavaScriptObject parent, String name, Object value) /*-{
 		parent[name] = value;
-	}-*/;  
+	}-*/;
 }
