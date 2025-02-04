@@ -18,7 +18,7 @@ import java.util.Iterator;
 	public static native <T> JsIterable<T> iterable(Iterable<T> itbl) /*-{
 	    var result = {};
 	    result[Symbol.iterator] = function () {
-	        it = itbl.@Iterable::iterator()();
+	        var it = itbl.@Iterable::iterator()();
 	        return {
 	            next: function() {
 	                if (it.@Iterator::hasNext()()) {
