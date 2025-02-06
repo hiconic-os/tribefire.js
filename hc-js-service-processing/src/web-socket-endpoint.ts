@@ -46,36 +46,17 @@ export class WebSocketServiceEndpoint {
     }
 
     // returns the first channelId
-    async openWebSocketWithChannelId(): Promise<string> {
+    async openWebSocketWithChannelId(): Promise<void> {
         const wsUrl = this.wsUrl();
         this.logDebug("WS URL: " + wsUrl);
 
         this.#webSocket = new ReconnectingWebSocket(wsUrl, this.#optionalProps);
 
-        let promiseHandled = false;
-        let resolve: any
-        let reject: any;
-
-        const promise = new Promise<string>((res, rej) => {
-            resolve = res;
-            reject = rej;
-        })
-
         const channelIdFromFirstMessageResolvingHandler: ((ev: MessageEvent) => any) = messageEvent => {
-            if (promiseHandled) {
-                this.logDebug("Unexpected: WebSocket has already been established or failed.");
-                return;
-            }
-
             this.#channelId = messageEvent.data;
             this.logDebug("Established WebSocket connection with channelId: " + this.#channelId);
 
             this.#webSocket!.onmessage = messageEvent => this.handleWsMessage(messageEvent)
-
-            if (!promiseHandled)
-                resolve(this.#channelId!);
-            else
-                promiseHandled = true;
 
             this.#optionalProps?.onChannelIdAssigned?.(this.#channelId!);
         }
@@ -88,23 +69,13 @@ export class WebSocketServiceEndpoint {
 
         this.#webSocket.onerror = error => {
             console.error("Error with WebSocket connection to: " + wsUrl, error);
-            if (!promiseHandled) {
-                reject(error);
-                promiseHandled = true;
-            }
         }
 
         this.#webSocket.onclose = closeEvent => {
             this.logDebug(`Lost WebSocket connection to: ${wsUrl}. Reason: ${closeEvent.reason}`);
-            if (!promiseHandled) {
-                reject(closeEvent.reason);
-                promiseHandled = true;
-            }
         }
 
         this.#webSocket.onmessage = channelIdFromFirstMessageResolvingHandler
-
-        return promise;
     }
 
     private wsUrl(): string {

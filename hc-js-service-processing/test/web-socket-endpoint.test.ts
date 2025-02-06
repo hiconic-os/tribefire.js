@@ -4,7 +4,7 @@ import { WebSocketServiceEndpoint } from '../src/web-socket-endpoint.js';
 import { LocalEvaluator } from '../src/evaluator.js';
 import { eval_ } from '@dev.hiconic/tf.js_hc-js-api';
 import { ServiceRequest } from '@dev.hiconic/gm_service-api-model';
-import { Awaiter, WebSocketAwaiters } from './util/web-socket-utils.js';
+import { Awaiter, WebSocketAwaiters } from './util/awaiters.js';
 
 const SERVER_URL = "ws://localhost:420";
 const TEST_CHANNEL_ID = "CHANNEL_ID"
@@ -26,6 +26,8 @@ describe('Reconnecting Web Socket tests', () => {
         channelIdAwaiter.resolve(channelId);
     }
 
+    const currentWebSocket = () => endpoint.webSocket()?.webSocket()!;
+
     beforeEach(async () => {
         beforeWasOk = false;
 
@@ -34,11 +36,10 @@ describe('Reconnecting Web Socket tests', () => {
 
         console.log("[Before] Setting Up Client");
         evaluator = new LocalEvaluator();
-        endpoint = new WebSocketServiceEndpoint(evaluator, SERVER_URL, "testClientId", { onChannelIdAssigned });
+        endpoint = new WebSocketServiceEndpoint(evaluator, SERVER_URL, "testClientId", { onChannelIdAssigned, debug: true });
 
         console.log("[Before] Connecting Client");
-        const channelId = await endpoint.openWebSocketWithChannelId();
-        expect(channelId).toBe(FIRST_TEST_CHANNEL_ID);
+        await endpoint.openWebSocketWithChannelId();
 
         endpoint.webSocket()!.onmessage = (event) => {
             console.log(`[Client] received: ${event.data}`);
@@ -64,24 +65,24 @@ describe('Reconnecting Web Socket tests', () => {
 
         // if we don't wait here, the next test's will client will immediately be notified with onclose
         console.log("[After] Waiting for client to close.");
-        await wsAwaiters.closeAwaiter.await();
+        await wsAwaiters.closeAwaiter.awaitNext();
         console.log("[After] Client closed.");
     })
 
-    it('tests channelId sent as first message', async () => {
+    it('tests channelId received as first message', async () => {
         console.log("[Test] Waiting for channelId to be established.");
 
-        const channelId = await channelIdAwaiter.await();
+        const channelId = await channelIdAwaiter.awaitNext();
         expect(channelId).toEqual(FIRST_TEST_CHANNEL_ID);
 
         console.log("[Test] Channel ID: ", endpoint.channelId());
         expect(endpoint.channelId()).toEqual(FIRST_TEST_CHANNEL_ID);
     })
 
-    it('tests channelId sent as first message after reconnect', async () => {
+    it('tests channelId received as first message after reconnect due to close', async () => {
         console.log("[Test] Waiting for channelId to be established.");
 
-        const channelId = await channelIdAwaiter.await();
+        const channelId = await channelIdAwaiter.awaitNext();
         expect(channelId).toEqual(FIRST_TEST_CHANNEL_ID);
 
         console.log("[Test] Channel ID: ", endpoint.channelId());
@@ -90,21 +91,49 @@ describe('Reconnecting Web Socket tests', () => {
         // Now let's close the underlying WebSocket
         // ReconnectingWebSocket will reconnect, and we get a new pushChannelId
         console.log("[Test] Closing WebSocket: ", endpoint.channelId());
-        endpoint.webSocket()?.webSocket()?.close()
+        currentWebSocket().close()
 
         console.log("[Test] Waiting for new message.");
-        const newChannelId = await channelIdAwaiter.await();
+        const newChannelId = await channelIdAwaiter.awaitNext();
         expect(newChannelId).toEqual(TEST_CHANNEL_ID + "-2");
 
         // Let's do it again fo good measure
         console.log("[Test] Closing WebSocket: ", endpoint.channelId());
-        endpoint.webSocket()?.webSocket()?.close()
+        currentWebSocket().close()
 
         console.log("[Test] Waiting for new message.");
-        const newChannelId2 = await channelIdAwaiter.await();
+        const newChannelId2 = await channelIdAwaiter.awaitNext();
         expect(newChannelId2).toEqual(TEST_CHANNEL_ID + "-3");
     })
 
+    it('tests channelId received as first message after reconnect due to error', async () => {
+        console.log("[Test] Waiting for channelId to be established.");
+
+        const channelId = await channelIdAwaiter.awaitNext();
+        expect(channelId).toEqual(FIRST_TEST_CHANNEL_ID);
+
+        console.log("[Test] Channel ID: ", endpoint.channelId());
+        expect(endpoint.channelId()).toEqual(FIRST_TEST_CHANNEL_ID);
+
+        // Now let's close the underlying WebSocket
+        // ReconnectingWebSocket will reconnect, and we get a new pushChannelId
+        console.log("[Test] Closing WebSocket: ", endpoint.channelId());
+        currentWebSocket().close()
+
+        console.log("[Test] Waiting for new message.");
+        const newChannelId = await channelIdAwaiter.awaitNext();
+        expect(newChannelId).toEqual(TEST_CHANNEL_ID + "-2");
+
+        // Let's do it again fo good measure
+        console.log("[Test] Closing WebSocket: ", endpoint.channelId());
+
+        currentWebSocket().onerror!(new Event("Intentional Error To Test Reconnect"));
+        currentWebSocket().close()
+
+        console.log("[Test] Waiting for new message.");
+        const newChannelId2 = await channelIdAwaiter.awaitNext();
+        expect(newChannelId2).toEqual(TEST_CHANNEL_ID + "-3");
+    })
 })
 
 

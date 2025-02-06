@@ -20,11 +20,11 @@ export class WebSocketAwaiters {
  *
  * testExecution() {
  *   triggerSomething(); // this leads to 
- *   const str1 = await myValueAwaiter.await();
+ *   const str1 = await myValueAwaiter.awaitNext();
  *   // expect str1
  *
  *   triggerSomethingElse();
- *   const str2 = await myValueAwaiter.await();
+ *   const str2 = await myValueAwaiter.awaitNext();
  *   // expect str2
  * }
  */
@@ -36,7 +36,7 @@ export class Awaiter<T> {
         [this.promise, this.resolve] = newPromise();
     }
 
-    async await(): Promise<T> {
+    async awaitNext(): Promise<T> {
         const result = await this.promise;
         [this.promise, this.resolve] = newPromise();
         return result;
