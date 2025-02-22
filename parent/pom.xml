@@ -37,7 +37,9 @@ limitations under the License.
         <V.com.xedge>2.0</V.com.xedge>
         <V.javax.servlet>3.1.0</V.javax.servlet>
         <V.javax.validation>1.0.0.GA</V.javax.validation>
-        <V.org.vectomatic>0.5.10</V.org.vectomatic>
+        <V.org.vectomatic>0.5.10</V.org.vectomatic>        
+
+        <npmRegistryUrl>https://registry.npmjs.org</npmRegistryUrl>
     </properties>
     <licenses>
         <license>
