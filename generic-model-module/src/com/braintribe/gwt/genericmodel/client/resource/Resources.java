@@ -21,6 +21,7 @@ import com.braintribe.gwt.fileapi.client.Blob;
 import com.braintribe.gwt.fileapi.client.File;
 import com.braintribe.model.generic.GMF;
 import com.braintribe.model.generic.GmCoreApiInteropNamespaces;
+import com.braintribe.model.generic.session.InputStreamProvider;
 import com.braintribe.model.resource.Resource;
 import com.braintribe.model.resource.source.TransientSource;
 
@@ -31,13 +32,7 @@ public interface Resources {
 
 	@JsMethod(namespace = GmCoreApiInteropNamespaces.resources)
 	public static Resource fromBlob(Blob blob) {
-		String uuid = GMF.platform().newUuid();
-
-		GwtInputStreamProvider streamProvider = new GwtInputStreamProvider(blob);
-
-		TransientSource source = TransientSource.T.create();
-		source.setGlobalId(uuid);
-		source.setInputStreamProvider(streamProvider);
+		TransientSource source = sourceFromBlob(blob);
 
 		Resource resource = Resource.T.create();
 
@@ -50,6 +45,19 @@ public interface Resources {
 
 		return resource;
 	}
+	
+	@JsMethod(namespace = GmCoreApiInteropNamespaces.resources)
+	public static TransientSource sourceFromBlob(Blob blob) {
+		String uuid = GMF.platform().newUuid();
+
+		GwtInputStreamProvider streamProvider = new GwtInputStreamProvider(blob);
+
+		TransientSource source = TransientSource.T.create();
+		source.setGlobalId(uuid);
+		source.setInputStreamProvider(streamProvider);
+
+		return source;
+	}
 
 	@JsMethod(namespace = GmCoreApiInteropNamespaces.resources)
 	public static Resource fromFile(File file) {
@@ -57,5 +65,19 @@ public interface Resources {
 		resource.setName(file.getName());
 
 		return resource;
+	}
+	
+	@JsMethod(namespace = GmCoreApiInteropNamespaces.resources)
+	/**
+	 * Returns the associated {@link Blob} if existing otherwise null
+	 */
+	public static Blob hasBlob(TransientSource resource) {
+		InputStreamProvider provider = resource.getInputStreamProvider();
+		
+		if (provider instanceof GwtInputStreamProvider) {
+			return ((GwtInputStreamProvider) provider).blob();
+		}
+		
+		return null; 
 	}
 }
