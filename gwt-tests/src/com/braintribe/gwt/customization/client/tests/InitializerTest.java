@@ -23,7 +23,6 @@ import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.GmfException;
 import com.braintribe.model.generic.reflection.EntityType;
 import com.braintribe.model.meta.GmMetaModel;
-import com.braintribe.utils.lcd.CommonTools;
 
 /**
  * @author peter.gazdik

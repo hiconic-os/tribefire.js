@@ -42,7 +42,6 @@ import com.braintribe.model.meta.GmType;
 import com.braintribe.model.meta.data.HasMetaData;
 import com.braintribe.model.resource.Resource;
 
-
 /**
  * @author peter.gazdik
  */
@@ -63,7 +62,7 @@ public class InstanceOfTest extends AbstractGmGwtTest {
 		checkAssignability(HasMetaData.T, GmMetaModel.T, true);
 		checkAssignability(HasMetaData.T, GmEntityType.T, true);
 		checkAssignability(HasMetaData.T, GmEnumType.T, true);
-		
+
 		// negatives
 		logSeparator();
 		log("checking negative cases for compile-time types");
@@ -72,55 +71,62 @@ public class InstanceOfTest extends AbstractGmGwtTest {
 		checkAssignability(Resource.T, GmMetaModel.T, false);
 		checkAssignability(Resource.T, GmEntityType.T, false);
 		checkAssignability(Resource.T, GmEnumType.T, false);
-		
+
 		logSeparator();
 		log("checking runtime-time types");
 		log("creating models");
 		List<EntityType<?>> toBeVirtualized = Arrays.asList(InitializedSubEntity.T, InitializedEntity.T);
 		Set<String> typeNames = toBeVirtualized.stream().map(t -> t.getTypeSignature()).collect(Collectors.toSet());
 		GmMetaModel testModel = generateModel("test-model", toBeVirtualized);
-		
-		for (GmType type: testModel.getTypes()) {
+
+		for (GmType type : testModel.getTypes()) {
 			if (type.isEntity() && typeNames.contains(type.getTypeSignature())) {
 				GmEntityType entityType = (GmEntityType) type;
 				entityType.setTypeSignature(entityType.getTypeSignature() + SYNTHETIC);
 			}
 		}
-		
-		List<EntityType<?>> toBeVirtualized2 = Arrays.asList(
-				Derived.T, 
-				DerivedAbstractBase.T, 
-				StandaloneAbstractBase.T, 
-				AbstractDerivedAbstractBase.T, 
-				AbstractDerived.T,
-				DiamondAbstractBase.T,
-				DiamondAbstractIntermediate1.T,
-				DiamondAbstractIntermediate2.T,
-				DiamondTop.T);
-		
+
+		List<EntityType<?>> toBeVirtualized2 = Arrays.asList( //
+				Derived.T, //
+				DerivedAbstractBase.T, //
+				StandaloneAbstractBase.T, //
+				AbstractDerivedAbstractBase.T, //
+				AbstractDerived.T, //
+				DiamondAbstractBase.T, //
+				DiamondAbstractIntermediate1.T, //
+				DiamondAbstractIntermediate2.T, //
+				DiamondTop.T //
+		);
+
 		GmMetaModel testModel2 = generateModel("test-model2", toBeVirtualized2);
-		
-		GmEntityType runtimeDerivedAbstractBase = createDerivate("com.braintribe.model.virtual.RuntimeDerivedAbstractBase", testModel2, DerivedAbstractBase.T);
-		GmEntityType runtimeStandaloneAbstractBase = createDerivate("com.braintribe.model.virtual.RuntimeStandaloneAbstractBase", testModel2, StandaloneAbstractBase.T);
-		GmEntityType runtimeFromAbstractDerivedAbstractBase = createDerivate("com.braintribe.model.virtual.RuntimeFromAbstractDerivedAbstractBase", testModel2, AbstractDerivedAbstractBase.T);
+
+		GmEntityType runtimeDerivedAbstractBase = createDerivate("com.braintribe.model.virtual.RuntimeDerivedAbstractBase", testModel2,
+				DerivedAbstractBase.T);
+		GmEntityType runtimeStandaloneAbstractBase = createDerivate("com.braintribe.model.virtual.RuntimeStandaloneAbstractBase", testModel2,
+				StandaloneAbstractBase.T);
+		GmEntityType runtimeFromAbstractDerivedAbstractBase = createDerivate("com.braintribe.model.virtual.RuntimeFromAbstractDerivedAbstractBase",
+				testModel2, AbstractDerivedAbstractBase.T);
 		GmEntityType runtimeFromDerived = createDerivate("com.braintribe.model.virtual.RuntimeFromDerived", testModel2, Derived.T);
-		GmEntityType runtimeFromDiamondAbstractBase = createDerivate("com.braintribe.model.virtual.RuntimeFromDiamondAbstractBase", testModel2, DiamondAbstractBase.T);
-		GmEntityType runtimeFromDiamoneIntermediate1 = createDerivate("com.braintribe.model.virtual.RuntimeFromDiamoneIntermediate1", testModel2, DiamondAbstractIntermediate1.T);
-		
+		GmEntityType runtimeFromDiamondAbstractBase = createDerivate("com.braintribe.model.virtual.RuntimeFromDiamondAbstractBase", testModel2,
+				DiamondAbstractBase.T);
+		GmEntityType runtimeFromDiamoneIntermediate1 = createDerivate("com.braintribe.model.virtual.RuntimeFromDiamoneIntermediate1", testModel2,
+				DiamondAbstractIntermediate1.T);
+
 		log("weaving models");
 		testModel.deploy();
 		testModel2.deploy();
-		
+
 		EntityType<?> initializedSubEntitySyntheticType = GMF.getTypeReflection().getType(InitializedSubEntity.T.getTypeSignature() + SYNTHETIC);
 		EntityType<?> initializedEntitySyntheticType = GMF.getTypeReflection().getType(InitializedEntity.T.getTypeSignature() + SYNTHETIC);
-		
+
 		EntityType<?> runtimeDerivedAbstractBaseType = GMF.getTypeReflection().getType(runtimeDerivedAbstractBase.getTypeSignature());
 		EntityType<?> runtimeStandaloneAbstractBaseType = GMF.getTypeReflection().getType(runtimeStandaloneAbstractBase.getTypeSignature());
-		EntityType<?> runtimeFromAbstractDerivedAbstractBaseType = GMF.getTypeReflection().getType(runtimeFromAbstractDerivedAbstractBase.getTypeSignature());
+		EntityType<?> runtimeFromAbstractDerivedAbstractBaseType = GMF.getTypeReflection()
+				.getType(runtimeFromAbstractDerivedAbstractBase.getTypeSignature());
 		EntityType<?> runtimeFromDerivedType = GMF.getTypeReflection().getType(runtimeFromDerived.getTypeSignature());
 		EntityType<?> runtimeFromDiamondAbstractBaseType = GMF.getTypeReflection().getType(runtimeFromDiamondAbstractBase.getTypeSignature());
 		EntityType<?> runtimeFromDiamoneIntermediate1Type = GMF.getTypeReflection().getType(runtimeFromDiamoneIntermediate1.getTypeSignature());
-		
+
 		log("checking positive cases for runtime types");
 		checkAssignability(GenericEntity.T, initializedEntitySyntheticType, true);
 		checkAssignability(GenericEntity.T, initializedSubEntitySyntheticType, true);
@@ -132,7 +138,7 @@ public class InstanceOfTest extends AbstractGmGwtTest {
 		checkAssignability(Derived.T, runtimeFromDerivedType, true);
 		checkAssignability(DiamondAbstractBase.T, runtimeFromDiamondAbstractBaseType, true);
 		checkAssignability(DiamondAbstractBase.T, runtimeFromDiamoneIntermediate1Type, true);
-		
+
 		log("checking negative cases for runtime types");
 		checkAssignability(StandardIdentifiable.T, initializedEntitySyntheticType, false);
 		checkAssignability(Resource.T, initializedSubEntitySyntheticType, false);
@@ -146,58 +152,47 @@ public class InstanceOfTest extends AbstractGmGwtTest {
 		derivate.setGlobalId("type:" + typeSignature);
 		derivate.setIsAbstract(false);
 
-		for (EntityType<?> superType: superTypes) {
+		for (EntityType<?> superType : superTypes) {
 			GmEntityType gmSuperType = findType(model, superType);
 			derivate.getSuperTypes().add(gmSuperType);
 		}
-		
+
 		model.getTypes().add(derivate);
-		
+
 		return derivate;
 	}
 
 	private GmEntityType findType(GmMetaModel model, EntityType<?> type) {
-		GmEntityType gmSuperType = (GmEntityType) model.getTypes()
-			.stream()
-			.filter(t -> t.getTypeSignature().equals(type.getTypeSignature()))
-			.findFirst()
-			.get();
-		return gmSuperType;
-	}
-	
-	public static void main(String[] args) {
-		List<String> strings = Arrays.asList("one", "two", "three");
-		
-		String string = strings.stream().filter(s -> s.equals("two")).findFirst().orElse(null);
-		
-		System.out.println(string);
+		return (GmEntityType) model.getTypes() //
+				.stream() //
+				.filter(t -> t.getTypeSignature().equals(type.getTypeSignature())) //
+				.findFirst() //
+				.get();
 	}
 
 	private void checkAssignability(EntityType<?> type, EntityType<?> otherType, boolean expectedAssignability) {
 		// type assignability
 		boolean assignable = type.isAssignableFrom(otherType);
-		String issue = expectedAssignability? IS_ASSIGNABLE_TO_TYPE: IS_NOT_ASSIGNABLE_TO_TYPE;
-		
+		String issue = expectedAssignability ? IS_ASSIGNABLE_TO_TYPE : IS_NOT_ASSIGNABLE_TO_TYPE;
+
 		if (assignable != expectedAssignability) {
 			logError("  fail: type " + otherType.getShortName() + issue + type.getShortName());
-		}
-		else {
+		} else {
 			log("  match: type " + otherType.getShortName() + issue + type.getShortName());
 		}
-		
+
 		// instanceof
 		if (!otherType.isAbstract()) {
 			GenericEntity instance = otherType.create();
 			boolean instanceOf = type.isInstance(instance);
-			
+
 			if (instanceOf != expectedAssignability) {
 				logError("  fail: instance of " + instance.entityType().getShortName() + issue + type.getShortName());
-			}
-			else {
+			} else {
 				log("  match: instance of " + instance.entityType().getShortName() + issue + type.getShortName());
 			}
 		}
-		
+
 	}
-	
+
 }
