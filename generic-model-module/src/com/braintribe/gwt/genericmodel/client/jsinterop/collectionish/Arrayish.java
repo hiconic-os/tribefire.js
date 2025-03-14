@@ -24,6 +24,7 @@ import java.util.StringJoiner;
 import com.braintribe.gwt.browserfeatures.client.interop.JsConcatArray;
 import com.braintribe.gwt.browserfeatures.client.interop.JsIterableIterator;
 import com.braintribe.gwt.genericmodel.client.reflect.TypePackage;
+import com.braintribe.model.generic.collection.ArrayIface;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.i18n.client.Messages.Optional;
 
@@ -51,6 +52,11 @@ public class Arrayish<T> extends AbstractCollectionish<T> implements ArrayIface<
 	@Override
 	public Object wrappedCollection() {
 		return list;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return list.isEmpty();
 	}
 
 	// ############################################

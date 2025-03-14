@@ -145,7 +145,7 @@ public class EnumTypeImpl<E extends Enum<E>> extends AbstractCustomType implemen
 
 	@Override
 	public boolean isInstance(Object value) {
-		return javaType == value.getClass();
+		return value != null && javaType == value.getClass();
 	}
 
 	@Override
@@ -158,8 +158,4 @@ public class EnumTypeImpl<E extends Enum<E>> extends AbstractCustomType implemen
 		return false;
 	}
 
-	@Override
-	public boolean isEmpty(Object value) {
-		return value == null;
-	}
 }

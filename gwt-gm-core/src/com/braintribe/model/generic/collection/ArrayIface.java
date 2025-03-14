@@ -1,13 +1,11 @@
-package com.braintribe.gwt.genericmodel.client.jsinterop.collectionish;
-
-import com.braintribe.gwt.browserfeatures.client.JsCollections;
-import com.braintribe.gwt.genericmodel.client.reflect.TypePackage;
+package com.braintribe.model.generic.collection;
 
 import jsinterop.annotations.JsType;
 import jsinterop.annotations.custom.TsIgnore;
+import jsinterop.context.JsInteropNamespaces;
 
 /**
- * This only exists so that it's used as a return type of a static factory method that creates a {@link Arrayish} instance.
+ * This only exists so that it's used as a return type of a static factory method that creates a Arrayish instance.
  * <p>
  * It's important that this method is reflected in its .d.ts as if it was returning T.Array, but Arrayish itself cannot be mapped there, cause GWT
  * would also project the class under that namespace.
@@ -18,7 +16,7 @@ import jsinterop.annotations.custom.TsIgnore;
  */
 @SuppressWarnings("unused")
 @TsIgnore
-@JsType(name = "Array", namespace = TypePackage.GM_TYPE_NAMESPACE)
+@JsType(name = "Array", namespace = JsInteropNamespaces.type)
 public interface ArrayIface<E> {
 	// marker interface for JsInterop
 }

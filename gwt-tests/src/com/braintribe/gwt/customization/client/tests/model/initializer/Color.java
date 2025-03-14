@@ -13,11 +13,23 @@
 // ============================================================================
 package com.braintribe.gwt.customization.client.tests.model.initializer;
 
+import com.braintribe.model.generic.base.EnumBase;
+import com.braintribe.model.generic.reflection.EnumType;
+import com.braintribe.model.generic.reflection.EnumTypes;
+
 /**
  * @author peter.gazdik
  */
-public enum Color {
+public enum Color implements EnumBase<Color> {
 	red,
 	green,
-	blue,
+	blue;
+
+	public static final EnumType<Color> T = EnumTypes.T(Color.class);
+
+	@Override
+	public EnumType<Color> type() {
+		return T;
+	}
+
 }

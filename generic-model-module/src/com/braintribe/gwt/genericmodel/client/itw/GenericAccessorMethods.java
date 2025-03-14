@@ -39,6 +39,7 @@ import com.braintribe.model.generic.reflection.GmtsEnhancedEntityStub;
 import com.braintribe.model.generic.reflection.Property;
 import com.braintribe.model.generic.reflection.PropertyAccessInterceptor;
 import com.braintribe.model.generic.reflection.TypeCode;
+import com.braintribe.model.generic.reflection.type.JsTypeUtils;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsDate;
 import com.google.gwt.core.client.UnsafeNativeLong;
@@ -505,41 +506,13 @@ public class GenericAccessorMethods {
 			return nonCollectionJsToObject(v);
 		}
 
-		private native static Object nonCollectionJsToObject(Object v) /*-{
-			if (v.@Object::getClass())
-				return v;
-		
-			var t = typeof v;
-			if (t == 'string' || v instanceof String)
-			 	return v;
-			if (t == 'number')
-			 	return @Integer::valueOf(I)(v);
-	
-			if (@C::isJsNumber(*)(v)) {
-				if (v.type == null)
-			 		return @Integer::valueOf(I)(v);
-			 	if (v.type() == 'f')
-			 		return @Float::valueOf(F)(v.valueOf());
-			 	if (v.type() == 'd')
-			 		return v.valueOf();
-			 	return @Integer::valueOf(I)(v);
-			}
-	
-			if (t == 'bigint')
-				return @Long::new(Ljava/lang/String;)(v.toString());
-			if (@C::isJsDate(*)(v))
-				return @C::jsToJDate(*)(v);
-	
-			return v;
-		}-*/;
+		private static Object nonCollectionJsToObject(Object v) {
+			return JsTypeUtils.nonCollectionJsToObject(v);
+		}
 
-		private static native Date jsToJDate(Object jsdate) /*-{
-			if (jsdate == null)
-				return null;
-			if (@C::isJsDate(*)(jsdate))
-				return @Date::fromJsDate(*)(jsdate);
-			throw new Error("Value is not a JS Date: " + date);
-		}-*/;
+		private static Date jsToJDate(Object jsdate) {
+			return JsTypeUtils.jsToJDate(jsdate);
+		}
 
 		private static native JsDate jToJsDate(Object date) /*-{
 			return date == null ? null : date.@Date::toJsDate()();
@@ -594,21 +567,11 @@ public class GenericAccessorMethods {
 			return result;
 		}-*/;
 
-		/**
-		 * This is more robust than "instanceof Date", as instanceof checks don't work across frames<br>
-		 * <a href="https://stackoverflow.com/a/643827">See StackOverflow</a>.
-		 */
 		// @formatter:off
-		private static boolean isJsDate(JavaScriptObject o) { return isJsType(o, "Date"); }
-		private static boolean isJsNumber(JavaScriptObject o) { return isJsType(o, "Number"); }
-		private static boolean isJsArray(Object o) { return isJsType(o, "Array"); }
-		private static boolean isJsSet(Object o) { return isJsType(o, "Set"); }
-		private static boolean isJsMap(Object o) { return isJsType(o, "Map"); }
+		private static boolean isJsArray(Object o) { return JsTypeUtils.isJsArray(o); }
+		private static boolean isJsSet(Object o) { return JsTypeUtils.isJsSet(o); }
+		private static boolean isJsMap(Object o) { return JsTypeUtils.isJsMap(o); }
 		// @formatter:on
-
-		private static native boolean isJsType(Object o, String type) /*-{
-			return Object.prototype.toString.call(o) === '[object '+type+']';
-		}-*/;
 	}
 
 }

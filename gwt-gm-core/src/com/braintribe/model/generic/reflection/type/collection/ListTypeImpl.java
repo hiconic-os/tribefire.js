@@ -18,6 +18,7 @@ package com.braintribe.model.generic.reflection.type.collection;
 import java.util.Collections;
 import java.util.List;
 
+import com.braintribe.model.generic.collection.ArrayIface;
 import com.braintribe.model.generic.collection.PlainList;
 import com.braintribe.model.generic.pr.criteria.ListElementCriterion;
 import com.braintribe.model.generic.reflection.AbstractGenericModelType;
@@ -166,4 +167,10 @@ public final class ListTypeImpl extends AbstractCollectionType implements ListTy
 	protected boolean isInstanceOfThis(Object value) {
 		return value instanceof List;
 	}
+
+	@Override
+	public boolean isInstanceJs(Object value) {
+		return value instanceof ArrayIface;
+	}
+
 }

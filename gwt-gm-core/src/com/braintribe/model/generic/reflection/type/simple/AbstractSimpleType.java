@@ -68,7 +68,7 @@ public abstract class AbstractSimpleType extends AbstractGenericModelType implem
 
 	@Override
 	public boolean isInstance(Object value) {
-		return javaType == value.getClass();
+		return value != null && javaType == value.getClass();
 	}
 
 	@Override
@@ -85,7 +85,12 @@ public abstract class AbstractSimpleType extends AbstractGenericModelType implem
 	public final boolean isEmpty(Object value) {
 		return value == null;
 	}
-	
+
+	@Override
+	public final boolean isEmptyJs(Object value) {
+		return value == null;
+	}
+
 	@Override
 	@SuppressWarnings("unusable-by-js")
 	public Class<?> getPrimitiveJavaType() {

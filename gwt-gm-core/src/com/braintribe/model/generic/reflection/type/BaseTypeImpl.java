@@ -21,7 +21,9 @@ import com.braintribe.model.generic.reflection.BaseType;
 import com.braintribe.model.generic.reflection.CloningContext;
 import com.braintribe.model.generic.reflection.GenericModelException;
 import com.braintribe.model.generic.reflection.GenericModelType;
+import com.braintribe.model.generic.reflection.GenericModelTypeJs;
 import com.braintribe.model.generic.reflection.GenericModelTypeReflection;
+import com.braintribe.model.generic.reflection.GenericModelTypeReflectionJs;
 import com.braintribe.model.generic.reflection.StrategyOnCriterionMatch;
 import com.braintribe.model.generic.reflection.TraversingContext;
 import com.braintribe.model.generic.reflection.TypeCode;
@@ -56,6 +58,15 @@ public class BaseTypeImpl extends AbstractGenericModelType implements BaseType {
 		return type.isEmpty(value);
 	}
 
+	@Override
+	public boolean isEmptyJs(Object value) {
+		if (value == null)
+			return true;
+
+		GenericModelTypeJs type = (GenericModelTypeJs) getActualTypeJs(value);
+		return type.isEmptyJs(value);
+	}
+
 	public AbstractGenericModelType getActualAbsType(Object value) {
 		return (AbstractGenericModelType) getActualType(value);
 	}
@@ -66,6 +77,15 @@ public class BaseTypeImpl extends AbstractGenericModelType implements BaseType {
 			return this;
 
 		return getTypeReflection().getType(value);
+	}
+
+	@Override
+	public GenericModelType getActualTypeJs(Object value) {
+		if (value == null)
+			return this;
+
+		GenericModelTypeReflectionJs tr = (GenericModelTypeReflectionJs) getTypeReflection();
+		return tr.getTypeJs(value);
 	}
 
 	private GenericModelTypeReflection getTypeReflection() {
@@ -124,7 +144,12 @@ public class BaseTypeImpl extends AbstractGenericModelType implements BaseType {
 	public boolean isInstance(Object value) {
 		return value != null;
 	}
-	
+
+	@Override
+	public boolean isInstanceJs(Object value) {
+		return value != null;
+	}
+
 	@Override
 	public boolean areCustomInstancesReachable() {
 		return true;

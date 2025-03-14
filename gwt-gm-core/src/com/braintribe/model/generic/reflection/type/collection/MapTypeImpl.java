@@ -18,6 +18,7 @@ package com.braintribe.model.generic.reflection.type.collection;
 import java.util.Collections;
 import java.util.Map;
 
+import com.braintribe.model.generic.collection.MapIface;
 import com.braintribe.model.generic.collection.PlainMap;
 import com.braintribe.model.generic.pr.criteria.MapCriterion;
 import com.braintribe.model.generic.pr.criteria.MapEntryCriterion;
@@ -94,8 +95,7 @@ public final class MapTypeImpl extends AbstractCollectionType implements MapType
 	}
 
 	@Override
-	public Object cloneImpl(CloningContext cloningContext, Object instance, StrategyOnCriterionMatch strategy)
-			throws GenericModelException {
+	public Object cloneImpl(CloningContext cloningContext, Object instance, StrategyOnCriterionMatch strategy) throws GenericModelException {
 		if (instance == null)
 			return null;
 
@@ -113,7 +113,7 @@ public final class MapTypeImpl extends AbstractCollectionType implements MapType
 			MapKeyCriterion keyCriterion = acquireMapKeyCriterion();
 			MapValueCriterion valueCriterion = acquireMapValueCriterion();
 
-			for (Map.Entry<?, ?> entry: map.entrySet()) {
+			for (Map.Entry<?, ?> entry : map.entrySet()) {
 				try {
 					cloningContext.pushTraversingCriterion(entryCriterion, entry);
 					if (cloningContext.isTraversionContextMatching()) {
@@ -171,7 +171,7 @@ public final class MapTypeImpl extends AbstractCollectionType implements MapType
 
 		try {
 			traversingContext.pushTraversingCriterion(acquireMapCriterion(), instance);
-			for (Map.Entry<?, ?> entry: map.entrySet()) {
+			for (Map.Entry<?, ?> entry : map.entrySet()) {
 				try {
 					traversingContext.pushTraversingCriterion(entryCriterion, entry);
 
@@ -277,9 +277,14 @@ public final class MapTypeImpl extends AbstractCollectionType implements MapType
 	public boolean isEmpty(Object value) {
 		return value == null || Collections.EMPTY_MAP.equals(value);
 	}
-	
+
 	@Override
 	protected boolean isInstanceOfThis(Object value) {
 		return value instanceof Map;
+	}
+
+	@Override
+	public boolean isInstanceJs(Object value) {
+		return value instanceof MapIface;
 	}
 }

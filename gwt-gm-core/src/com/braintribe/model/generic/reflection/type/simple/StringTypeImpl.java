@@ -68,4 +68,8 @@ public class StringTypeImpl extends AbstractSimpleType implements StringType {
 		return GmValueCodec.stringFromGmString(encodedValue);
 	}
 
+	@Override
+	public boolean isInstanceJs(Object value) {
+		return isInstance(value);
+	}
 }

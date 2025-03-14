@@ -19,11 +19,12 @@ import com.braintribe.model.generic.GMF;
 import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.pr.AbsenceInformation;
 import com.braintribe.model.generic.pr.criteria.PropertyCriterion;
+import com.braintribe.model.generic.reflection.type.JsTypeUtils;
 import com.braintribe.model.generic.value.ValueDescriptor;
 
 @SuppressWarnings("unusable-by-js")
-public abstract class AbstractProperty implements Property, JsInteropAttribute {
-	private GenericModelType propertyType;
+public abstract class AbstractProperty implements PropertyJs, JsInteropAttribute {
+	private GenericModelTypeJs propertyType;
 	protected final String propertyName;
 	private final boolean isIdentifier;
 	private final boolean isPartition;
@@ -135,7 +136,7 @@ public abstract class AbstractProperty implements Property, JsInteropAttribute {
 	}
 
 	public void setPropertyType(GenericModelType propertyType) {
-		this.propertyType = propertyType;
+		this.propertyType = (GenericModelTypeJs) propertyType;
 	}
 
 	@Override
@@ -228,7 +229,13 @@ public abstract class AbstractProperty implements Property, JsInteropAttribute {
 	@Override
 	public boolean isEmptyValue(Object value) {
 		return propertyType.isEmpty(value) || //
-				(!nullable && propertyType.getDefaultValue().equals(value));
+				(!nullable && value != null && propertyType.getDefaultValue().equals(value));
+	}
+
+	@Override
+	public boolean isEmptyValueJs(Object value) {
+		return propertyType.isEmptyJs(value)
+				|| (!nullable && value != null && propertyType.getDefaultValue().equals(JsTypeUtils.nonCollectionJsToObject(value)));
 	}
 
 	@Override

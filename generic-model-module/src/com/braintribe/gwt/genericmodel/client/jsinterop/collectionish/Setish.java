@@ -19,6 +19,7 @@ import java.util.Set;
 
 import com.braintribe.gwt.browserfeatures.client.interop.JsIterableIterator;
 import com.braintribe.gwt.genericmodel.client.reflect.TypePackage;
+import com.braintribe.model.generic.collection.SetIface;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.i18n.client.Messages.Optional;
 
@@ -41,6 +42,11 @@ public class Setish<T> extends AbstractCollectionish<T> implements SetIface<T> {
 	@Override
 	public Object wrappedCollection() {
 		return set;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return set.isEmpty();
 	}
 
 	// ############################################

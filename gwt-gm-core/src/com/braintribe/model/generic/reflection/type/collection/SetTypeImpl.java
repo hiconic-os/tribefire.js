@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import com.braintribe.model.generic.collection.PlainSet;
+import com.braintribe.model.generic.collection.SetIface;
 import com.braintribe.model.generic.pr.criteria.SetElementCriterion;
 import com.braintribe.model.generic.reflection.AbstractGenericModelType;
 import com.braintribe.model.generic.reflection.CloningContext;
@@ -76,8 +77,7 @@ public final class SetTypeImpl extends AbstractCollectionType implements SetType
 	}
 
 	@Override
-	public Object cloneImpl(CloningContext cloningContext, Object instance, StrategyOnCriterionMatch strategy)
-			throws GenericModelException {
+	public Object cloneImpl(CloningContext cloningContext, Object instance, StrategyOnCriterionMatch strategy) throws GenericModelException {
 
 		if (instance == null)
 			return null;
@@ -86,7 +86,7 @@ public final class SetTypeImpl extends AbstractCollectionType implements SetType
 
 		Set<?> set = (Set<?>) instance;
 		Set<Object> setClone = createPlain();
-		for (Object value: set) {
+		for (Object value : set) {
 			try {
 				cloningContext.pushTraversingCriterion(criterion, value);
 				if (!cloningContext.isTraversionContextMatching()) {
@@ -108,7 +108,7 @@ public final class SetTypeImpl extends AbstractCollectionType implements SetType
 		SetElementCriterion criterion = acquireCriterion();
 
 		Set<?> set = (Set<?>) instance;
-		for (Object value: set) {
+		for (Object value : set) {
 			try {
 				traversingContext.pushTraversingCriterion(criterion, value);
 				elementType.traverseImpl(traversingContext, value);
@@ -161,9 +161,14 @@ public final class SetTypeImpl extends AbstractCollectionType implements SetType
 	public boolean isEmpty(Object value) {
 		return value == null || Collections.EMPTY_SET.equals(value);
 	}
-	
+
 	@Override
 	protected boolean isInstanceOfThis(Object value) {
 		return value instanceof Set;
+	}
+
+	@Override
+	public boolean isInstanceJs(Object value) {
+		return value instanceof SetIface;
 	}
 }

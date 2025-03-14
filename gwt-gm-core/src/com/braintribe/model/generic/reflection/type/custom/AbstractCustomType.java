@@ -44,4 +44,19 @@ public abstract class AbstractCustomType extends AbstractGenericModelType implem
 		return getJavaType().getSimpleName();
 	}
 
+	@Override
+	public boolean isEmpty(Object value) {
+		return value == null;
+	}
+
+	@Override
+	public boolean isEmptyJs(Object value) {
+		return value == null;
+	}
+
+	@Override
+	public final boolean isInstanceJs(Object value) {
+		return isInstance(value);
+	}
+
 }

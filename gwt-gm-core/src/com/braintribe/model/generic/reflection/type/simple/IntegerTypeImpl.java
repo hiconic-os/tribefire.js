@@ -18,6 +18,7 @@ package com.braintribe.model.generic.reflection.type.simple;
 import com.braintribe.model.generic.reflection.GenericModelException;
 import com.braintribe.model.generic.reflection.IntegerType;
 import com.braintribe.model.generic.reflection.TypeCode;
+import com.braintribe.model.generic.reflection.type.JsTypeUtils;
 import com.braintribe.model.generic.tools.GmValueCodec;
 
 @SuppressWarnings("unusable-by-js")
@@ -68,4 +69,8 @@ public class IntegerTypeImpl extends AbstractSimpleType implements IntegerType {
 		return GmValueCodec.integerFromGmString(encodedValue);
 	}
 
+	@Override
+	public boolean isInstanceJs(Object value) {
+		return JsTypeUtils.isJsInteger(value);
+	}
 }

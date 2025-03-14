@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.braintribe.gwt.customization.client.tests.model.initializer.Color;
 import com.braintribe.model.generic.GenericEntity;
 import com.braintribe.model.generic.reflection.EntityType;
 import com.braintribe.model.generic.reflection.EntityTypes;
@@ -101,5 +102,13 @@ public interface PropsEntity extends GenericEntity {
 
 	Map<Float, Date> getMapFloatDate();
 	void setMapFloatDate(Map<Float, Date> mapFloatDate);
+
+	// custom
+
+	Color getColor();
+	void setColor(Color color);
+
+	PropsEntity getOtherEntity();
+	void setOtherEntity(PropsEntity otherEntity);
 
 }

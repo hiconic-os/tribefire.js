@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.ArrayIface;
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Arrayish;
-import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.MapIface;
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Mapish;
-import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.SetIface;
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Setish;
 import com.braintribe.model.generic.GMF;
 import com.braintribe.model.generic.GmCoreApiInteropNamespaces;
+import com.braintribe.model.generic.collection.ArrayIface;
+import com.braintribe.model.generic.collection.MapIface;
+import com.braintribe.model.generic.collection.SetIface;
 import com.braintribe.model.generic.reflection.BaseType;
 import com.braintribe.model.generic.reflection.GenericModelType;
 import com.braintribe.model.processing.session.impl.session.collection.EnhancedList;

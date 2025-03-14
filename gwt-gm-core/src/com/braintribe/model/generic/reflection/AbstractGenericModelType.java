@@ -78,6 +78,11 @@ public abstract class AbstractGenericModelType implements GenericModelTypeJs {
 		return this;
 	}
 
+	@Override
+	public GenericModelType getActualTypeJs(Object value) {
+		return getActualType(value);
+	}
+
 	public abstract Object cloneImpl(CloningContext cloningContext, Object instance, StrategyOnCriterionMatch strategy) throws GenericModelException;
 
 	@Override

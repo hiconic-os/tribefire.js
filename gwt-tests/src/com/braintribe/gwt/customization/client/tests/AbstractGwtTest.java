@@ -57,15 +57,16 @@ public abstract class AbstractGwtTest {
 	// ## . . . . . Assertions . . . . . . . . ##
 	// ##########################################
 
-	protected void assertNotNull(Object o, String descriptor) {
+	@JsMethod
+	public void assertNotNull(Object o, String descriptor) {
 		if (o == null)
-			throw new RuntimeException("Object is null: " + descriptor);
+			logError("Object is null: " + descriptor);
 	}
 
 	@JsMethod(name = "assertEqual")
 	public native void assertEqualJs(JavaScriptObject actual, JavaScriptObject expected, String message, JavaScriptObject omitLogIfOk) /*-{
 		if (!this.areEqual(actual, expected)) 
-			this.@AbstractGwtTest::logError(*)("Error: " + message + //
+			this.@AbstractGwtTest::logError(*)("    Error: " + message + //
 					 "   Expected: " + expected + " (" + this.typeOf(expected) + ")" + //
 					", actual: " + actual + " (" +  this.typeOf(actual) + ")");
 

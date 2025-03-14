@@ -758,9 +758,4 @@ public abstract class AbstractEntityType<T extends GenericEntity> extends Abstra
 				.collect(Collectors.toList());
 	}
 
-	@Override
-	public boolean isEmpty(Object value) {
-		return value == null;
-	}
-
 }

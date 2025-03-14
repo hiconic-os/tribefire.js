@@ -78,4 +78,8 @@ public class DecimalTypeImpl extends AbstractSimpleType implements DecimalType {
 		return GmValueCodec.decimalFromGmString(encodedValue);
 	}
 
+	@Override
+	public boolean isInstanceJs(Object value) {
+		return isInstance(value);
+	}
 }

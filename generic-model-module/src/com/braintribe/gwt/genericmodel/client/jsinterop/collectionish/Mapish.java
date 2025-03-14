@@ -22,6 +22,7 @@ import com.braintribe.gwt.browserfeatures.client.interop.JsIterableIterator;
 import com.braintribe.gwt.browserfeatures.client.interop.JsMap;
 import com.braintribe.gwt.genericmodel.client.itw.GenericAccessorMethods;
 import com.braintribe.gwt.genericmodel.client.reflect.TypePackage;
+import com.braintribe.model.generic.collection.MapIface;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.i18n.client.Messages.Optional;
 
@@ -53,6 +54,11 @@ public class Mapish<K, V> extends AbstractCollectionish<V> implements MapIface<K
 	@Override
 	public Object wrappedCollection() {
 		return map;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return map.isEmpty();
 	}
 
 	// ############################################

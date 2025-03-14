@@ -443,7 +443,7 @@ public abstract class AbstractGenericModelTypeReflection implements ItwTypeRefle
 		return (T) getTypeHelper(value);
 	}
 
-	private GenericModelType getTypeHelper(Object value) {
+	protected GenericModelType getTypeHelper(Object value) {
 		GenericModelType type;
 
 		if (value == null)

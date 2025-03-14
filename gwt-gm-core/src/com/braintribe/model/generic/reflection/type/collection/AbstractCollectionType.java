@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.braintribe.model.generic.collection.Collectionish;
 import com.braintribe.model.generic.reflection.AbstractGenericModelType;
 import com.braintribe.model.generic.reflection.CollectionType;
 import com.braintribe.model.generic.reflection.GenericModelException;
@@ -83,7 +84,7 @@ public abstract class AbstractCollectionType extends AbstractGenericModelType im
 	}
 
 	private boolean _areCustomInstancesReachable() {
-		for (GenericModelType type: getParameterization()) {
+		for (GenericModelType type : getParameterization()) {
 			if (type.areCustomInstancesReachable())
 				return true;
 		}
@@ -99,7 +100,7 @@ public abstract class AbstractCollectionType extends AbstractGenericModelType im
 	}
 
 	private final boolean _areEntitiesReachable() {
-		for (GenericModelType type: getParameterization()) {
+		for (GenericModelType type : getParameterization()) {
 			if (type.areEntitiesReachable())
 				return true;
 		}
@@ -110,7 +111,13 @@ public abstract class AbstractCollectionType extends AbstractGenericModelType im
 	public boolean isInstance(Object value) {
 		return isInstanceOfThis(value);
 	}
-	
+
 	protected abstract boolean isInstanceOfThis(Object value);
-	
+
+	@Override
+	public boolean isEmptyJs(Object value) {
+		return isInstanceJs(value) && //
+				((Collectionish) value).isEmpty();
+	}
+
 }

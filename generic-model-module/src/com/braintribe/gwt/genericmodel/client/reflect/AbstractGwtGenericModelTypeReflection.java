@@ -21,11 +21,16 @@ import java.util.stream.Stream;
 import com.braintribe.gwt.genericmodel.client.GwtGmPlatform;
 import com.braintribe.gwt.genericmodel.client.itw.GwtScriptTypeSynthesis;
 import com.braintribe.model.generic.GenericEntity;
+import com.braintribe.model.generic.base.GenericBase;
+import com.braintribe.model.generic.collection.Collectionish;
 import com.braintribe.model.generic.reflection.AbstractGenericModelTypeReflection;
 import com.braintribe.model.generic.reflection.EntityType;
 import com.braintribe.model.generic.reflection.EnumType;
 import com.braintribe.model.generic.reflection.GenericModelException;
 import com.braintribe.model.generic.reflection.GenericModelType;
+import com.braintribe.model.generic.reflection.GenericModelTypeReflectionJs;
+import com.braintribe.model.generic.reflection.SimpleTypes;
+import com.braintribe.model.generic.reflection.type.JsTypeUtils;
 import com.braintribe.model.generic.reflection.type.custom.EnumTypeImpl;
 import com.braintribe.model.meta.GmMetaModel;
 import com.braintribe.model.meta.Weavable;
@@ -38,7 +43,7 @@ import jsinterop.context.JsKeywords;
 /**
  *
  */
-public abstract class AbstractGwtGenericModelTypeReflection extends AbstractGenericModelTypeReflection {
+public abstract class AbstractGwtGenericModelTypeReflection extends AbstractGenericModelTypeReflection implements GenericModelTypeReflectionJs {
 
 	static {
 		ensureSymbols(TypePackage.getHcNsRoot());
@@ -132,14 +137,14 @@ public abstract class AbstractGwtGenericModelTypeReflection extends AbstractGene
 	@Override
 	protected Class<?> getClassForName(String qualifiedEntityTypeName, boolean require) throws GenericModelException {
 		if (require)
-			throw new UnsupportedOperationException("No class lookup supported in GWT!");
+			throw new UnsupportedOperationException("No class lookup supported in JS!");
 
 		return null;
 	}
 
 	@Override
 	public <T extends GenericModelType> T getType(Type type) throws GenericModelException {
-		throw new UnsupportedOperationException("Method 'AbstractGwtGenericModelTypeReflection.getGenericModelType' is not supported in GWT.");
+		throw new UnsupportedOperationException("Method 'AbstractGwtGenericModelTypeReflection.getGenericModelType' is not supported in JS.");
 	}
 
 	@Override
@@ -151,7 +156,56 @@ public abstract class AbstractGwtGenericModelTypeReflection extends AbstractGene
 
 	@Override
 	public ProtoGmEntityType findProtoGmEntityType(String typeSignature) {
-		throw new UnsupportedOperationException("Method 'findProtoGmEntityType' is not supported in GWT!");
+		throw new UnsupportedOperationException("Method 'findProtoGmEntityType' is not supported in JS!");
 	}
+
+	@Override
+	public <T extends GenericModelType> T getTypeJs(Object value) {
+		return (T) getTypeJsHelper(value);
+	}
+
+	private GenericModelType getTypeJsHelper(Object v) {
+		if (v == null)
+			return TYPE_OBJECT;
+		if (v instanceof GenericBase)
+			return ((GenericBase) v).type();
+		if (v instanceof Collectionish)
+			return getType(((Collectionish) v).wrappedCollection());
+
+		return getNonCollectionTypeJs(v);
+	}
+
+	/**
+	 * Similar logic to {@link JsTypeUtils#nonCollectionJsToObject(Object)}
+	 * 
+	 * Uses {@link SimpleTypes}
+	 */
+	private native GenericModelType getNonCollectionTypeJs(Object v) /*-{
+		if (v.@Object::getClass())
+			return this.@AbstractGwtGenericModelTypeReflection::getTypeHelper(*)(v);
+
+		var t = typeof v;
+		if (t == 'string' || v instanceof String)
+			return @SimpleTypes::TYPE_STRING;
+		if (t == 'number')
+			return @SimpleTypes::TYPE_INTEGER;
+
+		if (@JsTypeUtils::isJsNumber(*)(v)) {
+			if (v.type == null)
+				return @SimpleTypes::TYPE_INTEGER;
+			if (v.type() == 'f')
+				return @SimpleTypes::TYPE_FLOAT;
+			if (v.type() == 'd')
+				return @SimpleTypes::TYPE_DOUBLE;
+			return @SimpleTypes::TYPE_INTEGER;
+		}
+
+		if (t == 'bigint')
+			return @SimpleTypes::TYPE_LONG;
+		if (@JsTypeUtils::isJsDate(*)(v))
+			return @SimpleTypes::TYPE_DATE;
+
+		return this.@AbstractGwtGenericModelTypeReflection::getTypeHelper(*)(v);
+	}-*/;
 
 }

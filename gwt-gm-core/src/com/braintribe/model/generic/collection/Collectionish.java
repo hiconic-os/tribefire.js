@@ -18,4 +18,5 @@ package com.braintribe.model.generic.collection;
  */
 public interface Collectionish {
 	Object wrappedCollection();
+	boolean isEmpty();
 }

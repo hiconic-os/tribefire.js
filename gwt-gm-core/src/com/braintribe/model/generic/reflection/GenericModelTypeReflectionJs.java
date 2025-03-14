@@ -13,23 +13,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // ============================================================================
-package com.braintribe.model.generic;
+package com.braintribe.model.generic.reflection;
 
-import java.util.List;
-
-import com.braintribe.model.generic.reflection.EntityType;
-import com.braintribe.model.generic.reflection.EntityTypes;
+import jsinterop.annotations.JsMethod;
 
 /**
- * An GenericEntity holding a collection of GenericEntities.
- * 
- * @author gunther.schenk
+ * Same concept as {@link GenericModelTypeJs}
  */
-public interface GenericEntityList extends GenericEntity {
+@SuppressWarnings("unusable-by-js")
+public interface GenericModelTypeReflectionJs extends GenericModelTypeReflection {
 
-	EntityType<GenericEntityList> T = EntityTypes.T(GenericEntityList.class);
-
-	List<GenericEntity> getEntities();
-	void setEntities(List<GenericEntity> entities);
+	@JsMethod(name = "getTypeOf")
+	<T extends GenericModelType> T getTypeJs(Object value);
 
 }

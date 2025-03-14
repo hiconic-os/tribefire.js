@@ -63,4 +63,8 @@ public class BooleanTypeImpl extends AbstractSimpleType implements BooleanType {
 		return GmValueCodec.booleanFromGmString(encodedValue);
 	}
 
+	@Override
+	public boolean isInstanceJs(Object value) {
+		return isInstance(value);
+	}
 }
