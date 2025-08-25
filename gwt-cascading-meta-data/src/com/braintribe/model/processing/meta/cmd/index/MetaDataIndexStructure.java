@@ -81,6 +81,8 @@ public class MetaDataIndexStructure {
 	public static abstract class MdIndex extends ConcurrentCachedIndex<MetaDataIndexKey, MetaDataBox> {
 		protected ResolutionContext resolutionContext;
 
+		private volatile MetaDataBox allMd;
+
 		MdIndex(ResolutionContext resolutionContext) {
 			this.resolutionContext = resolutionContext;
 		}
@@ -91,21 +93,29 @@ public class MetaDataIndexStructure {
 
 		@Override
 		protected MetaDataBox provideValueFor(MetaDataIndexKey indexKey) {
-			MetaDataBox allMetaData = getAllMetaData();
+			loadAllMd();
 
-			if (allMetaData == null) {
-				return MetaDataBox.EMPTY_BOX;
-			}
+			if (allMd == MetaDataBox.EMPTY_BOX)
+				return allMd;
 
 			if (indexKey.inheritableOnly()) {
 				return filterInheritableOnly(acquireMetaData(indexKey.indexKeyForAll()));
 
 			} else {
-				List<QualifiedMetaData> normalMetaData = filterMdByTypeAndStaticSelector(allMetaData.normalMetaData, indexKey);
-				List<QualifiedMetaData> importantMetaData = filterMdByTypeAndStaticSelector(allMetaData.importantMetaData, indexKey);
+				List<QualifiedMetaData> normalMetaData = filterMdByTypeAndStaticSelector(allMd.normalMetaData, indexKey);
+				List<QualifiedMetaData> importantMetaData = filterMdByTypeAndStaticSelector(allMd.importantMetaData, indexKey);
 
 				return new MetaDataBox(normalMetaData, importantMetaData);
 			}
+		}
+
+		private void loadAllMd() {
+			if (allMd != null)
+				return;
+
+			allMd = getAllMetaData();
+			if (allMd == null)
+				allMd = MetaDataBox.EMPTY_BOX;
 		}
 
 		private List<QualifiedMetaData> filterMdByTypeAndStaticSelector(List<QualifiedMetaData> metaData, MetaDataIndexKey indexKey) {
@@ -123,13 +133,11 @@ public class MetaDataIndexStructure {
 			List<QualifiedMetaData> filteredMd = newList();
 			boolean areSame = true;
 
-			for (QualifiedMetaData qmd : allMd) {
-				if (qmd.metaData().getInherited()) {
+			for (QualifiedMetaData qmd : allMd)
+				if (qmd.metaData().getInherited())
 					filteredMd.add(qmd);
-				} else {
+				else
 					areSame = false;
-				}
-			}
 
 			return areSame ? allMd : filteredMd;
 		}
