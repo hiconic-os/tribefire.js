@@ -39,7 +39,9 @@ limitations under the License.
         <V.javax.validation>1.0.0.GA</V.javax.validation>
         <V.org.vectomatic>0.5.10</V.org.vectomatic>        
 
+        <!--  Needs new token every three months and now it failed anyway... supporting this is a waste of time right now.
         <npmRegistryUrl>https://registry.npmjs.org</npmRegistryUrl>
+        -->
     </properties>
     <licenses>
         <license>
