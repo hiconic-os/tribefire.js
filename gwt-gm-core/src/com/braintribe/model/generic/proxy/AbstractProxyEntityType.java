@@ -52,7 +52,7 @@ import com.braintribe.model.generic.value.PreliminaryEntityReference;
 public abstract class AbstractProxyEntityType implements EntityType<ProxyEntity> {
 
 	private static final GenericModelType[] PARAMETERIZATION = new GenericModelType[0];
-	
+
 	protected final String typeSignature;
 	private String simpleTypeName;
 	protected final Map<String, AbstractProxyProperty> propertiesByName = new LinkedHashMap<>();
@@ -227,6 +227,11 @@ public abstract class AbstractProxyEntityType implements EntityType<ProxyEntity>
 	}
 
 	@Override
+	public ProxyEntity cast(Object value) {
+		return (ProxyEntity) value;
+	}
+
+	@Override
 	public boolean isAbstract() {
 		return false;
 	}
@@ -250,6 +255,12 @@ public abstract class AbstractProxyEntityType implements EntityType<ProxyEntity>
 	}
 
 	@Override
+	public List<EntityType<?>> getLinearizedSuperTypes() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	@Deprecated
 	public Iterable<EntityType<?>> getTransitiveSuperTypes(boolean includeSelf, boolean distinct) {
 		return includeSelf ? Collections.singleton(this) : Collections.emptySet();
 	}

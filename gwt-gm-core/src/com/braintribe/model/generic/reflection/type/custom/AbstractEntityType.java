@@ -73,6 +73,7 @@ public abstract class AbstractEntityType<T extends GenericEntity> extends Abstra
 	private List<Property> declaredProperties;
 	private List<Property> customTypeProperties;
 	private List<AbstractEntityType<?>> superTypes = newList();
+	private List<EntityType<?>> linearizedSuperTypes;
 	private Set<EntityType<?>> subTypes = newSet();
 	// TODO this should not be here after BTT-XY implemented is - in GWT we want the fast JsStringMap for this
 	private Map<String, Property> propertiesByName = Collections.EMPTY_MAP;
@@ -105,6 +106,13 @@ public abstract class AbstractEntityType<T extends GenericEntity> extends Abstra
 	@Override
 	public Class<T> getJavaType() {
 		return (Class<T>) javaType;
+	}
+
+	@Override
+	public T cast(Object value) {
+		if (value != null && !isInstance(value))
+			throw new ClassCastException("Cannot cast " + value.getClass().getName() + " to " + getTypeSignature());
+		return (T) value;
 	}
 
 	@Override
@@ -619,6 +627,14 @@ public abstract class AbstractEntityType<T extends GenericEntity> extends Abstra
 	}
 
 	@Override
+	public List<EntityType<?>> getLinearizedSuperTypes() {
+		if (linearizedSuperTypes == null)
+			linearizedSuperTypes = C3Linearization.getLinearizedSuperTypes(this);
+		return linearizedSuperTypes;
+	}
+
+	@Override
+	@Deprecated
 	public Iterable<EntityType<?>> getTransitiveSuperTypes(boolean includeSelf, boolean distinct) {
 		Collection<EntityType<?>> result = getTransitiveSuperTypes(distinct);
 		if (includeSelf)
