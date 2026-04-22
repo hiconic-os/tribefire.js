@@ -27,7 +27,7 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.XMLParser;
 
 public class GmXmlCodec<T> implements Codec<T, String>, GmAsyncCodec<T, String> {
-	private GmDomCodec<T> domCodec;
+	private final GmDomCodec<T> domCodec;
 	
 	private static boolean hasProcessingInstructionBug = hasProcessingInstructionBug();
 	
@@ -110,7 +110,7 @@ public class GmXmlCodec<T> implements Codec<T, String>, GmAsyncCodec<T, String> 
 			throw new CodecException("error while decoding xml into DOM", e);
 		}
 		
-		return domCodec.decode(document, context);
+		return (T1) domCodec.decode(document, context);
 	}
 	
 	@Override
