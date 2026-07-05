@@ -52,6 +52,7 @@ import com.braintribe.model.processing.meta.oracle.BasicModelOracle;
 import com.braintribe.model.processing.query.parser.QueryParser;
 import com.braintribe.model.processing.query.parser.api.GmqlParsingError;
 import com.braintribe.model.processing.query.parser.api.ParsedQuery;
+import com.braintribe.model.processing.query.stringifier.BasicQueryStringifier;
 import com.braintribe.model.query.Query;
 import com.braintribe.model.service.api.ServiceRequest;
 import com.braintribe.processing.async.api.AsyncCallback;
@@ -182,6 +183,11 @@ public class StaticTools {
 				sb.append(error.getMessage());
 			throw new IllegalArgumentException(sb.toString());
 		}
+	}
+
+	@JsMethod(name = "stringify", namespace = TfJsNameSpaces.QUERY_TOOLS)
+	public static String stringifyQuery(Query query) throws IllegalArgumentException {
+		return BasicQueryStringifier.print(query);
 	}
 	
 	//ERROR HANDLING
