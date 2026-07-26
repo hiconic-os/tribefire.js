@@ -23,12 +23,14 @@ import java.util.Map;
 
 import com.braintribe.model.generic.annotation.meta.api.RepeatableMdaHandler.RepeatableAggregatorMdaHandler;
 import com.braintribe.model.generic.annotation.meta.handlers.AliasMdaHandler;
+import com.braintribe.model.generic.annotation.meta.handlers.CompositeIndexMdaHandler;
 import com.braintribe.model.generic.annotation.meta.handlers.CompoundUniqueMdaHandler;
 import com.braintribe.model.generic.annotation.meta.handlers.DescriptionMdaHandler;
 import com.braintribe.model.generic.annotation.meta.handlers.NameMdaHandler;
 import com.braintribe.model.generic.annotation.meta.handlers.PlaceholderMdaHandler;
 import com.braintribe.model.generic.annotation.meta.handlers.PredicateMdaHandlers;
 import com.braintribe.model.generic.annotation.meta.handlers.SimpleMdaHandlers;
+import com.braintribe.model.generic.annotation.meta.handlers.UnsatisfiedByMdaHandler;
 import com.braintribe.model.generic.reflection.EntityType;
 import com.braintribe.model.meta.data.MetaData;
 
@@ -73,9 +75,11 @@ import com.braintribe.model.meta.data.MetaData;
 		registerRepeatable( //
 				AliasMdaHandler.INSTANCE, //
 				CompoundUniqueMdaHandler.INSTANCE, //
+				CompositeIndexMdaHandler.INSTANCE, //
 				DescriptionMdaHandler.INSTANCE, //
 				NameMdaHandler.INSTANCE, //
-				PlaceholderMdaHandler.INSTANCE //
+				PlaceholderMdaHandler.INSTANCE, //
+				UnsatisfiedByMdaHandler.INSTANCE //
 		);
 
 		/* We have to be careful here. We are using regular analyzer that creates instances of Confidential even in proto analysis. This could be a
