@@ -19,6 +19,7 @@ import static com.braintribe.utils.lcd.CollectionTools2.mapBy;
 import static com.braintribe.utils.lcd.CollectionTools2.newList;
 import static com.braintribe.utils.lcd.CollectionTools2.newMap;
 import static com.braintribe.utils.lcd.CollectionTools2.newSet;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
 import java.util.Arrays;
@@ -69,7 +70,7 @@ import com.braintribe.model.generic.value.ValueDescriptor;
 public abstract class AbstractEntityType<T extends GenericEntity> extends AbstractCustomType implements EntityTypeJs<T> {
 	private boolean isAbstract;
 	private List<Property> properties;
-	private List<TransientProperty> transientProperties;
+	private List<TransientProperty> transientProperties = emptyList();
 	private List<Property> declaredProperties;
 	private List<Property> customTypeProperties;
 	private List<AbstractEntityType<?>> superTypes = newList();
@@ -216,7 +217,6 @@ public abstract class AbstractEntityType<T extends GenericEntity> extends Abstra
 			return t1;
 	}
 
-	
 	public void setEvaluatesTo(GenericModelType evaluatesTo) {
 		this.evaluatesTo = evaluatesTo;
 	}
@@ -239,7 +239,7 @@ public abstract class AbstractEntityType<T extends GenericEntity> extends Abstra
 	public Property getProperty(String name) throws GenericModelException {
 		Property property = propertiesByName.get(name);
 		if (property == null)
-			throw new GenericModelException("Property " + name + " not found for: " + getTypeName());
+			throw new GenericModelException("Property [" + name + "] not found for: " + getTypeName());
 		return property;
 	}
 
@@ -257,7 +257,7 @@ public abstract class AbstractEntityType<T extends GenericEntity> extends Abstra
 	public TransientProperty getTransientProperty(String name) throws GenericModelException {
 		TransientProperty property = transientPropertiesByName.get(name);
 		if (property == null)
-			throw new GenericModelException("Transient property " + name + " not found for: " + getTypeName());
+			throw new GenericModelException("Transient property [" + name + "] not found for: " + getTypeName());
 		return property;
 	}
 
@@ -337,7 +337,7 @@ public abstract class AbstractEntityType<T extends GenericEntity> extends Abstra
 
 	@Override
 	public T createPlainRaw() {
-		throw new RuntimeException("Cannot instantiate abstract type: " + getTypeName());
+		throw new UnsupportedOperationException("Cannot instantiate abstract entity type: " + getTypeName());
 	}
 
 	@Override
@@ -360,7 +360,7 @@ public abstract class AbstractEntityType<T extends GenericEntity> extends Abstra
 
 	@Override
 	public T createRaw() {
-		throw new RuntimeException("Cannot instantiate abstract type: " + getTypeName());
+		throw new UnsupportedOperationException("Cannot instantiate abstract entity type: " + getTypeName());
 	}
 
 	// This should not be considered as override, as the interface method is deprecated (but this stays)
@@ -419,6 +419,14 @@ public abstract class AbstractEntityType<T extends GenericEntity> extends Abstra
 		// create the raw clone and register it as visited to avoid double cloning
 		entityClone = cloningContext.supplyRawClone(actualType, entity);
 		cloningContext.registerAsVisited(entity, entityClone);
+
+		// transfer transient properties if cloned type is exactly the same
+		List<TransientProperty> actualTransProperties = actualType.getTransientProperties();
+		if (actualType == entityClone.entityType() && !actualTransProperties.isEmpty())
+			for (TransientProperty tp : actualTransProperties) {
+				Object value = tp.get(entity);
+				tp.set(entityClone, value);
+			}
 
 		List<AbstractProperty> actualProperties = (List<AbstractProperty>) (List<?>) actualType.getProperties();
 
@@ -570,8 +578,8 @@ public abstract class AbstractEntityType<T extends GenericEntity> extends Abstra
 		try {
 			traversingContext.pushTraversingCriterion(actualType.acquireCriterion(), entity);
 
-			/* Some Matchers may operate only on ENTITY level (and e.g. not PROPERTY or ROOT level). To handle that
-			 * case, we have to check again here whether the Matcher matches. (see BTT-4113) */
+			/* Some Matchers may operate only on ENTITY level (and e.g. not PROPERTY or ROOT level). To handle that case, we have to check again here
+			 * whether the Matcher matches. (see BTT-4113) */
 			if (traversingContext.isTraversionContextMatching())
 				return;
 
@@ -608,10 +616,12 @@ public abstract class AbstractEntityType<T extends GenericEntity> extends Abstra
 	}
 
 	public void addSubType(EntityType<?> subType) {
-		subTypes = GMF.platform().isSingleThreaded() ? subTypes : newSet(subTypes);
-		subTypes.add(subType);
+		Set<EntityType<?>> newSubTypes = GMF.platform().isSingleThreaded() ? subTypes : newSet(subTypes);
+		newSubTypes.add(subType);
+		subTypes = newSubTypes;
 	}
 
+	// TODO this might only be used in GWT, maybe move the method to GwtEntityType
 	public void setSuperTypes(List<AbstractEntityType<?>> superTypes) {
 		this.superTypes = superTypes;
 
@@ -671,7 +681,7 @@ public abstract class AbstractEntityType<T extends GenericEntity> extends Abstra
 	@Override
 	@SuppressWarnings("deprecation") // this will stay, just the iface method will be dropped
 	public String toString(T instance) {
-		return GenericToStringBuilder.buildToString(instance, this);
+		return instance.asString();
 	}
 
 	// This should not be considered as override, as the interface method is deprecated (but this stays)
@@ -772,6 +782,11 @@ public abstract class AbstractEntityType<T extends GenericEntity> extends Abstra
 		return transientProperties.stream() //
 				.filter(tp -> tp.getDeclaringType() == this) //
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public boolean isEmpty(Object value) {
+		return value == null;
 	}
 
 }
