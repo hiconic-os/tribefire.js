@@ -49,7 +49,6 @@ import com.braintribe.model.generic.reflection.EntityType;
 import com.braintribe.model.generic.reflection.EntityTypeJs;
 import com.braintribe.model.generic.reflection.GenericModelException;
 import com.braintribe.model.generic.reflection.GenericModelType;
-import com.braintribe.model.generic.reflection.GenericToStringBuilder;
 import com.braintribe.model.generic.reflection.Property;
 import com.braintribe.model.generic.reflection.PropertyAccessInterceptor;
 import com.braintribe.model.generic.reflection.PropertyTransferCompetence;
@@ -268,7 +267,7 @@ public abstract class AbstractEntityType<T extends GenericEntity> extends Abstra
 
 	@Override
 	public Stream<Attribute> getAttributes() {
-		return null;
+		return Stream.concat(getProperties().stream(), getTransientProperties().stream());
 	}
 
 	@Override
