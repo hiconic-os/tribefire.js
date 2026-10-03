@@ -29,13 +29,14 @@ import jsinterop.annotations.JsType;
 @JsType
 @SuppressWarnings("unusable-by-js")
 public class AccessServiceGwtPersistenceGmSession extends GwtPersistenceGmSession implements ModelEnvironmentDrivenGmSession {
-
 	protected ModelEnvironment modelEnvironment;
 
 	@Override
 	public void configureModelEnvironment(ModelEnvironment me) {
 		cleanup();
 		configureAccessDescriptor(new AccessDescriptor(me.getDataAccessId(), me.getDataModel(), me.getDataAccessDenotationType()));
+		configureModelAccessoryAccessDescriptor(new AccessDescriptor(ModelEnvironmentAccessIds.metaModelAccessId(me.getMetaModelAccessId()),
+				me.getDataModel(), me.getDataAccessDenotationType()));
 		this.modelEnvironment = me;
 	}
 

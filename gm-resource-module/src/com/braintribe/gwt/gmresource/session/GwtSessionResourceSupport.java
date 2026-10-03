@@ -26,11 +26,12 @@ import com.braintribe.model.processing.session.api.resource.ResourceAccessFactor
 public class GwtSessionResourceSupport implements ResourceAccessFactory<AccessDescriptor> {
 	protected String streamBaseUrl;
 	protected Supplier<String> sessionIdProvider;
-	protected boolean accessoryAxis = false;
 
+	/** @deprecated The resource domain is supplied by the session's {@link AccessDescriptor}. */
+	@Deprecated
 	@Configurable
 	public void setAccessoryAxis(boolean accessoryAxis) {
-		this.accessoryAxis = accessoryAxis;
+		// Kept as a no-op for binary compatibility with existing GWT wiring.
 	}
 
 	@Required
@@ -45,12 +46,12 @@ public class GwtSessionResourceSupport implements ResourceAccessFactory<AccessDe
 
 	@Override
 	public ResourceAccess newInstance(AccessDescriptor accessInfo) {
-		Supplier<String> accessIdProvider = accessoryAxis ? () -> "cortex" : accessInfo::accessId;
+		Supplier<String> accessIdProvider = accessInfo::accessId;
 		return new RestBasedResourceAccessBuilder(accessIdProvider, streamBaseUrl, sessionIdProvider);
 	}
 
 	public ResourceAccess newInstanceForDomainId(String domainId) {
-		Supplier<String> domainIdProvider = accessoryAxis ? () -> "cortex" : () -> domainId;
+		Supplier<String> domainIdProvider = () -> domainId;
 		return new RestBasedResourceAccessBuilder(domainIdProvider, streamBaseUrl, sessionIdProvider);
 	}
 

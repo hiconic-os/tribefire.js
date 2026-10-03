@@ -105,6 +105,7 @@ import com.braintribe.utils.lcd.CollectionTools2;
 public class GwtPersistenceGmSession extends AbstractPersistenceGmSession implements HasAccessDescriptor {
 	private static Logger logger = Logger.getLogger(GwtPersistenceGmSession.class);
 	protected AccessDescriptor accessDescriptor;
+	protected AccessDescriptor modelAccessoryAccessDescriptor;
 	private ResourceAccessFactory<? super AccessDescriptor> resourcesAccessFactory;
 	private ResourceAccessFactory<? super AccessDescriptor> modelAccessoryResourcesAccessFactory;
 	private ResourceAccess resourcesAccess;
@@ -202,12 +203,18 @@ public class GwtPersistenceGmSession extends AbstractPersistenceGmSession implem
 	public void configureAccessDescriptor(AccessDescriptor accessDescriptor) {
 		cleanup();
 		this.accessDescriptor = accessDescriptor;
+		this.modelAccessoryAccessDescriptor = new AccessDescriptor("cortex", accessDescriptor.dataModel(), accessDescriptor.accessDenotationType());
+	}
+
+	protected void configureModelAccessoryAccessDescriptor(AccessDescriptor accessDescriptor) {
+		this.modelAccessoryAccessDescriptor = accessDescriptor;
 	}
 
 	@Override
 	public void cleanup() {
 		super.cleanup();
 		this.accessDescriptor = null;
+		this.modelAccessoryAccessDescriptor = null;
 	}
 
 	public void configureAccessDescriptor(AccessDescriptor accessDescriptor, AsyncCallback<Void> asyncCallback) {
@@ -568,7 +575,7 @@ public class GwtPersistenceGmSession extends AbstractPersistenceGmSession implem
 				return modelSession;
 
 			modelSession = new BasicManagedGmSession();
-			modelSession.setResourcesAccessFactory(session -> modelAccessoryResourcesAccessFactory.newInstance(accessDescriptor));
+			modelSession.setResourcesAccessFactory(session -> modelAccessoryResourcesAccessFactory.newInstance(modelAccessoryAccessDescriptor));
 			modelSession.setModelAccessory(this);
 
 			try {
