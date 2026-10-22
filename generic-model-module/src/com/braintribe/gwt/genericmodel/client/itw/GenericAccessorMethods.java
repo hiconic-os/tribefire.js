@@ -476,6 +476,9 @@ public class GenericAccessorMethods {
 		}
 
 		private native static JavaScriptObject nonCollectionObjectToJs(Object v) /*-{
+			if (v == null)
+				return null;
+
 		 	var clazz = v.@Object::getClass()();
 		 	if(clazz == @String::class)
 		 		return v;

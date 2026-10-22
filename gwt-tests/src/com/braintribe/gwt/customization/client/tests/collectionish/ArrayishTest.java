@@ -16,6 +16,7 @@ package com.braintribe.gwt.customization.client.tests.collectionish;
 import static com.braintribe.utils.lcd.CollectionTools2.asList;
 
 import com.braintribe.gwt.genericmodel.client.jsinterop.collectionish.Arrayish;
+import com.braintribe.gwt.genericmodel.client.itw.GenericAccessorMethods;
 
 import javaemul.internal.annotations.DoNotInline;
 
@@ -30,7 +31,19 @@ public class ArrayishTest extends AbstractCollectionishTest {
 		Arrayish<String> af = new Arrayish<>(asList((Object[]) a), null, null);
 
 		testMethods(af, a);
+
+		Arrayish<Object> nullable = new Arrayish<>(asList("a", null, Integer.valueOf(1)), //
+				GenericAccessorMethods.jToJsNonCollectionConverter(), GenericAccessorMethods.jsToJNonCollectionConverter());
+		testNullableElements(nullable);
 	}
+
+	private native void testNullableElements(Arrayish<Object> array) /*-{
+		var values = [...array];
+		this.assertEqual(values.length, 3, "nullable array length");
+		this.assertEqual(values[0], "a", "value before null");
+		this.assertEqual(values[1], null, "null value");
+		this.assertEqual(values[2], 1, "value after null");
+	}-*/;
 
 	@DoNotInline
 	private native void testMethods(Arrayish<String> aa, String[] a) /*-{
