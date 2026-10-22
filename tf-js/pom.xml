@@ -26,6 +26,7 @@ limitations under the License.
         <gwt-compatible>true</gwt-compatible>
         <jsinterop>true</jsinterop>
         <npmPackaging>gwtTerminal</npmPackaging>
+        <npmRegistryUrl>https://registry.npmjs.org</npmRegistryUrl>
     </properties>
     <licenses>
         <license>
