@@ -17,6 +17,8 @@ limitations under the License.
 <project xmlns:artifact="antlib:org.apache.maven.artifact.ant" xmlns:bt="antlib:com.braintribe.build.ant.tasks" basedir="." default="assemble obf" name="tf-js">
 	<bt:import artifact="com.braintribe.devrock.ant:gwt-js-library-ant-script#1.0" useCase="DEVROCK" />
 
+	<!-- Reassemble the npm runtime with the recursion-safe RPC type ensurer. -->
+
 	<!-- tf-js is consumed from npm as @dev.hiconic/runtime. Keep the generated
 	     legacy packages available in dist, but outside the directories scanned
 	     by the generic npm publisher. -->
