@@ -80,7 +80,6 @@ public class TfJsRpcLatest {
 				GwtGmWebRpcEvaluator bean = publish(new GwtGmWebRpcEvaluator());
 				bean.setServerUrl(addToPath(servicesUrl, "rpc"));
 				bean.setSessionIdProvider(sessionIdHolder);
-				// TODO this is kind of questionable, the typeEnsurer evaluates AuthorizedRequest (GetMetaModelForTypes)
 				bean.setTypeEnsurer(typeEnsurer.get());
 				bean.setSendSessionIdExpressive(false);
 				return bean;
@@ -93,11 +92,26 @@ public class TfJsRpcLatest {
 
 		protected final Holder<String> sessionIdHolder = new Holder<>();
 
+		/**
+		 * Deliberately has no type ensurer. A missing type in the response of
+		 * {@code GetMetaModelForTypes} must fail once instead of recursively issuing the same request.
+		 */
+		private final Supplier<GwtGmWebRpcEvaluator> typeReflectionEvaluator = new SingletonBeanProvider<GwtGmWebRpcEvaluator>() {
+			@Override
+			public GwtGmWebRpcEvaluator create() throws Exception {
+				GwtGmWebRpcEvaluator bean = publish(new GwtGmWebRpcEvaluator());
+				bean.setServerUrl(addToPath(servicesUrl, "rpc"));
+				bean.setSessionIdProvider(sessionIdHolder);
+				bean.setSendSessionIdExpressive(false);
+				return bean;
+			}
+		};
+
 		protected final Supplier<CortexTypeEnsurer> typeEnsurer = new SingletonBeanProvider<CortexTypeEnsurer>() {
 			@Override
 			public CortexTypeEnsurer create() throws Exception {
 				CortexTypeEnsurer bean = publish(new CortexTypeEnsurer());
-				bean.setEvaluator(serviceRequestEvaluator.get());
+				bean.setEvaluator(typeReflectionEvaluator.get());
 				return bean;
 			}
 		};

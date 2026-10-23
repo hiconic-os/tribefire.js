@@ -51,12 +51,24 @@ public class TfJsRpc {
 			return new Holder<String>();
 		}
 	};
+
+	/** Evaluates type-reflection requests without recursively trying to ensure their response types. */
+	public Supplier<GwtGmWebRpcEvaluator> typeReflectionEvaluator = new SingletonBeanProvider<GwtGmWebRpcEvaluator>() {
+		@Override
+		public GwtGmWebRpcEvaluator create() throws Exception {
+			GwtGmWebRpcEvaluator bean = publish(new GwtGmWebRpcEvaluator());
+			bean.setServerUrl(servicesUrl);
+			bean.setSessionIdProvider(sessionIdProvider.get());
+			bean.setSendSessionIdExpressive(false);
+			return bean;
+		}
+	};
 	
 	public Supplier<CortexTypeEnsurer> typeEnsurer = new SingletonBeanProvider<CortexTypeEnsurer>() {
 		@Override
 		public CortexTypeEnsurer create() throws Exception {
 			CortexTypeEnsurer bean = publish(new CortexTypeEnsurer());
-			bean.setEvaluator(serviceRequestEvaluator.get());
+			bean.setEvaluator(typeReflectionEvaluator.get());
 			return bean;
 		}
 	};
